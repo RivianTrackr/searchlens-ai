@@ -170,8 +170,8 @@ The plugin creates two custom tables:
 
 ## Support
 
-- [Report Issues](https://github.com/RivianTrackr/AI-Search-Summary/issues)
-- [Discussions](https://github.com/RivianTrackr/AI-Search-Summary/discussions)
+- [Report Issues](https://github.com/RivianTrackr/aiss-ai-search-summary/issues)
+- [Discussions](https://github.com/RivianTrackr/aiss-ai-search-summary/discussions)
 
 ## License
 
