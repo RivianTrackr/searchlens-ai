@@ -658,6 +658,9 @@ class AI_Search_Summary {
             $output['spam_blocklist'] = '';
         }
 
+        // Preserve data on uninstall
+        $output['preserve_data_on_uninstall'] = isset($input['preserve_data_on_uninstall']) && $input['preserve_data_on_uninstall'] ? 1 : 0;
+
         // Auto-purge settings
         $output['auto_purge_enabled'] = isset($input['auto_purge_enabled']) && $input['auto_purge_enabled'] ? 1 : 0;
         $output['auto_purge_days'] = isset($input['auto_purge_days'])
@@ -952,6 +955,7 @@ class AI_Search_Summary {
                     'custom_css'           => '',
                     'auto_purge_enabled'   => 0,
                     'auto_purge_days'      => 90,
+                    'preserve_data_on_uninstall' => 0,
                 )
             )
         );
@@ -2301,6 +2305,28 @@ class AI_Search_Summary {
                                     rows="6"
                                     style="width: 100%; max-width: 500px; font-family: monospace; font-size: 13px;"
                                     placeholder="example-spam-term&#10;another blocked phrase&#10;unwanted keyword"><?php echo esc_textarea( isset( $options['spam_blocklist'] ) ? $options['spam_blocklist'] : '' ); ?></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Preserve Data on Uninstall -->
+                        <div class="aiss-field">
+                            <div class="aiss-field-label">
+                                <label>Preserve Data on Uninstall</label>
+                            </div>
+                            <div class="aiss-field-description">
+                                Keep all plugin data (settings, analytics logs, and feedback) when the plugin is deleted. Enable this if you plan to reinstall the plugin later and want to retain your existing data.
+                            </div>
+                            <div class="aiss-toggle-wrapper">
+                                <label class="aiss-toggle">
+                                    <input type="checkbox"
+                                           name="<?php echo esc_attr( $this->option_name ); ?>[preserve_data_on_uninstall]"
+                                           value="1"
+                                           <?php checked( ! empty( $options['preserve_data_on_uninstall'] ), true ); ?> />
+                                    <span class="aiss-toggle-slider"></span>
+                                </label>
+                                <span class="aiss-toggle-label">
+                                    <?php echo ! empty( $options['preserve_data_on_uninstall'] ) ? 'Enabled' : 'Disabled'; ?>
+                                </span>
                             </div>
                         </div>
                     </div>
