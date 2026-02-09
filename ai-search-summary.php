@@ -2,11 +2,11 @@
 declare(strict_types=1);
 /**
  * Plugin Name: AI Search Summary
- * Plugin URI: https://github.com/RivianTrackr/AI-Search-Summary
+ * Plugin URI: https://github.com/RivianTrackr/aiss-ai-search-summary
  * Description: Add an OpenAI powered AI summary to WordPress search results without delaying normal results, with analytics, cache control, and collapsible sources.
  * Version: 1.0.0
  * Author: Jose Castillo
- * Author URI: https://github.com/RivianTrackr/AI-Search-Summary
+ * Author URI: https://github.com/RivianTrackr/aiss-ai-search-summary
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Requires at least: 6.9
