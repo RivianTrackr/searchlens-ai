@@ -73,6 +73,7 @@ class AI_Search_Summary {
         add_action( 'wp_ajax_aiss_test_api_key', array( $this, 'ajax_test_api_key' ) );
         add_action( 'wp_ajax_aiss_refresh_models', array( $this, 'ajax_refresh_models' ) );
         add_action( 'wp_ajax_aiss_clear_cache', array( $this, 'ajax_clear_cache' ) );
+        add_action( 'wp_ajax_aiss_purge_spam', array( $this, 'ajax_purge_spam' ) );
         add_action( 'admin_post_aiss_export_csv', array( $this, 'handle_csv_export' ) );
         add_action( 'aiss_daily_log_purge', array( $this, 'run_scheduled_purge' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );
@@ -553,6 +554,7 @@ class AI_Search_Summary {
             'color_border'         => '#94a3b8',
             'custom_css'              => '',
             'allow_reasoning_models'  => 0,
+            'spam_blocklist'          => '',
         );
 
         $opts = get_option( $this->option_name, array() );
@@ -641,6 +643,21 @@ class AI_Search_Summary {
 
         $output['custom_css'] = isset($input['custom_css']) ? $this->sanitize_custom_css($input['custom_css']) : '';
         $output['allow_reasoning_models'] = isset($input['allow_reasoning_models']) && $input['allow_reasoning_models'] ? 1 : 0;
+
+        // Spam blocklist: one term per line, sanitize each line
+        if ( isset( $input['spam_blocklist'] ) ) {
+            $lines = explode( "\n", $input['spam_blocklist'] );
+            $clean_lines = array();
+            foreach ( $lines as $line ) {
+                $line = sanitize_text_field( trim( $line ) );
+                if ( ! empty( $line ) ) {
+                    $clean_lines[] = $line;
+                }
+            }
+            $output['spam_blocklist'] = implode( "\n", $clean_lines );
+        } else {
+            $output['spam_blocklist'] = '';
+        }
 
         // Auto-purge settings
         $output['auto_purge_enabled'] = isset($input['auto_purge_enabled']) && $input['auto_purge_enabled'] ? 1 : 0;
@@ -1093,6 +1110,95 @@ class AI_Search_Summary {
         } else {
             wp_send_json_error( array( 'message' => 'Could not clear cache.' ) );
         }
+    }
+
+    /**
+     * AJAX handler to purge spam entries from analytics logs.
+     *
+     * Scans the logs table for entries matching spam patterns and deletes them.
+     */
+    public function ajax_purge_spam() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( array( 'message' => 'Permission denied.' ) );
+        }
+
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'aiss_purge_spam' ) ) {
+            wp_send_json_error( array( 'message' => 'Invalid security token. Please refresh the page.' ) );
+        }
+
+        if ( ! $this->logs_table_is_available() ) {
+            wp_send_json_error( array( 'message' => 'Analytics table is not available.' ) );
+        }
+
+        global $wpdb;
+        $table_name = self::get_logs_table_name();
+
+        // Fetch all distinct search queries
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $queries = $wpdb->get_col(
+            $wpdb->prepare(
+                'SELECT DISTINCT search_query FROM %i',
+                $table_name
+            )
+        );
+
+        if ( empty( $queries ) ) {
+            wp_send_json_success( array(
+                'message' => 'No log entries found.',
+                'deleted' => 0,
+            ) );
+        }
+
+        $spam_queries = array();
+        foreach ( $queries as $query ) {
+            if ( $this->is_spam_query( $query ) || $this->is_sql_injection_attempt( $query ) ) {
+                $spam_queries[] = $query;
+            }
+        }
+
+        if ( empty( $spam_queries ) ) {
+            wp_send_json_success( array(
+                'message' => 'No spam entries detected in the logs.',
+                'deleted' => 0,
+            ) );
+        }
+
+        // Delete all log entries matching spam queries
+        $placeholders = implode( ', ', array_fill( 0, count( $spam_queries ), '%s' ) );
+        $args         = array_merge( array( $table_name ), $spam_queries );
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $deleted = $wpdb->query(
+            // phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
+            $wpdb->prepare(
+                "DELETE FROM %i WHERE search_query IN ($placeholders)",
+                ...$args
+            )
+        );
+
+        // Also clean up matching feedback entries
+        $feedback_table = self::get_feedback_table_name();
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $wpdb->query(
+            // phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
+            $wpdb->prepare(
+                "DELETE FROM %i WHERE search_query IN ($placeholders)",
+                ...array_merge( array( $feedback_table ), $spam_queries )
+            )
+        );
+
+        // Clear the analytics cache so stats refresh
+        delete_transient( 'aiss_analytics_overview' );
+
+        if ( false === $deleted ) {
+            wp_send_json_error( array( 'message' => 'Database error while purging spam.' ) );
+        }
+
+        wp_send_json_success( array(
+            'message' => number_format( $deleted ) . ' spam log entries deleted across ' . count( $spam_queries ) . ' spam queries.',
+            'deleted' => $deleted,
+            'queries' => count( $spam_queries ),
+        ) );
     }
 
     /**
@@ -2180,6 +2286,24 @@ class AI_Search_Summary {
                                 </span>
                             </div>
                         </div>
+
+                        <!-- Spam Blocklist -->
+                        <div class="aiss-field">
+                            <div class="aiss-field-label">
+                                <label for="aiss-spam-blocklist">Spam Blocklist</label>
+                            </div>
+                            <div class="aiss-field-description">
+                                Block search queries containing these terms. One term per line (case-insensitive). Built-in spam detection already blocks URLs, emails, phone numbers, and common spam keywords automatically.
+                            </div>
+                            <div class="aiss-field-input">
+                                <textarea
+                                    id="aiss-spam-blocklist"
+                                    name="<?php echo esc_attr( $this->option_name ); ?>[spam_blocklist]"
+                                    rows="6"
+                                    style="width: 100%; max-width: 500px; font-family: monospace; font-size: 13px;"
+                                    placeholder="example-spam-term&#10;another blocked phrase&#10;unwanted keyword"><?php echo esc_textarea( isset( $options['spam_blocklist'] ) ? $options['spam_blocklist'] : '' ); ?></textarea>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -2931,7 +3055,25 @@ class AI_Search_Summary {
                 <p>Manage analytics log data</p>
             </div>
             <div class="aiss-section-content">
+                <!-- Spam Cleanup -->
                 <div class="aiss-field">
+                    <div class="aiss-field-label">
+                        <label>Spam Cleanup</label>
+                    </div>
+                    <div class="aiss-field-description">
+                        Scan log entries for spam patterns (URLs, emails, phone numbers, known spam keywords, and your blocklist) and remove them.
+                    </div>
+                    <div style="margin-top: 12px; display: flex; align-items: center; gap: 12px;">
+                        <button type="button" id="aiss-purge-spam-btn"
+                                class="aiss-button aiss-button-secondary"
+                                data-nonce="<?php echo esc_attr( wp_create_nonce( 'aiss_purge_spam' ) ); ?>">
+                            Scan &amp; Remove Spam
+                        </button>
+                        <span id="aiss-purge-spam-result"></span>
+                    </div>
+                </div>
+
+                <div class="aiss-field" style="margin-top: 24px;">
                     <div class="aiss-field-label">
                         <label>Purge Old Logs</label>
                     </div>
@@ -3031,6 +3173,50 @@ class AI_Search_Summary {
                 </div>
             </div>
         </div>
+
+        <script>
+        (function($) {
+            $(document).ready(function() {
+                $('#aiss-purge-spam-btn').on('click', function() {
+                    var btn = $(this);
+                    var resultSpan = $('#aiss-purge-spam-result');
+                    var nonce = btn.data('nonce');
+
+                    if (!confirm('This will scan all log entries and permanently delete those matching spam patterns. Continue?')) {
+                        return;
+                    }
+
+                    btn.prop('disabled', true).text('Scanning...');
+                    resultSpan.html('');
+
+                    $.ajax({
+                        url: ajaxurl,
+                        type: 'POST',
+                        data: {
+                            action: 'aiss_purge_spam',
+                            nonce: nonce
+                        },
+                        success: function(response) {
+                            btn.prop('disabled', false).text('Scan & Remove Spam');
+                            if (response.success) {
+                                var color = response.data.deleted > 0 ? '#10b981' : '#6e6e73';
+                                resultSpan.html('<span style="color: ' + color + ';">' + response.data.message + '</span>');
+                                if (response.data.deleted > 0) {
+                                    setTimeout(function() { location.reload(); }, 2000);
+                                }
+                            } else {
+                                resultSpan.html('<span style="color: #ef4444;">' + response.data.message + '</span>');
+                            }
+                        },
+                        error: function() {
+                            btn.prop('disabled', false).text('Scan & Remove Spam');
+                            resultSpan.html('<span style="color: #ef4444;">Request failed. Please try again.</span>');
+                        }
+                    });
+                });
+            });
+        })(jQuery);
+        </script>
         <?php
     }
 
@@ -3857,6 +4043,11 @@ class AI_Search_Summary {
             return false;
         }
 
+        // Block spam queries (URLs, emails, phone numbers, known spam, blocklist)
+        if ( $this->is_spam_query( $value ) ) {
+            return false;
+        }
+
         return true;
     }
 
@@ -3957,8 +4148,117 @@ class AI_Search_Summary {
     }
 
     /**
+     * Detect spam patterns in search queries.
+     *
+     * Blocks queries containing URLs, email addresses, phone numbers,
+     * excessive repetition, and known spam keywords. Also checks the
+     * admin-configurable blocklist.
+     *
+     * @param string $value Input value to check.
+     * @return bool True if spam pattern detected.
+     */
+    private function is_spam_query( $value ) {
+        $normalized = strtolower( trim( $value ) );
+
+        // 1. URLs (http/https/www)
+        if ( preg_match( '#https?://|www\.#i', $normalized ) ) {
+            return true;
+        }
+
+        // 2. Email addresses
+        if ( preg_match( '/[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}/i', $normalized ) ) {
+            return true;
+        }
+
+        // 3. Phone numbers (7+ consecutive digits, optionally separated by dashes/spaces/dots)
+        $digits_only = preg_replace( '/[\s\-\.\(\)]+/', '', $normalized );
+        if ( preg_match( '/\d{7,}/', $digits_only ) ) {
+            return true;
+        }
+
+        // 4. Excessive character repetition (e.g., "aaaaaa", "123123123")
+        if ( preg_match( '/(.)\1{5,}/', $normalized ) ) {
+            return true;
+        }
+        // Repeated word/phrase patterns (e.g., "buy buy buy buy")
+        if ( preg_match( '/\b(\w+)\b(?:\s+\1\b){3,}/i', $normalized ) ) {
+            return true;
+        }
+
+        // 5. Common spam keywords/phrases
+        $spam_patterns = array(
+            'buy cheap',
+            'order now',
+            'free shipping',
+            'click here',
+            'act now',
+            'limited time offer',
+            'viagra',
+            'cialis',
+            'casino',
+            'poker online',
+            'slot machine',
+            'payday loan',
+            'earn money fast',
+            'work from home',
+            'make money online',
+            'weight loss',
+            'diet pill',
+            'enlargement',
+            'nigerian prince',
+            'cryptocurrency investment',
+            'binary option',
+            'forex trading',
+            'seo service',
+            'backlink',
+            'guest post service',
+            'telegram',
+            'whatsapp.*group',
+            'join.*channel',
+        );
+
+        foreach ( $spam_patterns as $pattern ) {
+            if ( preg_match( '/' . $pattern . '/i', $normalized ) ) {
+                if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                    // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+                    error_log( '[AI Search Summary] Blocked spam query (pattern: ' . $pattern . '): ' . substr( $value, 0, 100 ) );
+                }
+                return true;
+            }
+        }
+
+        // 6. High ratio of non-alphanumeric characters (gibberish)
+        $alpha_count = preg_match_all( '/[a-z0-9]/i', $value );
+        $total_len   = max( 1, strlen( $value ) );
+        if ( $total_len > 10 && ( $alpha_count / $total_len ) < 0.5 ) {
+            return true;
+        }
+
+        // 7. Admin-configurable blocklist
+        $options   = $this->get_options();
+        $blocklist = isset( $options['spam_blocklist'] ) ? $options['spam_blocklist'] : '';
+        if ( ! empty( $blocklist ) ) {
+            $blocked_terms = array_filter( array_map( 'trim', explode( "\n", strtolower( $blocklist ) ) ) );
+            foreach ( $blocked_terms as $term ) {
+                if ( empty( $term ) ) {
+                    continue;
+                }
+                if ( strpos( $normalized, $term ) !== false ) {
+                    if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                        // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+                        error_log( '[AI Search Summary] Blocked query via blocklist (term: ' . $term . '): ' . substr( $value, 0, 100 ) );
+                    }
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Intelligently truncate text at sentence boundaries.
-     * 
+     *
      * Attempts to cut at the last complete sentence within the limit.
      * Falls back to word boundary if no sentence ending is found.
      *
