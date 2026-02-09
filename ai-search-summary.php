@@ -554,6 +554,9 @@ class AI_Search_Summary {
             'custom_css'              => '',
             'allow_reasoning_models'  => 0,
             'spam_blocklist'          => '',
+            'post_types'              => array(),
+            'max_sources_display'     => AISS_MAX_SOURCES_DISPLAY,
+            'content_length'          => AISS_CONTENT_LENGTH,
         );
 
         $opts = get_option( $this->option_name, array() );
@@ -657,6 +660,24 @@ class AI_Search_Summary {
         } else {
             $output['spam_blocklist'] = '';
         }
+
+        // Post type filtering
+        if ( isset( $input['post_types'] ) && is_array( $input['post_types'] ) ) {
+            $valid_types = get_post_types( array( 'public' => true ), 'names' );
+            $output['post_types'] = array_values( array_intersect( array_map( 'sanitize_key', $input['post_types'] ), $valid_types ) );
+        } else {
+            $output['post_types'] = array();
+        }
+
+        // Max sources display: min 1, max 20, default 5
+        $output['max_sources_display'] = isset( $input['max_sources_display'] )
+            ? max( 1, min( 20, intval( $input['max_sources_display'] ) ) )
+            : 5;
+
+        // Content length per post: min 100, max 2000, default 400
+        $output['content_length'] = isset( $input['content_length'] )
+            ? max( 100, min( 2000, intval( $input['content_length'] ) ) )
+            : 400;
 
         // Preserve data on uninstall
         $output['preserve_data_on_uninstall'] = isset($input['preserve_data_on_uninstall']) && $input['preserve_data_on_uninstall'] ? 1 : 0;
@@ -956,6 +977,9 @@ class AI_Search_Summary {
                     'auto_purge_enabled'   => 0,
                     'auto_purge_days'      => 90,
                     'preserve_data_on_uninstall' => 0,
+                    'post_types'           => array(),
+                    'max_sources_display'  => 5,
+                    'content_length'       => 400,
                 )
             )
         );
@@ -2007,6 +2031,24 @@ class AI_Search_Summary {
                             </div>
                         </div>
 
+                        <!-- Max Sources Display -->
+                        <div class="aiss-field">
+                            <div class="aiss-field-label">
+                                <label>Max Sources Displayed</label>
+                            </div>
+                            <div class="aiss-field-description">
+                                Maximum number of source articles shown beneath the AI summary (1 &ndash; 20)
+                            </div>
+                            <div class="aiss-field-input">
+                                <input type="number"
+                                       name="<?php echo esc_attr( $this->option_name ); ?>[max_sources_display]"
+                                       value="<?php echo esc_attr( isset( $options['max_sources_display'] ) ? $options['max_sources_display'] : 5 ); ?>"
+                                       min="1"
+                                       max="20" />
+                                <span style="margin-left: 8px; color: #86868b; font-size: 14px;">sources</span>
+                            </div>
+                        </div>
+
                         <!-- Show Feedback -->
                         <div class="aiss-field">
                             <div class="aiss-field-label">
@@ -2090,6 +2132,51 @@ class AI_Search_Summary {
                                        value="<?php echo esc_attr( $options['max_posts'] ); ?>"
                                        min="1"
                                        max="50" />
+                            </div>
+                        </div>
+
+                        <!-- Content Length -->
+                        <div class="aiss-field">
+                            <div class="aiss-field-label">
+                                <label>Content Length Per Post</label>
+                            </div>
+                            <div class="aiss-field-description">
+                                Characters of post content sent to the AI per article (100 &ndash; 2,000). Higher values give the AI more context but increase token usage and cost.
+                            </div>
+                            <div class="aiss-field-input">
+                                <input type="number"
+                                       name="<?php echo esc_attr( $this->option_name ); ?>[content_length]"
+                                       value="<?php echo esc_attr( isset( $options['content_length'] ) ? $options['content_length'] : AISS_CONTENT_LENGTH ); ?>"
+                                       min="100"
+                                       max="2000"
+                                       step="50" />
+                                <span style="margin-left: 8px; color: #86868b; font-size: 14px;">characters</span>
+                            </div>
+                        </div>
+
+                        <!-- Post Types -->
+                        <div class="aiss-field">
+                            <div class="aiss-field-label">
+                                <label>Post Types</label>
+                            </div>
+                            <div class="aiss-field-description">
+                                Choose which post types to include in AI search results. If none are selected, all public post types are included.
+                            </div>
+                            <div class="aiss-field-input">
+                                <?php
+                                $public_post_types = get_post_types( array( 'public' => true ), 'objects' );
+                                $selected_types    = isset( $options['post_types'] ) && is_array( $options['post_types'] ) ? $options['post_types'] : array();
+                                foreach ( $public_post_types as $pt ) :
+                                ?>
+                                    <label style="display: block; margin-bottom: 6px; cursor: pointer;">
+                                        <input type="checkbox"
+                                               name="<?php echo esc_attr( $this->option_name ); ?>[post_types][]"
+                                               value="<?php echo esc_attr( $pt->name ); ?>"
+                                               <?php checked( in_array( $pt->name, $selected_types, true ) ); ?> />
+                                        <?php echo esc_html( $pt->labels->singular_name ); ?>
+                                        <span style="color: #86868b; font-size: 13px;">(<?php echo esc_html( $pt->name ); ?>)</span>
+                                    </label>
+                                <?php endforeach; ?>
                             </div>
                         </div>
 
@@ -4373,12 +4460,14 @@ class AI_Search_Summary {
             $max_posts = 20;
         }
 
-        $post_type = 'any';
+        $post_types = isset( $options['post_types'] ) && is_array( $options['post_types'] ) && ! empty( $options['post_types'] )
+            ? $options['post_types']
+            : 'any';
 
         // Single optimized query that gets all posts sorted by relevance and recency
         $search_args = array(
             's'              => $search_query,
-            'post_type'      => $post_type,
+            'post_type'      => $post_types,
             'posts_per_page' => $max_posts,
             'post_status'    => 'publish',
             'orderby'        => 'date',
@@ -4394,7 +4483,8 @@ class AI_Search_Summary {
                 $content = wp_strip_all_tags( $post->post_content );
                 
                 // Use smart truncation for better sentence boundaries
-                $truncated_content = $this->smart_truncate( $content, AISS_CONTENT_LENGTH );
+                $content_length    = isset( $options['content_length'] ) ? (int) $options['content_length'] : AISS_CONTENT_LENGTH;
+                $truncated_content = $this->smart_truncate( $content, $content_length );
                 $excerpt = $this->smart_truncate( $content, AISS_EXCERPT_LENGTH );
 
                 $posts_for_ai[] = array(
@@ -4918,7 +5008,9 @@ class AI_Search_Summary {
             return '';
         }
 
-        $sources = array_slice( $sources, 0, AISS_MAX_SOURCES_DISPLAY );
+        $options     = $this->get_options();
+        $max_sources = (int) $options['max_sources_display'];
+        $sources     = array_slice( $sources, 0, $max_sources );
         $count   = count( $sources );
 
         $show_label = 'Show sources (' . intval( $count ) . ')';
