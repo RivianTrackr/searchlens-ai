@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * Plugin Name: AI Search Summary
  * Description: Add an OpenAI powered AI summary to WordPress search results without delaying normal results, with analytics, cache control, and collapsible sources.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: Jose Castillo
  * Author URI: https://github.com/RivianTrackr/
  * License: GPL v2 or later
@@ -14,7 +14,7 @@ declare(strict_types=1);
  * Domain Path: /languages
  */
 
-define( 'AI_SEARCH_VERSION', '1.0.1' );
+define( 'AI_SEARCH_VERSION', '1.0.2' );
 define( 'AISS_MODELS_CACHE_TTL', 7 * DAY_IN_SECONDS );
 define( 'AISS_MIN_CACHE_TTL', 60 );
 define( 'AISS_MAX_CACHE_TTL', 86400 );
@@ -1249,6 +1249,11 @@ class AI_Search_Summary {
         // Validate dates
         if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $from_date ) || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $to_date ) ) {
             wp_die( 'Invalid date format.', 'Error', array( 'response' => 400 ) );
+        }
+
+        // Ensure from_date is not after to_date
+        if ( $from_date > $to_date ) {
+            wp_die( 'Start date must be on or before end date.', 'Error', array( 'response' => 400 ) );
         }
 
         // Add time to dates for inclusive range
@@ -3929,14 +3934,16 @@ class AI_Search_Summary {
             )
         );
 
-        // Lightweight endpoint for logging frontend (session) cache hits
+        // Lightweight endpoint for logging frontend (session) cache hits.
+        // Uses a dedicated permission check that skips IP rate limiting so
+        // analytics logging does not consume the user's rate-limit quota.
         register_rest_route(
             'aiss/v1',
             '/log-session-hit',
             array(
                 'methods'             => 'POST',
                 'callback'            => array( $this, 'rest_log_session_cache_hit' ),
-                'permission_callback' => array( $this, 'rest_permission_check' ),
+                'permission_callback' => array( $this, 'rest_log_permission_check' ),
                 'args'                => array(
                     'q' => array(
                         'required'          => true,
@@ -4082,8 +4089,29 @@ class AI_Search_Summary {
                 'Too many requests from your IP address. Please try again in a minute.',
                 array(
                     'status'     => 429,
-                    'retry_after' => $rate_info['reset'] - time(),
+                    'retry_after' => max( 1, $rate_info['reset'] - time() ),
                 )
+            );
+        }
+
+        return true;
+    }
+
+    /**
+     * Lightweight permission check for the log-session-hit endpoint.
+     *
+     * Only performs bot detection — intentionally skips IP rate limiting so
+     * that analytics logging does not consume the user's rate-limit quota.
+     *
+     * @param WP_REST_Request $request Request object.
+     * @return bool|WP_Error True if allowed, WP_Error if blocked.
+     */
+    public function rest_log_permission_check( WP_REST_Request $request ) {
+        if ( $this->is_likely_bot() ) {
+            return new WP_Error(
+                AISS_ERROR_BOT_DETECTED,
+                'Logging is not available for automated requests.',
+                array( 'status' => 403 )
             );
         }
 
@@ -4428,10 +4456,11 @@ class AI_Search_Summary {
 
     // Updated rest_get_summary() to use smart truncation
     public function rest_get_summary( WP_REST_Request $request ) {
-        $options = $this->get_options();
+        $options      = $this->get_options();
+        $search_query = $request->get_param( 'q' );
 
         if ( empty( $options['enable'] ) || empty( $options['api_key'] ) ) {
-            $this->log_search_event( $request->get_param( 'q' ), 0, 0, 'AI search not enabled or API key missing' );
+            $this->log_search_event( sanitize_text_field( (string) $search_query ), 0, 0, 'AI search not enabled or API key missing' );
 
             return rest_ensure_response(
                 array(
@@ -4442,10 +4471,7 @@ class AI_Search_Summary {
             );
         }
 
-        $search_query = $request->get_param( 'q' );
         if ( ! $search_query ) {
-            $this->log_search_event( '', 0, 0, 'Missing search query' );
-
             return rest_ensure_response(
                 array(
                     'answer_html' => '',
@@ -4501,10 +4527,11 @@ class AI_Search_Summary {
 
         $results_count = count( $posts_for_ai );
 
-        // Short-circuit when no articles match — log the search but skip the API call.
+        // Short-circuit when no articles match — log the search and skip the API call.
         if ( 0 === $results_count ) {
-            $options   = $this->get_options();
             $site_name = ! empty( $options['site_name'] ) ? $options['site_name'] : get_bloginfo( 'name' );
+
+            $this->log_search_event( $search_query, 0, 0, 'No matching posts found' );
 
             return rest_ensure_response(
                 array(
@@ -4560,7 +4587,6 @@ class AI_Search_Summary {
         $answer_html = wp_kses( $answer_html, $allowed_tags );
 
         // Add sources if enabled in settings
-        $options = $this->get_options();
         $show_sources = isset( $options['show_sources'] ) ? $options['show_sources'] : 1;
         if ( $show_sources && ! empty( $sources ) ) {
             $answer_html .= $this->render_sources_html( $sources );
@@ -4607,9 +4633,11 @@ class AI_Search_Summary {
         $normalized_query = strtolower( trim( $search_query ) );
         $namespace        = $this->get_cache_namespace();
 
+        $content_length = isset( $options['content_length'] ) ? (int) $options['content_length'] : AISS_CONTENT_LENGTH;
         $cache_key_data = implode( '|', array(
             $options['model'],
             $options['max_posts'],
+            $content_length,
             $normalized_query
         ) );
 
@@ -4622,6 +4650,10 @@ class AI_Search_Summary {
                 $cache_hit = true;
                 return $ai_data;
             }
+
+            // Corrupted cache entry — remove it so subsequent requests don't
+            // repeatedly attempt to decode the same bad data.
+            delete_transient( $cache_key );
         }
 
         // Cache miss - will make API call
