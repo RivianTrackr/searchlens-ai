@@ -5,6 +5,24 @@ All notable changes to AI Search Summary will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2026-02-10
+
+### Fixed
+
+- **Analytics: No-results searches now logged** - Searches that match zero posts are now recorded in analytics, giving admins complete visibility into what users are searching for.
+- **Analytics: Premature logging removed** - Empty/missing queries are no longer logged to the analytics table; the not-configured state now sanitizes the query before logging.
+- **CSV Export: Date range validation** - Exporting with a start date after the end date now shows a clear error instead of silently returning an empty file.
+- **Cache: Content length included in cache key** - Changing the "Content Length Per Post" setting now correctly invalidates stale cached summaries instead of serving results generated with the old length.
+- **Cache: Corrupted transients cleaned up** - If a cached transient contains invalid JSON, it is now deleted immediately rather than failing on every subsequent request until expiry.
+- **Rate Limiting: retry_after header clamped** - The `Retry-After` value in 429 responses is now guaranteed to be at least 1 second, preventing invalid zero or negative values.
+- **Rate Limiting: Session cache logging decoupled** - The `/log-session-hit` endpoint now uses a lightweight permission check (bot detection only) so browser cache hit logging no longer counts against the per-IP rate limit.
+
+### Changed
+
+- Removed redundant `get_options()` calls in the summary REST endpoint for cleaner code flow.
+
+---
+
 ## [1.0.1] - 2026-02-09
 
 ### Added
