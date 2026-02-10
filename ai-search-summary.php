@@ -3230,6 +3230,9 @@ class AI_Search_Summary {
                         foreach ( $options as $key => $value ) {
                             if ( $key !== 'auto_purge_enabled' && $key !== 'auto_purge_days' ) {
                                 if ( is_array( $value ) ) {
+                                    foreach ( $value as $item ) {
+                                        echo '<input type="hidden" name="' . esc_attr( $this->option_name ) . '[' . esc_attr( $key ) . '][]" value="' . esc_attr( $item ) . '" />';
+                                    }
                                     continue;
                                 }
                                 echo '<input type="hidden" name="' . esc_attr( $this->option_name ) . '[' . esc_attr( $key ) . ']" value="' . esc_attr( $value ) . '" />';

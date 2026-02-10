@@ -173,6 +173,7 @@ The plugin is designed with privacy in mind:
 * Fixed rate-limit retry_after header potentially returning negative values
 * Removed redundant options loading in the summary REST endpoint
 * Session cache hit logging no longer counts against the per-IP rate limit
+* Fixed saving auto-purge settings clearing selected post types
 
 = 1.0.1 =
 * Added post type filtering - choose which post types are included in AI search results
