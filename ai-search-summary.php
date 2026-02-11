@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * Plugin Name: AI Search Summary
  * Description: Add an OpenAI powered AI summary to WordPress search results without delaying normal results, with analytics, cache control, and collapsible sources.
- * Version: 1.0.3
+ * Version: 1.0.4
  * Author: Jose Castillo
  * Author URI: https://github.com/RivianTrackr/
  * License: GPL v2 or later
@@ -14,7 +14,7 @@ declare(strict_types=1);
  * Domain Path: /languages
  */
 
-define( 'AI_SEARCH_VERSION', '1.0.3' );
+define( 'AI_SEARCH_VERSION', '1.0.4' );
 define( 'AISS_MODELS_CACHE_TTL', 7 * DAY_IN_SECONDS );
 define( 'AISS_MIN_CACHE_TTL', 60 );
 define( 'AISS_MAX_CACHE_TTL', 86400 );
@@ -81,6 +81,11 @@ class AI_Search_Summary {
         add_shortcode( 'aiss_trending', array( $this, 'render_trending_shortcode' ) );
 
         add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $this, 'add_plugin_settings_link' ) );
+
+        // Automatically flush the in-memory options cache whenever the option is
+        // updated — regardless of whether it was saved via sanitize_options() or
+        // a direct update_option() call elsewhere.
+        add_action( 'update_option_' . $this->option_name, array( $this, 'flush_options_cache' ) );
     }
 
     /**
@@ -570,6 +575,16 @@ class AI_Search_Summary {
         return $this->options_cache;
     }
 
+    /**
+     * Flush the in-memory options cache.
+     *
+     * Hooked to `update_option_{$option_name}` so the cache is always
+     * invalidated when the option changes, even outside sanitize_options().
+     */
+    public function flush_options_cache() {
+        $this->options_cache = null;
+    }
+
     public function sanitize_options( $input ) {
         if (!is_array($input)) {
             $input = array();
@@ -723,7 +738,7 @@ class AI_Search_Summary {
             $this->bump_cache_namespace();
         }
 
-        $this->options_cache = null;
+        $this->flush_options_cache();
 
         return $output;
     }
@@ -2668,6 +2683,60 @@ class AI_Search_Summary {
         return (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i', $table_name ) );
     }
 
+    /**
+     * Render pagination controls for analytics tables.
+     *
+     * @param int    $current_page Current page number.
+     * @param int    $total_pages  Total number of pages.
+     * @param string $param_name   Query parameter name for this pagination.
+     */
+    private function render_analytics_pagination( $current_page, $total_pages, $param_name ) {
+        if ( $total_pages <= 1 ) {
+            return;
+        }
+
+        $base_url = admin_url( 'admin.php?page=aiss-analytics' );
+
+        // Preserve other pagination params when navigating
+        $preserve_params = array( 'queries_page', 'errors_page', 'events_page' );
+        foreach ( $preserve_params as $param ) {
+            if ( $param !== $param_name && isset( $_GET[ $param ] ) ) {
+                // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only pagination params
+                $base_url = add_query_arg( $param, absint( wp_unslash( $_GET[ $param ] ) ), $base_url );
+            }
+        }
+        ?>
+        <div class="aiss-pagination" style="margin: 20px; padding-top: 16px; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
+            <div class="aiss-pagination-info" style="font-size: 13px; color: #6e6e73;">
+                Page <?php echo esc_html( $current_page ); ?> of <?php echo esc_html( $total_pages ); ?>
+            </div>
+            <div class="aiss-pagination-buttons" style="display: flex; gap: 8px;">
+                <?php if ( $current_page > 1 ) : ?>
+                    <a href="<?php echo esc_url( add_query_arg( $param_name, $current_page - 1, $base_url ) ); ?>"
+                       style="display: inline-block; padding: 8px 16px; font-size: 13px; font-weight: 500; color: #374151; background: #fff; border: 1px solid #d1d5db; border-radius: 6px; text-decoration: none; transition: all 0.15s ease;">
+                        &laquo; Previous
+                    </a>
+                <?php else : ?>
+                    <span style="display: inline-block; padding: 8px 16px; font-size: 13px; font-weight: 500; color: #9ca3af; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; cursor: not-allowed;">
+                        &laquo; Previous
+                    </span>
+                <?php endif; ?>
+
+                <?php if ( $current_page < $total_pages ) : ?>
+                    <a href="<?php echo esc_url( add_query_arg( $param_name, $current_page + 1, $base_url ) ); ?>"
+                       style="display: inline-block; padding: 8px 16px; font-size: 13px; font-weight: 500; color: #fff; background: #0071e3; border: 1px solid #0071e3; border-radius: 6px; text-decoration: none; transition: all 0.15s ease;">
+                        Next &raquo;
+                    </a>
+                <?php else : ?>
+                    <span style="display: inline-block; padding: 8px 16px; font-size: 13px; font-weight: 500; color: #9ca3af; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; cursor: not-allowed;">
+                        Next &raquo;
+                    </span>
+                <?php endif; ?>
+            </div>
+        </div>
+        <?php
+    }
+
     private function render_analytics_content() {
         global $wpdb;
         $table_name = self::get_logs_table_name();
@@ -2752,7 +2821,19 @@ class AI_Search_Summary {
             )
         );
 
+        // Pagination for Top Queries
+        $queries_per_page = 20;
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only pagination parameter on admin page
+        $queries_page     = isset( $_GET['queries_page'] ) ? max( 1, absint( wp_unslash( $_GET['queries_page'] ) ) ) : 1;
+        $queries_offset   = ( $queries_page - 1 ) * $queries_per_page;
+
         $feedback_table_name = self::get_feedback_table_name();
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $total_unique_queries = (int) $wpdb->get_var(
+            $wpdb->prepare( 'SELECT COUNT(DISTINCT search_query) FROM %i', $table_name )
+        );
+
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $top_queries = $wpdb->get_results(
             $wpdb->prepare(
@@ -2771,9 +2852,27 @@ class AI_Search_Summary {
                  ) f ON l.search_query = f.search_query
                  GROUP BY l.search_query
                  ORDER BY total DESC
-                 LIMIT 20',
+                 LIMIT %d OFFSET %d',
                 $table_name,
-                $feedback_table_name
+                $feedback_table_name,
+                $queries_per_page,
+                $queries_offset
+            )
+        );
+
+        $total_queries_pages = max( 1, (int) ceil( $total_unique_queries / $queries_per_page ) );
+
+        // Pagination for Top Errors
+        $errors_per_page = 10;
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only pagination parameter on admin page
+        $errors_page     = isset( $_GET['errors_page'] ) ? max( 1, absint( wp_unslash( $_GET['errors_page'] ) ) ) : 1;
+        $errors_offset   = ( $errors_page - 1 ) * $errors_per_page;
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $total_unique_errors = (int) $wpdb->get_var(
+            $wpdb->prepare(
+                'SELECT COUNT(DISTINCT ai_error) FROM %i WHERE ai_error IS NOT NULL AND ai_error <> \'\'',
+                $table_name
             )
         );
 
@@ -2785,8 +2884,10 @@ class AI_Search_Summary {
                  WHERE ai_error IS NOT NULL AND ai_error <> \'\'
                  GROUP BY ai_error
                  ORDER BY total DESC
-                 LIMIT 10',
-                $table_name
+                 LIMIT %d OFFSET %d',
+                $table_name,
+                $errors_per_page,
+                $errors_offset
             )
         );
 
@@ -2946,7 +3047,22 @@ class AI_Search_Summary {
         <div class="aiss-section">
             <div class="aiss-section-header">
                 <h2>Top Search Queries</h2>
-                <p>Most frequently searched terms</p>
+                <p>
+                    <?php
+                    if ( $total_unique_queries > 0 ) {
+                        $q_start = $queries_offset + 1;
+                        $q_end   = min( $queries_offset + $queries_per_page, $total_unique_queries );
+                        printf(
+                            'Showing %s-%s of %s unique queries',
+                            number_format( $q_start ),
+                            number_format( $q_end ),
+                            number_format( $total_unique_queries )
+                        );
+                    } else {
+                        echo 'Most frequently searched terms';
+                    }
+                    ?>
+                </p>
             </div>
             <div class="aiss-section-content">
                 <?php if ( ! empty( $top_queries ) ) : ?>
@@ -2993,46 +3109,77 @@ class AI_Search_Summary {
                             </tbody>
                         </table>
                     </div>
+
+                    <?php if ( $total_queries_pages > 1 ) : ?>
+                        <?php $this->render_analytics_pagination( $queries_page, $total_queries_pages, 'queries_page' ); ?>
+                    <?php endif; ?>
+
                 <?php else : ?>
                     <div class="aiss-empty-message">No search data yet.</div>
                 <?php endif; ?>
             </div>
         </div>
 
+        <?php $total_errors_pages = max( 1, (int) ceil( $total_unique_errors / $errors_per_page ) ); ?>
+
         <!-- Top Errors Section -->
-        <?php if ( ! empty( $top_errors ) ) : ?>
+        <?php if ( ! empty( $top_errors ) || $errors_page > 1 ) : ?>
             <div class="aiss-section">
                 <div class="aiss-section-header">
                     <h2>Top AI Errors</h2>
-                    <p>Most common error messages</p>
+                    <p>
+                        <?php
+                        if ( $total_unique_errors > 0 ) {
+                            $e_start = $errors_offset + 1;
+                            $e_end   = min( $errors_offset + $errors_per_page, $total_unique_errors );
+                            printf(
+                                'Showing %s-%s of %s unique errors',
+                                number_format( $e_start ),
+                                number_format( $e_end ),
+                                number_format( $total_unique_errors )
+                            );
+                        } else {
+                            echo 'Most common error messages';
+                        }
+                        ?>
+                    </p>
                 </div>
                 <div class="aiss-section-content">
-                    <div class="aiss-table-wrapper">
-                        <table class="aiss-table">
-                            <thead>
-                                <tr>
-                                    <th>Error Message</th>
-                                    <th>Occurrences</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ( $top_errors as $err ) : ?>
+                    <?php if ( ! empty( $top_errors ) ) : ?>
+                        <div class="aiss-table-wrapper">
+                            <table class="aiss-table">
+                                <thead>
                                     <tr>
-                                        <td class="aiss-error-cell">
-                                            <?php
-                                            $msg = (string) $err->ai_error;
-                                            if ( strlen( $msg ) > 80 ) {
-                                                $msg = substr( $msg, 0, 77 ) . '...';
-                                            }
-                                            echo esc_html( $msg );
-                                            ?>
-                                        </td>
-                                        <td><?php echo number_format( (int) $err->total ); ?></td>
+                                        <th>Error Message</th>
+                                        <th>Occurrences</th>
                                     </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ( $top_errors as $err ) : ?>
+                                        <tr>
+                                            <td class="aiss-error-cell">
+                                                <?php
+                                                $msg = (string) $err->ai_error;
+                                                if ( strlen( $msg ) > 80 ) {
+                                                    $msg = substr( $msg, 0, 77 ) . '...';
+                                                }
+                                                echo esc_html( $msg );
+                                                ?>
+                                            </td>
+                                            <td><?php echo number_format( (int) $err->total ); ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <?php if ( $total_errors_pages > 1 ) : ?>
+                            <?php $this->render_analytics_pagination( $errors_page, $total_errors_pages, 'errors_page' ); ?>
+                        <?php endif; ?>
+
+                    <?php else : ?>
+                        <div class="aiss-empty-message">No errors on this page.</div>
+                    <?php endif; ?>
                 </div>
             </div>
         <?php endif; ?>
@@ -3121,42 +3268,14 @@ class AI_Search_Summary {
                     </div>
 
                     <?php if ( $total_pages > 1 ) : ?>
-                        <div class="aiss-pagination" style="margin: 20px; padding-top: 16px; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
-                            <div class="aiss-pagination-info" style="font-size: 13px; color: #6e6e73;">
-                                Page <?php echo esc_html( $current_page ); ?> of <?php echo esc_html( $total_pages ); ?>
-                                <?php if ( $is_large_table ) : ?>
-                                    <span style="margin-left: 8px; padding: 2px 8px; background: #fef3c7; color: #92400e; border-radius: 4px; font-size: 11px;">
-                                        Large dataset - showing recent <?php echo esc_html( number_format( $max_pages * $events_per_page ) ); ?> events
-                                    </span>
-                                <?php endif; ?>
+                        <?php $this->render_analytics_pagination( $current_page, $total_pages, 'events_page' ); ?>
+                        <?php if ( $is_large_table ) : ?>
+                            <div style="margin: 0 20px 10px; font-size: 11px;">
+                                <span style="padding: 2px 8px; background: #fef3c7; color: #92400e; border-radius: 4px;">
+                                    Large dataset - showing recent <?php echo esc_html( number_format( $max_pages * $events_per_page ) ); ?> events
+                                </span>
                             </div>
-                            <div class="aiss-pagination-buttons" style="display: flex; gap: 8px;">
-                                <?php
-                                $base_url = admin_url( 'admin.php?page=aiss-analytics' );
-
-                                if ( $current_page > 1 ) : ?>
-                                    <a href="<?php echo esc_url( add_query_arg( 'events_page', $current_page - 1, $base_url ) ); ?>"
-                                       style="display: inline-block; padding: 8px 16px; font-size: 13px; font-weight: 500; color: #374151; background: #fff; border: 1px solid #d1d5db; border-radius: 6px; text-decoration: none; transition: all 0.15s ease;">
-                                        &laquo; Previous
-                                    </a>
-                                <?php else : ?>
-                                    <span style="display: inline-block; padding: 8px 16px; font-size: 13px; font-weight: 500; color: #9ca3af; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; cursor: not-allowed;">
-                                        &laquo; Previous
-                                    </span>
-                                <?php endif; ?>
-
-                                <?php if ( $current_page < $total_pages ) : ?>
-                                    <a href="<?php echo esc_url( add_query_arg( 'events_page', $current_page + 1, $base_url ) ); ?>"
-                                       style="display: inline-block; padding: 8px 16px; font-size: 13px; font-weight: 500; color: #fff; background: #0071e3; border: 1px solid #0071e3; border-radius: 6px; text-decoration: none; transition: all 0.15s ease;">
-                                        Next &raquo;
-                                    </a>
-                                <?php else : ?>
-                                    <span style="display: inline-block; padding: 8px 16px; font-size: 13px; font-weight: 500; color: #9ca3af; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; cursor: not-allowed;">
-                                        Next &raquo;
-                                    </span>
-                                <?php endif; ?>
-                            </div>
-                        </div>
+                        <?php endif; ?>
                     <?php endif; ?>
 
                 <?php else : ?>
@@ -3614,6 +3733,12 @@ class AI_Search_Summary {
                 'query'            => get_search_query(),
                 'cacheVersion'     => $this->get_cache_namespace(),
                 'requestTimeout'   => isset( $options['request_timeout'] ) ? (int) $options['request_timeout'] : 60,
+                'errorCodes'       => array(
+                    'noResults'    => AISS_ERROR_NO_RESULTS,
+                    'apiError'     => AISS_ERROR_API_ERROR,
+                    'rateLimited'  => AISS_ERROR_RATE_LIMITED,
+                    'notConfigured' => AISS_ERROR_NOT_CONFIGURED,
+                ),
             )
         );
     }
@@ -4772,7 +4897,11 @@ class AI_Search_Summary {
         return $decoded;
     }
 
-    // Updated call_openai_for_search() with retry logic for transient errors
+    /**
+     * Call the OpenAI API with retry logic for transient errors.
+     * Returns the decoded API response on success, or an array with 'error' key on failure.
+     * Includes '_retry_count' metadata when retries were needed.
+     */
     private function call_openai_for_search( $api_key, $model, $user_query, $posts ) {
         if ( empty( $api_key ) ) {
             return array( 'error' => 'API key is missing. Please configure the plugin settings.' );
@@ -4887,9 +5016,17 @@ class AI_Search_Summary {
         while ( $attempt <= $max_retries ) {
             $result = $this->make_openai_request( $endpoint, $args );
 
-            // Success - return the decoded response
+            // Success - return the decoded response with retry metadata
             if ( isset( $result['success'] ) && $result['success'] ) {
-                return $result['data'];
+                $data = $result['data'];
+                if ( $attempt > 0 ) {
+                    $data['_retry_count'] = $attempt;
+                    if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                        // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+                        error_log( '[AI Search Summary] Request succeeded after ' . $attempt . ' retry(ies)' );
+                    }
+                }
+                return $data;
             }
 
             // Check if error is retryable
@@ -4913,8 +5050,12 @@ class AI_Search_Summary {
             }
         }
 
-        // Return the last error
-        return array( 'error' => $last_error['error'] ?? 'Unknown error occurred.' );
+        // Return the last error with retry metadata
+        $error_msg = $last_error['error'] ?? 'Unknown error occurred.';
+        if ( $attempt > 0 ) {
+            $error_msg .= ' (after ' . ( $attempt + 1 ) . ' attempts)';
+        }
+        return array( 'error' => $error_msg );
     }
 
     /**

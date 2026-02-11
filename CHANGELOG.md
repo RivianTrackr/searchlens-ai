@@ -5,6 +5,19 @@ All notable changes to AI Search Summary will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.4] - 2026-02-11
+
+### Improved
+
+- **Analytics: Top Queries pagination** - The "Top Search Queries" section now supports pagination instead of being hard-limited to 20 entries, allowing admins to browse the full list of unique queries on high-traffic sites.
+- **Analytics: Top Errors pagination** - The "Top AI Errors" section now supports pagination instead of being hard-limited to 10 entries.
+- **Analytics: Shared pagination component** - All analytics table pagination (recent events, top queries, top errors) now uses a single reusable method with consistent styling and cross-section state preservation.
+- **Options cache: Hook-based invalidation** - The in-memory options cache is now automatically flushed via the `update_option_{$option}` WordPress hook, ensuring consistency even when options are updated outside of the settings sanitization flow.
+- **JS error codes from PHP** - Error code constants (`AISS_ERROR_NO_RESULTS`, etc.) are now passed to the frontend via `wp_localize_script`, replacing the previously hardcoded string comparison in the JavaScript.
+- **API retry diagnostics** - When API retries occur, the attempt count is now included in error messages logged to analytics and in debug log entries, helping admins diagnose intermittent API issues.
+
+---
+
 ## [1.0.3] - 2026-02-10
 
 ### Fixed
