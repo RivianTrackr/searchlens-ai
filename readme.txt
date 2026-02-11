@@ -4,7 +4,7 @@ Tags: search, ai, openai, summary, chatgpt
 Requires at least: 6.9
 Tested up to: 6.9
 Requires PHP: 8.4
-Stable tag: 1.0.4
+Stable tag: 1.0.4.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -164,6 +164,16 @@ The plugin is designed with privacy in mind:
 
 == Changelog ==
 
+= 1.0.4.1 =
+* Added tablet responsive breakpoint (768px) and keyboard focus states for feedback buttons
+* Sources toggle state now persists across page navigations via localStorage
+* Progressive status messages shown during slow AI responses (10s, 20s, 30s)
+* Full query text shown on hover for truncated queries in analytics tables
+* Bulk delete action for selecting and removing multiple event log entries at once
+* Badge threshold legend added to analytics page explaining color-coded indicators
+* Extracted 18 magic numbers into named constants for maintainability
+* Added PHP type hints to 27 core functions
+
 = 1.0.4 =
 * Added hook-based options cache invalidation for robust settings flushing across all update paths
 * Added pagination to Top Search Queries and Top AI Errors analytics sections
@@ -205,6 +215,9 @@ The plugin is designed with privacy in mind:
 * Security headers and prepared statements
 
 == Upgrade Notice ==
+
+= 1.0.4.1 =
+Polish update: tablet responsive layout, sources toggle persistence, slow-response progress indicator, bulk log deletion, badge legend, named constants, and PHP type hints.
 
 = 1.0.4 =
 Improved analytics with paginated Top Queries and Top Errors sections, more robust options caching, and better API retry diagnostics.
