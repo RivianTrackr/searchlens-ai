@@ -186,7 +186,8 @@
 
         if (data && data.error) {
           // Cache no-results responses so we don't re-hit the server
-          if (data.error_code === 'no_results') {
+          var noResultsCode = (window.AISSearch && window.AISSearch.errorCodes && window.AISSearch.errorCodes.noResults) || 'no_results';
+          if (data.error_code === noResultsCode) {
             saveToCache(q, data);
           }
           var errorP = document.createElement('p');

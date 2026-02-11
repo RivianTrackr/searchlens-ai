@@ -4,7 +4,7 @@ Tags: search, ai, openai, summary, chatgpt
 Requires at least: 6.9
 Tested up to: 6.9
 Requires PHP: 8.4
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -164,6 +164,14 @@ The plugin is designed with privacy in mind:
 
 == Changelog ==
 
+= 1.0.4 =
+* Added hook-based options cache invalidation for robust settings flushing across all update paths
+* Added pagination to Top Search Queries and Top AI Errors analytics sections
+* Refactored analytics pagination into a shared reusable method, reducing code duplication
+* Error code constants are now passed to the JavaScript frontend for consistent error matching
+* API retry logic now includes attempt count in error messages and debug logs for better diagnostics
+* Cleaned up stale inline comments in the API retry code path
+
 = 1.0.3 =
 * Fixed no-results searches not being logged to analytics, giving admins complete search visibility
 * Fixed premature logging of unconfigured state before query validation; empty queries no longer logged
@@ -197,6 +205,9 @@ The plugin is designed with privacy in mind:
 * Security headers and prepared statements
 
 == Upgrade Notice ==
+
+= 1.0.4 =
+Improved analytics with paginated Top Queries and Top Errors sections, more robust options caching, and better API retry diagnostics.
 
 = 1.0.3 =
 Bug fixes for analytics logging, cache correctness, CSV export validation, rate limiting fairness, and settings persistence.
