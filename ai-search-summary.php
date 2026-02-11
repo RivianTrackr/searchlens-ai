@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * Plugin Name: AI Search Summary
  * Description: Add an OpenAI powered AI summary to WordPress search results without delaying normal results, with analytics, cache control, and collapsible sources.
- * Version: 1.0.4
+ * Version: 1.0.4.1
  * Author: Jose Castillo
  * Author URI: https://github.com/RivianTrackr/
  * License: GPL v2 or later
@@ -14,7 +14,7 @@ declare(strict_types=1);
  * Domain Path: /languages
  */
 
-define( 'AI_SEARCH_VERSION', '1.0.4' );
+define( 'AI_SEARCH_VERSION', '1.0.4.1' );
 define( 'AISS_MODELS_CACHE_TTL', 7 * DAY_IN_SECONDS );
 define( 'AISS_MIN_CACHE_TTL', 60 );
 define( 'AISS_MAX_CACHE_TTL', 86400 );
@@ -26,6 +26,29 @@ define( 'AISS_API_TIMEOUT', 60 );
 define( 'AISS_RATE_LIMIT_WINDOW', 70 );
 define( 'AISS_MAX_TOKENS', 1500 ); // Default; overridden by the admin setting
 define( 'AISS_IP_RATE_LIMIT', 10 ); // Requests per minute per IP
+
+// Pagination defaults
+define( 'AISS_PER_PAGE_QUERIES', 20 );
+define( 'AISS_PER_PAGE_ERRORS', 10 );
+define( 'AISS_PER_PAGE_EVENTS', 50 );
+
+// Input validation limits
+define( 'AISS_QUERY_MIN_LENGTH', 2 );
+define( 'AISS_QUERY_MAX_LENGTH', 500 );
+define( 'AISS_QUERY_MAX_BYTES', 2000 );
+define( 'AISS_ERROR_MAX_LENGTH', 500 );
+define( 'AISS_CUSTOM_CSS_MAX_LENGTH', 10000 );
+
+// Analytics badge thresholds
+define( 'AISS_BADGE_SUCCESS_HIGH', 90 );
+define( 'AISS_BADGE_SUCCESS_MED', 70 );
+define( 'AISS_BADGE_CACHE_HIGH', 50 );
+define( 'AISS_BADGE_CACHE_MED', 25 );
+define( 'AISS_BADGE_HELPFUL_HIGH', 70 );
+define( 'AISS_BADGE_HELPFUL_MED', 40 );
+
+// Large table optimization threshold
+define( 'AISS_LARGE_TABLE_THRESHOLD', 100000 );
 
 // Error codes for structured API responses
 define( 'AISS_ERROR_BOT_DETECTED', 'bot_detected' );
@@ -73,6 +96,7 @@ class AI_Search_Summary {
         add_action( 'wp_ajax_aiss_refresh_models', array( $this, 'ajax_refresh_models' ) );
         add_action( 'wp_ajax_aiss_clear_cache', array( $this, 'ajax_clear_cache' ) );
         add_action( 'wp_ajax_aiss_purge_spam', array( $this, 'ajax_purge_spam' ) );
+        add_action( 'wp_ajax_aiss_bulk_delete_logs', array( $this, 'ajax_bulk_delete_logs' ) );
         add_action( 'admin_post_aiss_export_csv', array( $this, 'handle_csv_export' ) );
         add_action( 'aiss_daily_log_purge', array( $this, 'run_scheduled_purge' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );
@@ -127,12 +151,12 @@ class AI_Search_Summary {
         );
     }
 
-    private static function get_logs_table_name() {
+    private static function get_logs_table_name(): string {
         global $wpdb;
         return $wpdb->prefix . 'aiss_logs';
     }
 
-    private static function get_feedback_table_name() {
+    private static function get_feedback_table_name(): string {
         global $wpdb;
         return $wpdb->prefix . 'aiss_feedback';
     }
@@ -338,7 +362,7 @@ class AI_Search_Summary {
         }
     }
 
-    private function logs_table_is_available() {
+    private function logs_table_is_available(): bool {
         if ( $this->logs_table_checked ) {
             return $this->logs_table_exists;
         }
@@ -406,7 +430,7 @@ class AI_Search_Summary {
             $sanitized_error = sanitize_text_field( $sanitized_error );
             // Limit error message length to prevent oversized storage
             if ( function_exists( 'mb_substr' ) ) {
-                $sanitized_error = mb_substr( $sanitized_error, 0, 500, 'UTF-8' );
+                $sanitized_error = mb_substr( $sanitized_error, 0, AISS_ERROR_MAX_LENGTH, 'UTF-8' );
             } else {
                 $sanitized_error = substr( $sanitized_error, 0, 500 );
             }
@@ -532,7 +556,7 @@ class AI_Search_Summary {
         return defined( 'AISS_API_KEY' ) && ! empty( AISS_API_KEY );
     }
 
-    public function get_options() {
+    public function get_options(): array {
         if ( is_array( $this->options_cache ) ) {
             return $this->options_cache;
         }
@@ -581,11 +605,11 @@ class AI_Search_Summary {
      * Hooked to `update_option_{$option_name}` so the cache is always
      * invalidated when the option changes, even outside sanitize_options().
      */
-    public function flush_options_cache() {
+    public function flush_options_cache(): void {
         $this->options_cache = null;
     }
 
-    public function sanitize_options( $input ) {
+    public function sanitize_options( array $input ): array {
         if (!is_array($input)) {
             $input = array();
         }
@@ -749,7 +773,7 @@ class AI_Search_Summary {
      * @param string $css Raw CSS input.
      * @return string Sanitized CSS.
      */
-    private function sanitize_custom_css( $css ) {
+    private function sanitize_custom_css( string $css ): string {
         if ( empty( $css ) ) {
             return '';
         }
@@ -792,7 +816,7 @@ class AI_Search_Summary {
         );
 
         // Limit length to prevent DoS
-        $max_length = 10000;
+        $max_length = AISS_CUSTOM_CSS_MAX_LENGTH;
         if ( strlen( $css ) > $max_length ) {
             $css = substr( $css, 0, $max_length );
         }
@@ -807,7 +831,7 @@ class AI_Search_Summary {
      * @param string $default Default color if invalid.
      * @return string Sanitized hex color.
      */
-    private function sanitize_color( $color, $default = '#000000' ) {
+    private function sanitize_color( string $color, string $default = '#000000' ): string {
         $color = trim( $color );
 
         // Use WordPress sanitize_hex_color if available
@@ -830,7 +854,7 @@ class AI_Search_Summary {
      * @param array $options Plugin options.
      * @return string CSS string.
      */
-    private function generate_color_css( $options ) {
+    private function generate_color_css( array $options ): string {
         $bg     = isset( $options['color_background'] ) ? $options['color_background'] : '#121e2b';
         $text   = isset( $options['color_text'] ) ? $options['color_text'] : '#e5e7eb';
         $accent = isset( $options['color_accent'] ) ? $options['color_accent'] : '#fba919';
@@ -920,7 +944,7 @@ class AI_Search_Summary {
      * @param string $hex Hex color code.
      * @return array|false RGB array or false on failure.
      */
-    private function hex_to_rgb( $hex ) {
+    private function hex_to_rgb( string $hex ): array {
         $hex = ltrim( $hex, '#' );
 
         if ( strlen( $hex ) === 3 ) {
@@ -1001,7 +1025,7 @@ class AI_Search_Summary {
         
     }
 
-    private function test_api_key( $api_key ) {
+    private function test_api_key( string $api_key ): array {
         if ( empty( $api_key ) ) {
             return array(
                 'success' => false,
@@ -1240,6 +1264,49 @@ class AI_Search_Summary {
             'message' => number_format( $deleted ) . ' spam log entries deleted across ' . count( $spam_queries ) . ' spam queries.',
             'deleted' => $deleted,
             'queries' => count( $spam_queries ),
+        ) );
+    }
+
+    /**
+     * AJAX handler: bulk-delete selected log entries by ID.
+     */
+    public function ajax_bulk_delete_logs(): void {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( array( 'message' => 'Permission denied.' ) );
+        }
+
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'aiss_bulk_delete_logs' ) ) {
+            wp_send_json_error( array( 'message' => 'Invalid security token. Please refresh the page.' ) );
+        }
+
+        if ( ! $this->logs_table_is_available() ) {
+            wp_send_json_error( array( 'message' => 'Analytics table is not available.' ) );
+        }
+
+        $raw_ids = isset( $_POST['ids'] ) ? sanitize_text_field( wp_unslash( $_POST['ids'] ) ) : '';
+        $ids     = array_filter( array_map( 'absint', explode( ',', $raw_ids ) ) );
+
+        if ( empty( $ids ) ) {
+            wp_send_json_error( array( 'message' => 'No entries selected.' ) );
+        }
+
+        global $wpdb;
+        $table_name   = self::get_logs_table_name();
+        $placeholders = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        $deleted = $wpdb->query(
+            $wpdb->prepare(
+                "DELETE FROM {$table_name} WHERE id IN ($placeholders)",
+                ...$ids
+            )
+        );
+
+        delete_transient( 'aiss_analytics_overview' );
+
+        wp_send_json_success( array(
+            'message' => number_format( (int) $deleted ) . ' log entries deleted.',
+            'deleted' => (int) $deleted,
         ) );
     }
 
@@ -1634,7 +1701,7 @@ class AI_Search_Summary {
      * Matches: o1, o3, o4, etc. and gpt-5* (reasoning-class models).
      * Does NOT match: gpt-4o (the "o" is part of the model name, not the o-series).
      */
-    private static function is_reasoning_model( $model_id ) {
+    private static function is_reasoning_model( string $model_id ): bool {
         // o-series reasoning models: o1, o3, o4-mini, etc.
         if ( preg_match( '/^o\d/', $model_id ) ) {
             return true;
@@ -1801,7 +1868,7 @@ class AI_Search_Summary {
         return true;
     }
 
-    private function get_cache_namespace() {
+    private function get_cache_namespace(): int {
         $ns = (int) get_option( $this->cache_namespace_option, 1 );
         if ( $ns < 1 ) {
             $ns = 1;
@@ -1810,14 +1877,14 @@ class AI_Search_Summary {
         return $ns;
     }
 
-    private function bump_cache_namespace() {
+    private function bump_cache_namespace(): int {
         $ns = $this->get_cache_namespace();
         $ns++;
         update_option( $this->cache_namespace_option, $ns );
         return $ns;
     }
 
-    private function clear_ai_cache() {
+    private function clear_ai_cache(): bool {
         // Namespace based invalidation: bump namespace so all previous cache keys become unreachable.
         $this->bump_cache_namespace();
 
@@ -2661,7 +2728,7 @@ class AI_Search_Summary {
      * @param string $table_name Table name (without prefix).
      * @return int Estimated row count.
      */
-    private function get_estimated_row_count( $table_name ) {
+    private function get_estimated_row_count( string $table_name ): int {
         global $wpdb;
 
         // Try to get estimate from INFORMATION_SCHEMA (fast for InnoDB)
@@ -2690,7 +2757,7 @@ class AI_Search_Summary {
      * @param int    $total_pages  Total number of pages.
      * @param string $param_name   Query parameter name for this pagination.
      */
-    private function render_analytics_pagination( $current_page, $total_pages, $param_name ) {
+    private function render_analytics_pagination( int $current_page, int $total_pages, string $param_name ): void {
         if ( $total_pages <= 1 ) {
             return;
         }
@@ -2743,7 +2810,7 @@ class AI_Search_Summary {
 
         // Get estimated row count to optimize queries for large datasets
         $estimated_rows = $this->get_estimated_row_count( $table_name );
-        $is_large_table = $estimated_rows > 100000; // Consider >100k rows as large
+        $is_large_table = $estimated_rows > AISS_LARGE_TABLE_THRESHOLD;
 
         // Get cached overview stats (5-minute TTL)
         $cache_key = 'aiss_analytics_overview';
@@ -2822,7 +2889,7 @@ class AI_Search_Summary {
         );
 
         // Pagination for Top Queries
-        $queries_per_page = 20;
+        $queries_per_page = AISS_PER_PAGE_QUERIES;
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only pagination parameter on admin page
         $queries_page     = isset( $_GET['queries_page'] ) ? max( 1, absint( wp_unslash( $_GET['queries_page'] ) ) ) : 1;
         $queries_offset   = ( $queries_page - 1 ) * $queries_per_page;
@@ -2863,7 +2930,7 @@ class AI_Search_Summary {
         $total_queries_pages = max( 1, (int) ceil( $total_unique_queries / $queries_per_page ) );
 
         // Pagination for Top Errors
-        $errors_per_page = 10;
+        $errors_per_page = AISS_PER_PAGE_ERRORS;
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only pagination parameter on admin page
         $errors_page     = isset( $_GET['errors_page'] ) ? max( 1, absint( wp_unslash( $_GET['errors_page'] ) ) ) : 1;
         $errors_offset   = ( $errors_page - 1 ) * $errors_per_page;
@@ -2892,7 +2959,7 @@ class AI_Search_Summary {
         );
 
         // Pagination for recent events
-        $events_per_page = 50;
+        $events_per_page = AISS_PER_PAGE_EVENTS;
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- This is a read-only pagination parameter on an admin page
         $current_page    = isset( $_GET['events_page'] ) ? max( 1, absint( wp_unslash( $_GET['events_page'] ) ) ) : 1;
         $events_offset   = ( $current_page - 1 ) * $events_per_page;
@@ -2986,6 +3053,18 @@ class AI_Search_Summary {
             </div>
         </div>
 
+        <!-- Badge Legend -->
+        <div style="margin-bottom: 16px; padding: 12px 16px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 12px; color: #6e6e73; display: flex; flex-wrap: wrap; gap: 16px; align-items: center;">
+            <span style="font-weight: 600; color: #374151;">Badge Thresholds:</span>
+            <span><span class="aiss-badge aiss-badge-success" style="font-size: 11px; padding: 2px 6px;">AI Success</span> &ge;<?php echo esc_html( AISS_BADGE_SUCCESS_HIGH ); ?>%</span>
+            <span><span class="aiss-badge aiss-badge-warning" style="font-size: 11px; padding: 2px 6px;">AI Success</span> &ge;<?php echo esc_html( AISS_BADGE_SUCCESS_MED ); ?>%</span>
+            <span><span class="aiss-badge aiss-badge-success" style="font-size: 11px; padding: 2px 6px;">Cache</span> &ge;<?php echo esc_html( AISS_BADGE_CACHE_HIGH ); ?>%</span>
+            <span><span class="aiss-badge aiss-badge-warning" style="font-size: 11px; padding: 2px 6px;">Cache</span> &ge;<?php echo esc_html( AISS_BADGE_CACHE_MED ); ?>%</span>
+            <span><span class="aiss-badge aiss-badge-success" style="font-size: 11px; padding: 2px 6px;">Helpful</span> &ge;<?php echo esc_html( AISS_BADGE_HELPFUL_HIGH ); ?>%</span>
+            <span><span class="aiss-badge aiss-badge-warning" style="font-size: 11px; padding: 2px 6px;">Helpful</span> &ge;<?php echo esc_html( AISS_BADGE_HELPFUL_MED ); ?>%</span>
+            <span><span class="aiss-badge aiss-badge-error" style="font-size: 11px; padding: 2px 6px;">Any</span> below thresholds</span>
+        </div>
+
         <!-- Daily Stats Section -->
         <div class="aiss-section">
             <div class="aiss-section-header">
@@ -3019,13 +3098,13 @@ class AI_Search_Summary {
                                         <td><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $row->day ) ) ); ?></td>
                                         <td><?php echo number_format( $day_total ); ?></td>
                                         <td>
-                                            <span class="aiss-badge aiss-badge-<?php echo $day_rate >= 90 ? 'success' : ( $day_rate >= 70 ? 'warning' : 'error' ); ?>">
+                                            <span class="aiss-badge aiss-badge-<?php echo $day_rate >= AISS_BADGE_SUCCESS_HIGH ? 'success' : ( $day_rate >= AISS_BADGE_SUCCESS_MED ? 'warning' : 'error' ); ?>">
                                                 <?php echo esc_html( $day_rate ); ?>%
                                             </span>
                                         </td>
                                         <td>
                                             <?php if ( $day_cache_total > 0 ) : ?>
-                                                <span class="aiss-badge aiss-badge-<?php echo $day_cache_rate >= 50 ? 'success' : ( $day_cache_rate >= 25 ? 'warning' : 'error' ); ?>">
+                                                <span class="aiss-badge aiss-badge-<?php echo $day_cache_rate >= AISS_BADGE_CACHE_HIGH ? 'success' : ( $day_cache_rate >= AISS_BADGE_CACHE_MED ? 'warning' : 'error' ); ?>">
                                                     <?php echo esc_html( $day_cache_rate ); ?>%
                                                 </span>
                                             <?php else : ?>
@@ -3087,16 +3166,16 @@ class AI_Search_Summary {
                                     $helpful_rate = $vote_count > 0 ? round( ( $helpful_count / $vote_count ) * 100 ) : null;
                                     ?>
                                     <tr>
-                                        <td class="aiss-query-cell"><?php echo esc_html( $row->search_query ); ?></td>
+                                        <td class="aiss-query-cell" title="<?php echo esc_attr( $row->search_query ); ?>"><?php echo esc_html( $row->search_query ); ?></td>
                                         <td><?php echo number_format( $total_q ); ?></td>
                                         <td>
-                                            <span class="aiss-badge aiss-badge-<?php echo $success_q_rate >= 90 ? 'success' : ( $success_q_rate >= 70 ? 'warning' : 'error' ); ?>">
+                                            <span class="aiss-badge aiss-badge-<?php echo $success_q_rate >= AISS_BADGE_SUCCESS_HIGH ? 'success' : ( $success_q_rate >= AISS_BADGE_SUCCESS_MED ? 'warning' : 'error' ); ?>">
                                                 <?php echo esc_html( $success_q_rate ); ?>%
                                             </span>
                                         </td>
                                         <td>
                                             <?php if ( $helpful_rate !== null ) : ?>
-                                                <span class="aiss-badge aiss-badge-<?php echo $helpful_rate >= 70 ? 'success' : ( $helpful_rate >= 40 ? 'warning' : 'error' ); ?>">
+                                                <span class="aiss-badge aiss-badge-<?php echo $helpful_rate >= AISS_BADGE_HELPFUL_HIGH ? 'success' : ( $helpful_rate >= AISS_BADGE_HELPFUL_MED ? 'warning' : 'error' ); ?>">
                                                     <?php echo esc_html( $helpful_rate ); ?>%
                                                 </span>
                                                 <span style="font-size:0.75rem; opacity:0.6;">(<?php echo esc_html( $vote_count ); ?>)</span>
@@ -3207,10 +3286,19 @@ class AI_Search_Summary {
             </div>
             <div class="aiss-section-content">
                 <?php if ( ! empty( $recent_events ) ) : ?>
+                    <div style="margin: 16px 20px 8px; display: flex; align-items: center; gap: 12px;">
+                        <button type="button" id="aiss-bulk-delete-btn"
+                                class="aiss-button aiss-button-secondary" style="font-size: 13px; padding: 6px 12px; display: none;"
+                                data-nonce="<?php echo esc_attr( wp_create_nonce( 'aiss_bulk_delete_logs' ) ); ?>">
+                            Delete Selected
+                        </button>
+                        <span id="aiss-bulk-delete-result" style="font-size: 13px;"></span>
+                    </div>
                     <div class="aiss-table-wrapper">
-                        <table class="aiss-table aiss-table-compact">
+                        <table class="aiss-table aiss-table-compact" id="aiss-events-table">
                             <thead>
                                 <tr>
+                                    <th style="width: 32px; text-align: center;"><input type="checkbox" id="aiss-select-all" title="Select all" /></th>
                                     <th>Query</th>
                                     <th>Status</th>
                                     <th>Cache</th>
@@ -3222,7 +3310,8 @@ class AI_Search_Summary {
                             <tbody>
                                 <?php foreach ( $recent_events as $event ) : ?>
                                     <tr>
-                                        <td class="aiss-query-cell"><?php echo esc_html( $event->search_query ); ?></td>
+                                        <td style="text-align: center;"><input type="checkbox" class="aiss-row-check" value="<?php echo esc_attr( $event->id ); ?>" /></td>
+                                        <td class="aiss-query-cell" title="<?php echo esc_attr( $event->search_query ); ?>"><?php echo esc_html( $event->search_query ); ?></td>
                                         <td>
                                             <?php if ( (int) $event->ai_success === 1 ) : ?>
                                                 <span class="aiss-badge aiss-badge-success">Success</span>
@@ -3453,6 +3542,63 @@ class AI_Search_Summary {
                         }
                     });
                 });
+
+                // Bulk delete for event log rows
+                var $selectAll = $('#aiss-select-all');
+                var $deleteBtn = $('#aiss-bulk-delete-btn');
+                var $resultSpan = $('#aiss-bulk-delete-result');
+
+                function updateDeleteBtn() {
+                    var checked = $('.aiss-row-check:checked').length;
+                    $deleteBtn.toggle(checked > 0).text('Delete Selected (' + checked + ')');
+                }
+
+                $selectAll.on('change', function() {
+                    $('.aiss-row-check').prop('checked', this.checked);
+                    updateDeleteBtn();
+                });
+
+                $(document).on('change', '.aiss-row-check', function() {
+                    var total = $('.aiss-row-check').length;
+                    var checked = $('.aiss-row-check:checked').length;
+                    $selectAll.prop('checked', total === checked);
+                    updateDeleteBtn();
+                });
+
+                $deleteBtn.on('click', function() {
+                    var ids = $('.aiss-row-check:checked').map(function() { return this.value; }).get();
+                    if (!ids.length) return;
+
+                    if (!confirm('Delete ' + ids.length + ' selected log entries? This cannot be undone.')) return;
+
+                    $deleteBtn.prop('disabled', true).text('Deleting...');
+                    $resultSpan.html('');
+
+                    $.ajax({
+                        url: ajaxurl,
+                        type: 'POST',
+                        data: {
+                            action: 'aiss_bulk_delete_logs',
+                            nonce: $deleteBtn.data('nonce'),
+                            ids: ids.join(',')
+                        },
+                        success: function(response) {
+                            $deleteBtn.prop('disabled', false);
+                            if (response.success) {
+                                $resultSpan.html('<span style="color: #10b981;">' + response.data.message + '</span>');
+                                setTimeout(function() { location.reload(); }, 1500);
+                            } else {
+                                $resultSpan.html('<span style="color: #ef4444;">' + response.data.message + '</span>');
+                                updateDeleteBtn();
+                            }
+                        },
+                        error: function() {
+                            $deleteBtn.prop('disabled', false);
+                            $resultSpan.html('<span style="color: #ef4444;">Request failed. Please try again.</span>');
+                            updateDeleteBtn();
+                        }
+                    });
+                });
             });
         })(jQuery);
         </script>
@@ -3470,7 +3616,7 @@ class AI_Search_Summary {
      * @param int $total Total number of operations.
      * @return int Success rate as a percentage (0-100).
      */
-    private function calculate_success_rate( $success_count, $total ) {
+    private function calculate_success_rate( int $success_count, int $total ): int {
         if ( $total <= 0 ) {
             return 0;
         }
@@ -3629,9 +3775,9 @@ class AI_Search_Summary {
                                 $success_q_rate = $this->calculate_success_rate( $success_q, $total_q );
                                 
                                 // Determine badge class
-                                if ( $success_q_rate >= 90 ) {
+                                if ( $success_q_rate >= AISS_BADGE_SUCCESS_HIGH ) {
                                     $badge_class = 'aiss-widget-badge-success';
-                                } elseif ( $success_q_rate >= 70 ) {
+                                } elseif ( $success_q_rate >= AISS_BADGE_SUCCESS_MED ) {
                                     $badge_class = 'aiss-widget-badge-warning';
                                 } else {
                                     $badge_class = 'aiss-widget-badge-error';
@@ -3867,7 +4013,7 @@ class AI_Search_Summary {
         );
     }
 
-    private function is_likely_bot() {
+    private function is_likely_bot(): bool {
         // No user agent = definitely suspicious
         if ( ! isset( $_SERVER['HTTP_USER_AGENT'] ) || empty( $_SERVER['HTTP_USER_AGENT'] ) ) {
             return true;
@@ -3945,7 +4091,7 @@ class AI_Search_Summary {
      * @param string $ip Client IP address.
      * @return bool True if rate limited.
      */
-    private function is_ip_rate_limited( $ip ) {
+    private function is_ip_rate_limited( string $ip ): bool {
         $rate_info = $this->get_rate_limit_info( $ip );
 
         if ( $rate_info['remaining'] <= 0 ) {
@@ -4017,7 +4163,7 @@ class AI_Search_Summary {
         );
     }
 
-    private function get_client_ip() {
+    private function get_client_ip(): string {
         // Use REMOTE_ADDR by default - it's the only non-spoofable source.
         // Sites behind trusted reverse proxies can define AISS_TRUSTED_PROXY_HEADER
         // to read from X-Forwarded-For or similar headers.
@@ -4297,12 +4443,12 @@ class AI_Search_Summary {
         // Reasonable length limits (prevent abuse)
         // Use mb_strlen for proper multi-byte character support
         $length = function_exists( 'mb_strlen' ) ? mb_strlen( $value, 'UTF-8' ) : strlen( $value );
-        if ( $length < 2 || $length > 500 ) {
+        if ( $length < AISS_QUERY_MIN_LENGTH || $length > AISS_QUERY_MAX_LENGTH ) {
             return false;
         }
 
         // Also check byte length to prevent oversized payloads
-        if ( strlen( $value ) > 2000 ) {
+        if ( strlen( $value ) > AISS_QUERY_MAX_BYTES ) {
             return false;
         }
 
@@ -4325,7 +4471,7 @@ class AI_Search_Summary {
      * @param string $value Input value to check.
      * @return bool True if SQL injection pattern detected.
      */
-    private function is_sql_injection_attempt( $value ) {
+    private function is_sql_injection_attempt( string $value ): bool {
         // Normalize: lowercase and decode URL encoding
         $normalized = strtolower( urldecode( $value ) );
 
@@ -4425,7 +4571,7 @@ class AI_Search_Summary {
      * @param string $value Input value to check.
      * @return bool True if spam pattern detected.
      */
-    private function is_spam_query( $value ) {
+    private function is_spam_query( string $value ): bool {
         $normalized = strtolower( trim( $value ) );
 
         // 1. URLs (http/https/www)
@@ -4535,14 +4681,14 @@ class AI_Search_Summary {
      * @return string Truncated text.
      */
 
-    private function safe_substr( $text, $start, $length ) {
+    private function safe_substr( string $text, int $start, int $length ): string {
         if ( function_exists( 'mb_substr' ) ) {
             return mb_substr( $text, $start, $length );
         }
         return substr( $text, $start, $length );
     }
     
-    private function smart_truncate( $text, $limit ) {
+    private function smart_truncate( string $text, int $limit ): string {
         if ( empty( $text ) ) {
             return '';
         }
@@ -4729,7 +4875,7 @@ class AI_Search_Summary {
         );
     }
 
-    private function is_rate_limited_for_ai_calls() {
+    private function is_rate_limited_for_ai_calls(): bool {
         $options = $this->get_options();
         $limit   = isset( $options['max_calls_per_minute'] ) ? (int) $options['max_calls_per_minute'] : 0;
 
@@ -5179,7 +5325,7 @@ class AI_Search_Summary {
         );
     }
 
-    private function render_sources_html( $sources ) {
+    private function render_sources_html( array $sources ): string {
         if ( empty( $sources ) || ! is_array( $sources ) ) {
             return '';
         }

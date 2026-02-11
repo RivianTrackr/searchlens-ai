@@ -147,8 +147,32 @@
       container.innerHTML = '<p role="alert" style="margin:0; opacity:0.8;">Request timed out. Please refresh the page to try again.</p>';
     }, timeoutMs);
 
+    // Show progressive status messages for slow responses
+    var progressMessages = [
+      { delay: 10000, text: 'Still working on your summary...' },
+      { delay: 20000, text: 'Taking a bit longer than usual...' },
+      { delay: 30000, text: 'Almost there, please wait...' }
+    ];
+    var progressTimers = progressMessages.map(function(msg) {
+      return setTimeout(function() {
+        var skeleton = container.querySelector('.aiss-skeleton');
+        if (!skeleton) return;
+        var status = skeleton.querySelector('.aiss-skeleton-status');
+        if (!status) {
+          status = document.createElement('p');
+          status.className = 'aiss-skeleton-status';
+          status.style.cssText = 'margin:0.5rem 0 0; font-size:0.8rem; opacity:0.7;';
+          status.setAttribute('role', 'status');
+          status.setAttribute('aria-live', 'polite');
+          skeleton.appendChild(status);
+        }
+        status.textContent = msg.text;
+      }, msg.delay);
+    });
+
     fetch(endpoint, { credentials: 'same-origin', signal: abortController.signal })
       .then(function(response) {
+        progressTimers.forEach(clearTimeout);
         clearTimeout(timeoutId);
 
         // Handle specific HTTP error codes
@@ -203,6 +227,7 @@
       })
       .catch(function(error) {
         clearTimeout(timeoutId);
+        progressTimers.forEach(clearTimeout);
         // Don't show error if request was intentionally aborted (timeout already handled)
         if (error.name === 'AbortError') {
           return;
@@ -212,7 +237,9 @@
         container.innerHTML = '<p role="alert" style="margin:0; opacity:0.8;">AI summary is not available right now.</p>';
       });
 
-    // Sources toggle handler
+    // Sources toggle handler (persists expanded state in localStorage)
+    var SOURCES_STATE_KEY = 'aiss_sources_expanded';
+
     document.addEventListener('click', function(e) {
       var btn = e.target.closest('.aiss-sources-toggle');
       if (!btn) return;
@@ -231,12 +258,33 @@
         list.removeAttribute('hidden');
         btn.textContent = hideLabel;
         btn.setAttribute('aria-expanded', 'true');
+        try { localStorage.setItem(SOURCES_STATE_KEY, '1'); } catch (e) {}
       } else {
         list.setAttribute('hidden', 'hidden');
         btn.textContent = showLabel;
         btn.setAttribute('aria-expanded', 'false');
+        try { localStorage.removeItem(SOURCES_STATE_KEY); } catch (e) {}
       }
     });
+
+    // Restore sources toggle state from previous visit
+    try {
+      if (localStorage.getItem(SOURCES_STATE_KEY) === '1') {
+        var observer = new MutationObserver(function(mutations, obs) {
+          var btn = document.querySelector('.aiss-sources-toggle');
+          if (btn) {
+            obs.disconnect();
+            var list = btn.closest('.aiss-sources') && btn.closest('.aiss-sources').querySelector('.aiss-sources-list');
+            if (list && list.hasAttribute('hidden')) {
+              list.removeAttribute('hidden');
+              btn.textContent = btn.getAttribute('data-label-hide') || 'Hide sources';
+              btn.setAttribute('aria-expanded', 'true');
+            }
+          }
+        });
+        observer.observe(container, { childList: true, subtree: true });
+      }
+    } catch (e) {}
 
     // Feedback button handler
     document.addEventListener('click', function(e) {

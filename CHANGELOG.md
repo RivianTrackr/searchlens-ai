@@ -5,6 +5,22 @@ All notable changes to AI Search Summary will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.4.1] - 2026-02-11
+
+### Improved
+
+- **CSS: Tablet responsive breakpoint** - Added missing `768px` media query so the summary widget properly adapts for tablets in portrait mode (641-768px range was previously unstyled).
+- **CSS: Keyboard focus states** - Feedback buttons now show a visible `focus-visible` outline for keyboard navigation, improving WCAG 2.1 AA compliance.
+- **JS: Sources toggle persistence** - The expanded/collapsed state of the sources list is now remembered across page navigations via `localStorage`.
+- **JS: Slow response progress indicator** - When the AI summary takes longer than 10 seconds, progressive status messages ("Still working...", "Taking a bit longer...", "Almost there...") are shown inside the skeleton loader with an ARIA live region for screen reader support.
+- **Analytics: Query cell tooltips** - Truncated search queries in the Top Queries and Recent Events tables now show the full text on hover via `title` attribute.
+- **Analytics: Bulk delete for event logs** - Admins can now select multiple log entries via checkboxes and delete them in bulk with a single click, with confirmation prompt and AJAX handling.
+- **Analytics: Badge threshold legend** - A visual legend above the Daily Stats table now explains what the green/yellow/red badge colors mean for AI success, cache hit, and helpfulness rates.
+- **Code: Named constants for magic numbers** - Extracted 18 hardcoded values (pagination sizes, validation limits, badge thresholds, table size threshold, CSS max length, error max length) into named `define()` constants for maintainability.
+- **Code: PHP type hints** - Added parameter and return type declarations to 27 core functions, improving IDE support and leveraging the existing `declare(strict_types=1)`.
+
+---
+
 ## [1.0.4] - 2026-02-11
 
 ### Improved

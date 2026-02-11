@@ -129,6 +129,21 @@
   color:#cbd5f5;
 }
 
+@media (max-width: 768px) {
+  .aiss-summary-inner {
+    padding: 1rem 1rem;
+  }
+
+  .aiss-summary-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .aiss-summary-header h2 {
+    font-size: 1.05rem;
+  }
+}
+
 @media (max-width: 640px) {
   .aiss-summary-header {
     flex-direction:column;
@@ -207,6 +222,11 @@
 .aiss-feedback-btn:hover:not(:disabled) {
   opacity: 1 !important;
   background-color: rgba(128, 128, 128, 0.1);
+}
+
+.aiss-feedback-btn:focus-visible {
+  outline: 2px solid #0071e3;
+  outline-offset: 2px;
 }
 
 .aiss-feedback-btn:disabled {
