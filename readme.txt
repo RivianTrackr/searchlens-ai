@@ -175,6 +175,7 @@ The plugin is designed with privacy in mind:
 * Security: Bulk delete nonce moved from HTML data-attribute to wp_localize_script
 * Added: Anonymize Search Queries setting for GDPR/privacy compliance (stores SHA-256 hashes)
 * Added: One-click GDPR purge to retroactively anonymize all stored search query text
+* Improved: Advanced settings section now hidden by default with a toggle button and warning banner
 
 = 1.0.4.1 =
 * Added tablet responsive breakpoint (768px) and keyboard focus states for feedback buttons

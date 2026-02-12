@@ -23,6 +23,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Privacy: Anonymize Search Queries setting** - New toggle in Advanced settings. When enabled, search queries are stored as SHA-256 hashes instead of plain text, preserving aggregate analytics while removing personally-identifiable search history.
 - **Privacy: GDPR Purge Existing Queries** - One-click button to retroactively replace all stored search query text with SHA-256 hashes. Includes confirmation prompt and AJAX handler with full security checks.
 
+### Improved
+
+- **Settings: Collapsible Advanced section** - The Advanced settings section is now hidden by default behind a "Show Advanced Settings" toggle button. Expanding it reveals a warning banner advising caution, reducing the chance of accidental changes to sensitive options like reasoning models, spam blocklists, and data retention.
+
 ---
 
 ## [1.0.4.1] - 2026-02-11
