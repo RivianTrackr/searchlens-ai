@@ -2543,6 +2543,15 @@ class AI_Search_Summary {
                         <p>Settings for advanced users</p>
                     </div>
                     <div class="aiss-section-content">
+                        <div id="aiss-advanced-toggle-wrap" style="margin-bottom: 16px;">
+                            <button type="button" id="aiss-advanced-toggle" class="aiss-button aiss-button-secondary" style="font-size: 13px; padding: 8px 16px;">
+                                Show Advanced Settings
+                            </button>
+                        </div>
+                        <div id="aiss-advanced-settings" style="display: none;">
+                            <div style="background: #fef3c7; border: 1px solid #f59e0b; border-radius: 6px; padding: 12px 16px; margin-bottom: 20px; font-size: 13px; color: #92400e;">
+                                <strong>Warning:</strong> These settings are intended for advanced users. Incorrect changes may affect plugin behavior, API costs, or data retention. Proceed with caution.
+                            </div>
                         <div class="aiss-field">
                             <div class="aiss-field-label">
                                 <label>Allow Reasoning Models</label>
@@ -2634,6 +2643,7 @@ class AI_Search_Summary {
                                 </p>
                             </div>
                         </div>
+                        </div><!-- /#aiss-advanced-settings -->
                     </div>
                 </div>
 
@@ -2646,6 +2656,19 @@ class AI_Search_Summary {
         <script>
         (function($) {
             $(document).ready(function() {
+                // Advanced settings toggle
+                $('#aiss-advanced-toggle').on('click', function() {
+                    var $settings = $('#aiss-advanced-settings');
+                    var isHidden = $settings.is(':hidden');
+                    if (isHidden) {
+                        $settings.slideDown(200);
+                        $(this).text('Hide Advanced Settings');
+                    } else {
+                        $settings.slideUp(200);
+                        $(this).text('Show Advanced Settings');
+                    }
+                });
+
                 $('#aiss-test-key-btn').on('click', function() {
                     var btn = $(this);
                     var useConstant = <?php echo $this->is_api_key_from_constant() ? 'true' : 'false'; ?>;
