@@ -9,8 +9,8 @@
  * @package AI_Search_Summary
  */
 
-// Exit if not called by WordPress uninstall
-if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
+// Exit if accessed directly or not called by WordPress uninstall
+if ( ! defined( 'ABSPATH' ) || ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
     exit;
 }
 
