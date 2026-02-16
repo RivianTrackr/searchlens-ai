@@ -7,32 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.5.3] - 2026-02-16
 
-### Fixed
-
-- **phpcs InterpolatedNotPrepared warning** — Switched from single-line `phpcs:ignore` to a `phpcs:disable`/`phpcs:enable` block around the bulk-delete query so the `InterpolatedNotPrepared` suppression covers the actual string literal line, not just the `$wpdb->prepare()` call above it.
-
----
-
-## [1.0.5.2] - 2026-02-16
-
-### Fixed
-
-- **Direct file access protection** — Added `ABSPATH` guard to the main `ai-search-summary.php` plugin file to satisfy the `missing_direct_file_access_protection` plugin check.
-- **Prepared SQL placeholder warning** — Added `ReplacementsWrongNumber` to the phpcs ignore directive on the dynamic `IN()` bulk-delete query, resolving the false-positive `PreparedSQLPlaceholders.ReplacementsWrongNumber` warning caused by the spread operator.
-
----
-
-## [1.0.5.1] - 2026-02-16
-
 ### Changed
 
-- **Credits opt-in by default** — `show_openai_badge`, `show_sources`, and `show_feedback` now default to disabled. Users must explicitly enable credit displays and links via the admin settings, meeting WordPress plugin directory requirements that all credits be opt-in.
+- **Credits are now opt-in** — The OpenAI badge, source links, and feedback buttons are now disabled by default. You must turn them on in **Settings → AI Search Summary** to display them, in line with WordPress plugin directory guidelines.
 
 ### Fixed
 
-- **Direct file access protection** — Added `ABSPATH` guard to `index.php` and `uninstall.php` to prevent direct access outside WordPress.
-- **Prepared SQL escaping** — Bulk-delete query now uses the `%i` identifier placeholder for the table name instead of string interpolation, resolving the `UnescapedDBParameter` plugin check warning.
-- **phpcs annotation coverage** — Fixed `InterpolatedNotPrepared` and `NonceVerification.Recommended` warnings by adding correctly scoped ignore/disable directives.
+- **Direct file access protection** — Added security checks to plugin files (`ai-search-summary.php`, `index.php`, `uninstall.php`) so they cannot be loaded directly outside of WordPress.
+- **Safer database queries** — The bulk-delete query now uses WordPress's built-in escaping for the table name instead of inserting it directly, eliminating a plugin-check warning.
+- **Code-quality warnings** — Corrected the placement and scope of several code-analysis suppression rules so they cover the intended lines and resolve false-positive warnings.
 
 ---
 
