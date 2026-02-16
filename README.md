@@ -1,6 +1,6 @@
 # AI Search Summary
 
-[![Version](https://img.shields.io/badge/version-1.0.5-blue.svg)](https://github.com/RivianTrackr/AI-Search-Summary)
+[![Version](https://img.shields.io/badge/version-1.0.5.1-blue.svg)](https://github.com/RivianTrackr/AI-Search-Summary)
 [![WordPress](https://img.shields.io/badge/WordPress-6.9%2B-blue.svg)](https://wordpress.org/)
 [![PHP](https://img.shields.io/badge/PHP-8.4%2B-purple.svg)](https://php.net/)
 [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)

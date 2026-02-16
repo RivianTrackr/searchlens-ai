@@ -5,6 +5,20 @@ All notable changes to AI Search Summary will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.5.1] - 2026-02-16
+
+### Changed
+
+- **Credits opt-in by default** — `show_openai_badge`, `show_sources`, and `show_feedback` now default to disabled. Users must explicitly enable credit displays and links via the admin settings, meeting WordPress plugin directory requirements that all credits be opt-in.
+
+### Fixed
+
+- **Direct file access protection** — Added `ABSPATH` guard to `index.php` and `uninstall.php` to prevent direct access outside WordPress.
+- **Prepared SQL escaping** — Bulk-delete query now uses the `%i` identifier placeholder for the table name instead of string interpolation, resolving the `UnescapedDBParameter` plugin check warning.
+- **phpcs annotation coverage** — Fixed `InterpolatedNotPrepared` and `NonceVerification.Recommended` warnings by adding correctly scoped ignore/disable directives.
+
+---
+
 ## [1.0.5] - 2026-02-12
 
 ### Security
