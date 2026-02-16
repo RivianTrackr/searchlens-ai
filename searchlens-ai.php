@@ -4,20 +4,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 /**
- * Plugin Name: AI Search Summary
+ * Plugin Name: SearchLens AI
  * Description: Add an OpenAI powered AI summary to WordPress search results without delaying normal results, with analytics, cache control, and collapsible sources.
- * Version: 1.0.5.4
+ * Version: 1.0.6
  * Author: Jose Castillo
  * Author URI: https://github.com/RivianTrackr/
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Requires at least: 6.9
  * Requires PHP: 8.4
- * Text Domain: aiss-ai-search-summary
+ * Text Domain: searchlens-ai
  * Domain Path: /languages
  */
 
-define( 'AI_SEARCH_VERSION', '1.0.5.4' );
+define( 'AI_SEARCH_VERSION', '1.0.6' );
 define( 'AISS_MODELS_CACHE_TTL', 7 * DAY_IN_SECONDS );
 define( 'AISS_MIN_CACHE_TTL', 60 );
 define( 'AISS_MAX_CACHE_TTL', 86400 );
@@ -67,7 +67,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class AI_Search_Summary {
+class SearchLens_AI {
 
     private $option_name         = 'aiss_options';
     private $models_cache_option = 'aiss_models_cache';
@@ -250,7 +250,7 @@ class AI_Search_Summary {
             $wpdb->query( $wpdb->prepare( 'ALTER TABLE %i ADD INDEX search_query_created (search_query(100), created_at)', $table_name ) );
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[AI Search Summary] Added search_query_created index' );
+                error_log( '[SearchLens AI] Added search_query_created index' );
             }
         }
 
@@ -260,7 +260,7 @@ class AI_Search_Summary {
             $wpdb->query( $wpdb->prepare( 'ALTER TABLE %i ADD INDEX ai_success_created (ai_success, created_at)', $table_name ) );
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[AI Search Summary] Added ai_success_created index' );
+                error_log( '[SearchLens AI] Added ai_success_created index' );
             }
         }
 
@@ -270,7 +270,7 @@ class AI_Search_Summary {
             $wpdb->query( $wpdb->prepare( 'ALTER TABLE %i ADD INDEX cache_hit_created (cache_hit, created_at)', $table_name ) );
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[AI Search Summary] Added cache_hit_created index' );
+                error_log( '[SearchLens AI] Added cache_hit_created index' );
             }
         }
 
@@ -280,7 +280,7 @@ class AI_Search_Summary {
             $wpdb->query( $wpdb->prepare( 'ALTER TABLE %i ADD INDEX results_count (results_count)', $table_name ) );
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[AI Search Summary] Added results_count index' );
+                error_log( '[SearchLens AI] Added results_count index' );
             }
         }
 
@@ -312,7 +312,7 @@ class AI_Search_Summary {
             $wpdb->query( $wpdb->prepare( 'ALTER TABLE %i ADD COLUMN cache_hit tinyint(1) NULL DEFAULT NULL AFTER ai_error', $table_name ) );
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[AI Search Summary] Added cache_hit column' );
+                error_log( '[SearchLens AI] Added cache_hit column' );
             }
         }
 
@@ -322,7 +322,7 @@ class AI_Search_Summary {
             $wpdb->query( $wpdb->prepare( 'ALTER TABLE %i ADD COLUMN response_time_ms int unsigned NULL DEFAULT NULL AFTER cache_hit', $table_name ) );
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[AI Search Summary] Added response_time_ms column' );
+                error_log( '[SearchLens AI] Added response_time_ms column' );
             }
         }
 
@@ -490,7 +490,7 @@ class AI_Search_Summary {
         if ( false === $result && defined( 'WP_DEBUG' ) && WP_DEBUG ) {
             // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
             error_log(
-                '[AI Search Summary] Failed to log search event: ' .
+                '[SearchLens AI] Failed to log search event: ' .
                 $wpdb->last_error .
                 ' | Query: ' . substr( $search_query, 0, 50 )
             );
@@ -1021,8 +1021,8 @@ class AI_Search_Summary {
         $parent_slug = 'aiss-settings';
 
         add_menu_page(
-            'AI Search',
-            'AI Search',
+            'SearchLens AI',
+            'SearchLens AI',
             $capability,
             $parent_slug,
             array( $this, 'render_settings_page' ),
@@ -1032,7 +1032,7 @@ class AI_Search_Summary {
 
         add_submenu_page(
             $parent_slug,
-            'AI Search Settings',
+            'SearchLens AI Settings',
             'Settings',
             $capability,
             $parent_slug,
@@ -1041,7 +1041,7 @@ class AI_Search_Summary {
 
         add_submenu_page(
             $parent_slug,
-            'AI Search Analytics',
+            'SearchLens AI Analytics',
             'Analytics',
             $capability,
             'aiss-analytics',
@@ -1598,7 +1598,7 @@ class AI_Search_Summary {
 
         if ( defined( 'WP_DEBUG' ) && WP_DEBUG && $deleted !== false ) {
             // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-            error_log( '[AI Search Summary] Auto-purge: deleted ' . $deleted . ' log entries older than ' . $days . ' days.' );
+            error_log( '[SearchLens AI] Auto-purge: deleted ' . $deleted . ' log entries older than ' . $days . ' days.' );
         }
     }
 
@@ -1836,7 +1836,7 @@ class AI_Search_Summary {
         if ( is_wp_error( $response ) ) {
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[AI Search Summary] Model list error: ' . $response->get_error_message() );
+                error_log( '[SearchLens AI] Model list error: ' . $response->get_error_message() );
             }
             return array();
         }
@@ -1847,7 +1847,7 @@ class AI_Search_Summary {
         if ( $code < 200 || $code >= 300 ) {
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[AI Search Summary] Model list HTTP error ' . $code . ' body: ' . $body );
+                error_log( '[SearchLens AI] Model list HTTP error ' . $code . ' body: ' . $body );
             }
             return array();
         }
@@ -2022,7 +2022,7 @@ class AI_Search_Summary {
         <div class="aiss-settings-wrap">
             <!-- Header -->
             <div class="aiss-header">
-                <h1>AI Search Settings</h1>
+                <h1>SearchLens AI Settings</h1>
                 <p>Configure OpenAI-powered search summaries for your site.</p>
             </div>
 
@@ -2032,7 +2032,7 @@ class AI_Search_Summary {
                     <?php echo $setup_complete ? '✓' : '○'; ?>
                 </div>
                 <div class="aiss-status-content">
-                    <h3><?php echo $setup_complete ? 'AI Search Active' : 'Setup Required'; ?></h3>
+                    <h3><?php echo $setup_complete ? 'SearchLens AI Active' : 'Setup Required'; ?></h3>
                     <p>
                         <?php 
                         if ( $setup_complete ) {
@@ -2065,7 +2065,7 @@ class AI_Search_Summary {
                         <!-- Enable Toggle -->
                         <div class="aiss-field">
                             <div class="aiss-field-label">
-                                <label>AI Search</label>
+                                <label>SearchLens AI</label>
                             </div>
                             <div class="aiss-field-description">
                                 Enable or disable AI-powered search summaries site-wide
@@ -3457,7 +3457,7 @@ class AI_Search_Summary {
         <!-- Recent Events Section -->
         <div class="aiss-section">
             <div class="aiss-section-header">
-                <h2>Recent AI Search Events</h2>
+                <h2>Recent SearchLens AI Events</h2>
                 <p>
                     <?php
                     $start_num = $events_offset + 1;
@@ -3825,7 +3825,7 @@ class AI_Search_Summary {
 
         wp_add_dashboard_widget(
             'aiss_dashboard_widget',
-            'AI Search Summary',
+            'SearchLens AI',
             array( $this, 'render_dashboard_widget' )
         );
     }
@@ -4848,7 +4848,7 @@ class AI_Search_Summary {
                 // Log the attempt for security monitoring
                 if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                     // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                    error_log( '[AI Search Summary] Blocked SQL injection attempt: ' . substr( $value, 0, 100 ) );
+                    error_log( '[SearchLens AI] Blocked SQL injection attempt: ' . substr( $value, 0, 100 ) );
                 }
                 return true;
             }
@@ -4937,7 +4937,7 @@ class AI_Search_Summary {
             if ( preg_match( '/' . $pattern . '/i', $normalized ) ) {
                 if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                     // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                    error_log( '[AI Search Summary] Blocked spam query (pattern: ' . $pattern . '): ' . substr( $value, 0, 100 ) );
+                    error_log( '[SearchLens AI] Blocked spam query (pattern: ' . $pattern . '): ' . substr( $value, 0, 100 ) );
                 }
                 return true;
             }
@@ -4975,7 +4975,7 @@ class AI_Search_Summary {
             if ( stripos( $normalized, strtolower( $probe ) ) !== false ) {
                 if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                     // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                    error_log( '[AI Search Summary] Blocked scanner probe query (variable: ' . $probe . '): ' . substr( $value, 0, 100 ) );
+                    error_log( '[SearchLens AI] Blocked scanner probe query (variable: ' . $probe . '): ' . substr( $value, 0, 100 ) );
                 }
                 return true;
             }
@@ -5000,7 +5000,7 @@ class AI_Search_Summary {
                 if ( strpos( $normalized, $term ) !== false ) {
                     if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                         // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                        error_log( '[AI Search Summary] Blocked query via blocklist (term: ' . $term . '): ' . substr( $value, 0, 100 ) );
+                        error_log( '[SearchLens AI] Blocked query via blocklist (term: ' . $term . '): ' . substr( $value, 0, 100 ) );
                     }
                     return true;
                 }
@@ -5289,7 +5289,7 @@ class AI_Search_Summary {
             // Log detailed error for debugging, but show generic message to users
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[AI Search Summary] API error: ' . $api_response['error'] );
+                error_log( '[SearchLens AI] API error: ' . $api_response['error'] );
             }
             $ai_error = 'The AI service encountered an error. Please try again later.';
             return null;
@@ -5318,14 +5318,14 @@ class AI_Search_Summary {
         if ( empty( $raw_content ) ) {
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[AI Search Summary] Empty response. Full API response: ' . wp_json_encode( $api_response ) );
+                error_log( '[SearchLens AI] Empty response. Full API response: ' . wp_json_encode( $api_response ) );
             }
             // Check if there's a finish_reason that explains the empty response
             $finish_reason = $api_response['choices'][0]['finish_reason'] ?? 'unknown';
             // Log detailed reason for debugging
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[AI Search Summary] Empty response with finish_reason: ' . $finish_reason );
+                error_log( '[SearchLens AI] Empty response with finish_reason: ' . $finish_reason );
             }
             if ( $finish_reason === 'content_filter' ) {
                 $ai_error = 'The response was filtered by content policy. Please try a different search.';
@@ -5509,7 +5509,7 @@ class AI_Search_Summary {
                     $data['_retry_count'] = $attempt;
                     if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                         // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                        error_log( '[AI Search Summary] Request succeeded after ' . $attempt . ' retry(ies)' );
+                        error_log( '[SearchLens AI] Request succeeded after ' . $attempt . ' retry(ies)' );
                     }
                 }
                 return $data;
@@ -5532,7 +5532,7 @@ class AI_Search_Summary {
 
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[AI Search Summary] Retry attempt ' . ( $attempt + 1 ) . ' after ' . $delay . 's delay' );
+                error_log( '[SearchLens AI] Retry attempt ' . ( $attempt + 1 ) . ' after ' . $delay . 's delay' );
             }
         }
 
@@ -5556,7 +5556,7 @@ class AI_Search_Summary {
             $error_msg = $response->get_error_message();
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[AI Search Summary] API request error: ' . $error_msg );
+                error_log( '[SearchLens AI] API request error: ' . $error_msg );
             }
 
             // Timeouts and connection errors are retryable
@@ -5593,7 +5593,7 @@ class AI_Search_Summary {
         if ( $code < 200 || $code >= 300 ) {
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[AI Search Summary] API HTTP error ' . $code . ' body: ' . $body );
+                error_log( '[SearchLens AI] API HTTP error ' . $code . ' body: ' . $body );
             }
 
             $decoded_error = json_decode( $body, true );
@@ -5649,7 +5649,7 @@ class AI_Search_Summary {
         if ( json_last_error() !== JSON_ERROR_NONE ) {
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[AI Search Summary] Failed to decode OpenAI response: ' . json_last_error_msg() );
+                error_log( '[SearchLens AI] Failed to decode OpenAI response: ' . json_last_error_msg() );
             }
             return array(
                 'success'   => false,
@@ -6004,7 +6004,7 @@ class AISS_Trending_Widget extends WP_Widget {
     public function __construct() {
         parent::__construct(
             'aiss_trending_widget',
-            'AI Search - Trending Searches',
+            'SearchLens AI - Trending Searches',
             array(
                 'description' => 'Display trending search keywords from a configurable time period.',
                 'classname'   => 'aiss-trending-widget-container',
@@ -6030,7 +6030,7 @@ class AISS_Trending_Widget extends WP_Widget {
         // Get the main plugin instance
         global $aiss_instance;
         if ( ! isset( $aiss_instance ) ) {
-            $aiss_instance = new AI_Search_Summary();
+            $aiss_instance = new SearchLens_AI();
         }
 
         $content = $aiss_instance->render_trending_searches( $limit, $title, $subtitle, $bg_color, $font_color, $time_period, $time_unit );
@@ -6167,7 +6167,7 @@ class AISS_Trending_Widget extends WP_Widget {
     }
 }
 
-register_activation_hook( __FILE__, array( 'AI_Search_Summary', 'activate' ) );
-register_deactivation_hook( __FILE__, array( 'AI_Search_Summary', 'deactivate' ) );
+register_activation_hook( __FILE__, array( 'SearchLens_AI', 'activate' ) );
+register_deactivation_hook( __FILE__, array( 'SearchLens_AI', 'deactivate' ) );
 
-new AI_Search_Summary();
+new SearchLens_AI();

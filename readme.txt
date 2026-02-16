@@ -1,10 +1,10 @@
-=== AI Search Summary ===
+=== SearchLens AI ===
 Contributors: josecastillo
 Tags: search, ai, openai, summary, chatgpt
 Requires at least: 6.9
 Tested up to: 6.9
 Requires PHP: 8.4
-Stable tag: 1.0.5.4
+Stable tag: 1.0.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Add AI-powered summaries to your WordPress search results using OpenAI's GPT mod
 
 == Description ==
 
-AI Search Summary is a powerful WordPress plugin that adds AI-powered summaries to your search results using OpenAI's GPT models. Enhance your site's search experience with intelligent, contextual summaries that help users find what they're looking for faster.
+SearchLens AI is a powerful WordPress plugin that adds AI-powered summaries to your search results using OpenAI's GPT models. Enhance your site's search experience with intelligent, contextual summaries that help users find what they're looking for faster.
 
 = Core AI Functionality =
 
@@ -76,11 +76,11 @@ Your use of this plugin constitutes acceptance of OpenAI's terms. No personal us
 
 == Installation ==
 
-1. Upload the `ai-search-summary` folder to the `/wp-content/plugins/` directory
+1. Upload the `searchlens-ai` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Go to **AI Search > Settings** and add your OpenAI API key
+3. Go to **SearchLens AI > Settings** and add your OpenAI API key
 4. Click "Test Connection" to verify your API key works
-5. Enable AI Search using the toggle
+5. Enable SearchLens AI using the toggle
 6. Configure additional settings as needed
 
 = Secure API Key Configuration (Recommended) =
@@ -138,7 +138,7 @@ The plugin supports all OpenAI GPT models including:
 
 = How do I see analytics? =
 
-Go to **AI Search > Analytics** in your WordPress admin to view:
+Go to **SearchLens AI > Analytics** in your WordPress admin to view:
 * Daily search statistics
 * Success rates and cache performance
 * Top search queries
@@ -255,7 +255,7 @@ Fixes remaining phpcs InterpolatedNotPrepared warning on bulk-delete prepared qu
 Fixes direct file access protection on main plugin file and resolves prepared SQL placeholder phpcs warning.
 
 = 1.0.5.1 =
-Credits and badges now default to hidden — enable them in Settings > AI Search Summary if desired. Includes direct access protection and prepared SQL fixes for plugin directory compliance.
+Credits and badges now default to hidden — enable them in Settings > SearchLens AI if desired. Includes direct access protection and prepared SQL fixes for plugin directory compliance.
 
 = 1.0.5 =
 Security hardening release: stricter CSS sanitization, atomic rate limiting, SHA-256 hashing, CSP headers, API key log redaction, JS bot challenge tokens, GDPR query anonymization, and nonce handling improvements.
@@ -273,4 +273,4 @@ Bug fixes for analytics logging, cache correctness, CSV export validation, rate 
 New settings: post type filtering, configurable max sources and content length per post, and an option to preserve data on uninstall.
 
 = 1.0.0 =
-Initial release of AI Search Summary. Requires WordPress 6.9+, PHP 8.4+, and an OpenAI API key.
+Initial release of SearchLens AI. Requires WordPress 6.9+, PHP 8.4+, and an OpenAI API key.

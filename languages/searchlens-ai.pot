@@ -2,7 +2,7 @@
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: AI Search Summary 1.0.1\n"
+"Project-Id-Version: SearchLens AI 1.0.6\n"
 "Report-Msgid-Bugs-To: https://github.com/RivianTrackr/AI-Search-Summary/issues\n"
 "POT-Creation-Date: 2025-01-01 00:00:00+00:00\n"
 "MIME-Version: 1.0\n"

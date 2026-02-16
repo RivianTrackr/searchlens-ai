@@ -1,9 +1,22 @@
 # Changelog
 
-All notable changes to AI Search Summary will be documented in this file.
+All notable changes to SearchLens AI will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.0.6] - 2026-02-16
+
+### Changed
+
+- **Plugin renamed from "AI Search Summary" to "SearchLens AI"** — Display name, slug, text domain, and main PHP file updated to comply with WordPress plugin directory naming guidelines. All internal identifiers (`AISS_*` constants, `aiss_*` options, database tables, REST API namespace, CSS classes) remain unchanged for backward compatibility.
+- Main plugin file renamed from `ai-search-summary.php` to `searchlens-ai.php`
+- Text domain changed from `aiss-ai-search-summary` to `searchlens-ai`
+- Admin menu label changed from "AI Search" to "SearchLens AI"
+- Dashboard widget title updated to "SearchLens AI"
+- Translation template renamed to `searchlens-ai.pot`
+
+---
 
 ## [1.0.5.4] - 2026-02-16
 
@@ -17,11 +30,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- **Credits are now opt-in** — The OpenAI badge, source links, and feedback buttons are now disabled by default. You must turn them on in **Settings → AI Search Summary** to display them, in line with WordPress plugin directory guidelines.
+- **Credits are now opt-in** — The OpenAI badge, source links, and feedback buttons are now disabled by default. You must turn them on in **Settings → SearchLens AI** to display them, in line with WordPress plugin directory guidelines.
 
 ### Fixed
 
-- **Direct file access protection** — Added security checks to plugin files (`ai-search-summary.php`, `index.php`, `uninstall.php`) so they cannot be loaded directly outside of WordPress.
+- **Direct file access protection** — Added security checks to plugin files (`searchlens-ai.php`, `index.php`, `uninstall.php`) so they cannot be loaded directly outside of WordPress.
 - **Safer database queries** — The bulk-delete query now uses WordPress's built-in escaping for the table name instead of inserting it directly, eliminating a plugin-check warning.
 - **Code-quality warnings** — Corrected the placement and scope of several code-analysis suppression rules so they cover the intended lines and resolve false-positive warnings.
 
@@ -178,4 +191,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-This is the first official release of AI Search Summary, consolidating all development work into a stable 1.0.0 version.
+This is the first official release of SearchLens AI, consolidating all development work into a stable 1.0.0 version.

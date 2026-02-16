@@ -1,6 +1,6 @@
-# Contributing to AI Search Summary
+# Contributing to SearchLens AI
 
-Thank you for your interest in contributing to AI Search Summary! We welcome contributions from the community.
+Thank you for your interest in contributing to SearchLens AI! We welcome contributions from the community.
 
 ## Table of Contents
 
@@ -32,7 +32,7 @@ This project adheres to a code of conduct. By participating, you are expected to
 ### Types of Contributions We Welcome
 
 - 🐛 **Bug fixes** - Fix issues or improve error handling
-- ✨ **New features** - Add functionality that benefits AI Search Summary users
+- ✨ **New features** - Add functionality that benefits SearchLens AI users
 - 📝 **Documentation** - Improve README, code comments, or inline docs
 - 🎨 **UI/UX improvements** - Enhance the admin interface or frontend display
 - ⚡ **Performance optimizations** - Make the plugin faster or more efficient
@@ -341,4 +341,4 @@ By contributing, you agree that your contributions will be licensed under the sa
 
 ---
 
-Thank you for contributing to AI Search Summary!
+Thank you for contributing to SearchLens AI!

@@ -1,6 +1,6 @@
-# AI Search Summary
+# SearchLens AI
 
-[![Version](https://img.shields.io/badge/version-1.0.5.4-blue.svg)](https://github.com/RivianTrackr/AI-Search-Summary)
+[![Version](https://img.shields.io/badge/version-1.0.6-blue.svg)](https://github.com/RivianTrackr/aiss-ai-search-summary)
 [![WordPress](https://img.shields.io/badge/WordPress-6.9%2B-blue.svg)](https://wordpress.org/)
 [![PHP](https://img.shields.io/badge/PHP-8.4%2B-purple.svg)](https://php.net/)
 [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
@@ -72,8 +72,8 @@ A powerful WordPress plugin that adds AI-powered summaries to your search result
 
 1. Upload the plugin folder to `/wp-content/plugins/`
 2. Activate the plugin in WordPress admin
-3. Go to **AI Search → Settings** and add your OpenAI API key
-4. Enable AI Search
+3. Go to **SearchLens AI → Settings** and add your OpenAI API key
+4. Enable SearchLens AI
 5. Configure settings as needed
 
 ## Configuration
@@ -99,7 +99,7 @@ define( 'AISS_API_KEY', getenv('OPENAI_API_KEY') );
 
 ### Settings Overview
 
-Navigate to **WP Admin → AI Search → Settings** to configure:
+Navigate to **WP Admin → SearchLens AI → Settings** to configure:
 
 | Section | Options |
 |---------|---------|

@@ -1,12 +1,12 @@
 <?php
 /**
- * Uninstall script for AI Search Summary
+ * Uninstall script for SearchLens AI
  *
  * This file runs when the plugin is deleted via the WordPress admin.
  * It removes all plugin data including options, transients, and database tables
  * unless the user has enabled the "Preserve Data on Uninstall" option.
  *
- * @package AI_Search_Summary
+ * @package SearchLens_AI
  */
 
 // Exit if accessed directly or not called by WordPress uninstall
