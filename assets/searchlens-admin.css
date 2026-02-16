@@ -1,21 +1,21 @@
-.aiss-settings-wrap {
+.searchlens-settings-wrap {
     max-width: 1600px;
     margin: 40px 20px 40px 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
-.aiss-header {
+.searchlens-header {
     margin-bottom: 32px;
 }
 
-.aiss-header h1 {
+.searchlens-header h1 {
     font-size: 32px;
     font-weight: 600;
     margin: 0 0 8px 0;
     color: #1d1d1f;
 }
 
-.aiss-header p {
+.searchlens-header p {
     font-size: 17px;
     line-height: 1.47059;
     font-weight: 400;
@@ -23,7 +23,7 @@
     margin: 0;
 }
 
-.aiss-status-card {
+.searchlens-status-card {
     background: #f5f5f7;
     border-radius: 12px;
     padding: 20px 24px;
@@ -33,11 +33,11 @@
     gap: 16px;
 }
 
-.aiss-status-card.active {
+.searchlens-status-card.active {
     background: #d1f4e0;
 }
 
-.aiss-status-icon {
+.searchlens-status-icon {
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -49,76 +49,76 @@
     flex-shrink: 0;
 }
 
-.aiss-status-content {
+.searchlens-status-content {
     flex: 1;
 }
 
-.aiss-status-content h3 {
+.searchlens-status-content h3 {
     margin: 0 0 4px 0;
     font-size: 17px;
     font-weight: 600;
     color: #1d1d1f;
 }
 
-.aiss-status-content p {
+.searchlens-status-content p {
     margin: 0;
     font-size: 15px;
     color: #6e6e73;
 }
 
-.aiss-section {
+.searchlens-section {
     background: #fff;
     border-radius: 12px;
     border: 1px solid #d2d2d7;
     margin-bottom: 20px;
 }
 
-.aiss-section-header {
+.searchlens-section-header {
     padding: 20px 24px;
     border-bottom: 1px solid #d2d2d7;
 }
 
-.aiss-section-header h2 {
+.searchlens-section-header h2 {
     margin: 0;
     font-size: 20px;
     font-weight: 600;
     color: #1d1d1f;
 }
 
-.aiss-section-header p {
+.searchlens-section-header p {
     margin: 4px 0 0 0;
     font-size: 14px;
     color: #6e6e73;
 }
 
-.aiss-section-content {
+.searchlens-section-content {
     padding: 0;
 }
 
-.aiss-field {
+.searchlens-field {
     padding: 20px 24px;
     border-bottom: 1px solid #f5f5f7;
 }
 
-.aiss-field:last-child {
+.searchlens-field:last-child {
     border-bottom: none;
 }
 
-.aiss-field-label {
+.searchlens-field-label {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 8px;
 }
 
-.aiss-field-label label {
+.searchlens-field-label label {
     font-size: 15px;
     font-weight: 500;
     color: #1d1d1f;
     margin: 0;
 }
 
-.aiss-field-required {
+.searchlens-field-required {
     display: inline-flex;
     align-items: center;
     font-size: 12px;
@@ -129,26 +129,26 @@
     font-weight: 500;
 }
 
-.aiss-field-description {
+.searchlens-field-description {
     font-size: 13px;
     color: #86868b;
     margin: 4px 0 12px 0;
     line-height: 1.5;
 }
 
-.aiss-field-description a {
+.searchlens-field-description a {
     color: #0071e3;
     text-decoration: none;
 }
 
-.aiss-field-description a:hover {
+.searchlens-field-description a:hover {
     text-decoration: underline;
 }
 
-.aiss-field-input input[type="text"],
-.aiss-field-input input[type="password"],
-.aiss-field-input input[type="number"],
-.aiss-field-input select {
+.searchlens-field-input input[type="text"],
+.searchlens-field-input input[type="password"],
+.searchlens-field-input input[type="number"],
+.searchlens-field-input select {
     width: 100%;
     max-width: 400px;
     padding: 10px 12px;
@@ -159,20 +159,20 @@
     transition: border-color 0.2s;
 }
 
-.aiss-field-input input:focus,
-.aiss-field-input select:focus {
+.searchlens-field-input input:focus,
+.searchlens-field-input select:focus {
     outline: none;
     border-color: #0071e3;
     box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
 }
 
-.aiss-field-actions {
+.searchlens-field-actions {
     display: flex;
     gap: 8px;
     margin-top: 12px;
 }
 
-.aiss-button {
+.searchlens-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -186,44 +186,44 @@
     text-decoration: none;
 }
 
-.aiss-button-primary {
+.searchlens-button-primary {
     background: #0071e3;
     color: #fff;
 }
 
-.aiss-button-primary:hover {
+.searchlens-button-primary:hover {
     background: #0077ed;
 }
 
-.aiss-button-secondary {
+.searchlens-button-secondary {
     background: #f5f5f7;
     color: #1d1d1f;
     border: 1px solid #d2d2d7;
 }
 
-.aiss-button-secondary:hover {
+.searchlens-button-secondary:hover {
     background: #e8e8ed;
 }
 
-.aiss-toggle-wrapper {
+.searchlens-toggle-wrapper {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.aiss-toggle {
+.searchlens-toggle {
     position: relative;
     width: 52px;
     height: 32px;
 }
 
-.aiss-toggle input {
+.searchlens-toggle input {
     opacity: 0;
     width: 0;
     height: 0;
 }
 
-.aiss-toggle-slider {
+.searchlens-toggle-slider {
     position: absolute;
     cursor: pointer;
     top: 0;
@@ -235,7 +235,7 @@
     border-radius: 34px;
 }
 
-.aiss-toggle-slider:before {
+.searchlens-toggle-slider:before {
     position: absolute;
     content: "";
     height: 28px;
@@ -247,21 +247,21 @@
     border-radius: 50%;
 }
 
-.aiss-toggle input:checked + .aiss-toggle-slider {
+.searchlens-toggle input:checked + .searchlens-toggle-slider {
     background-color: #34c759;
 }
 
-.aiss-toggle input:checked + .aiss-toggle-slider:before {
+.searchlens-toggle input:checked + .searchlens-toggle-slider:before {
     transform: translateX(20px);
 }
 
-.aiss-toggle-label {
+.searchlens-toggle-label {
     font-size: 15px;
     color: #1d1d1f;
     user-select: none;
 }
 
-.aiss-footer-actions {
+.searchlens-footer-actions {
     margin-top: 32px;
     padding-top: 24px;
     border-top: 1px solid #d2d2d7;
@@ -269,33 +269,33 @@
     gap: 12px;
 }
 
-.aiss-notice {
+.searchlens-notice {
     padding: 12px 16px;
     border-radius: 8px;
     font-size: 14px;
     margin-bottom: 16px;
 }
 
-.aiss-notice-success {
+.searchlens-notice-success {
     background: #d1f4e0;
     color: #0a5e2a;
 }
 
-.aiss-notice-error {
+.searchlens-notice-error {
     background: #ffe5e5;
     color: #c41e3a;
 }
 
 /* Analytics Page Styles */
 
-.aiss-stats-grid {
+.searchlens-stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 16px;
     margin-bottom: 24px;
 }
 
-.aiss-stat-card {
+.searchlens-stat-card {
     background: #fff;
     border: 1px solid #d2d2d7;
     border-radius: 12px;
@@ -303,7 +303,7 @@
     text-align: center;
 }
 
-.aiss-stat-label {
+.searchlens-stat-label {
     font-size: 13px;
     color: #86868b;
     margin-bottom: 8px;
@@ -312,13 +312,13 @@
     letter-spacing: 0.05em;
 }
 
-.aiss-stat-value {
+.searchlens-stat-value {
     font-size: 32px;
     font-weight: 600;
     color: #1d1d1f;
 }
 
-.aiss-stat-detail {
+.searchlens-stat-detail {
     font-size: 11px;
     color: #86868b;
     margin-top: 8px;
@@ -328,20 +328,20 @@
     letter-spacing: 0.02em;
 }
 
-.aiss-table-wrapper {
+.searchlens-table-wrapper {
     overflow-x: auto;
 }
 
-.aiss-table {
+.searchlens-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.aiss-table thead {
+.searchlens-table thead {
     background: #f5f5f7;
 }
 
-.aiss-table th {
+.searchlens-table th {
     padding: 12px 16px;
     text-align: left;
     font-size: 13px;
@@ -352,27 +352,27 @@
     border-bottom: 1px solid #d2d2d7;
 }
 
-.aiss-table td {
+.searchlens-table td {
     padding: 16px;
     font-size: 14px;
     color: #1d1d1f;
     border-bottom: 1px solid #f5f5f7;
 }
 
-.aiss-table tbody tr:last-child td {
+.searchlens-table tbody tr:last-child td {
     border-bottom: none;
 }
 
-.aiss-table tbody tr:hover {
+.searchlens-table tbody tr:hover {
     background: #fafafa;
 }
 
-.aiss-table-compact td {
+.searchlens-table-compact td {
     padding: 12px 16px;
     font-size: 13px;
 }
 
-.aiss-query-cell {
+.searchlens-query-cell {
     font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
     font-size: 13px;
     color: #0071e3;
@@ -382,7 +382,7 @@
     white-space: nowrap;
 }
 
-.aiss-error-cell {
+.searchlens-error-cell {
     color: #86868b;
     font-size: 13px;
     max-width: 350px;
@@ -391,13 +391,13 @@
     line-height: 1.4;
 }
 
-.aiss-date-cell {
+.searchlens-date-cell {
     color: #86868b;
     font-size: 13px;
     white-space: nowrap;
 }
 
-.aiss-badge {
+.searchlens-badge {
     display: inline-flex;
     align-items: center;
     padding: 4px 10px;
@@ -407,32 +407,32 @@
     white-space: nowrap;
 }
 
-.aiss-badge-success {
+.searchlens-badge-success {
     background: #d1f4e0;
     color: #0a5e2a;
 }
 
-.aiss-badge-warning {
+.searchlens-badge-warning {
     background: #fff3cd;
     color: #856404;
 }
 
-.aiss-badge-error {
+.searchlens-badge-error {
     background: #ffe5e5;
     color: #c41e3a;
 }
 
-.aiss-badge-muted {
+.searchlens-badge-muted {
     background: #f5f5f7;
     color: #86868b;
 }
 
-.aiss-badge-info {
+.searchlens-badge-info {
     background: #dbeafe;
     color: #1e40af;
 }
 
-.aiss-empty-state {
+.searchlens-empty-state {
     background: #fff;
     border: 1px solid #d2d2d7;
     border-radius: 12px;
@@ -440,42 +440,42 @@
     text-align: center;
 }
 
-.aiss-empty-icon {
+.searchlens-empty-icon {
     font-size: 64px;
     margin-bottom: 16px;
     opacity: 0.5;
 }
 
-.aiss-empty-state h3 {
+.searchlens-empty-state h3 {
     margin: 0 0 8px 0;
     font-size: 20px;
     font-weight: 600;
     color: #1d1d1f;
 }
 
-.aiss-empty-state p {
+.searchlens-empty-state p {
     margin: 0 0 24px 0;
     font-size: 15px;
     color: #6e6e73;
 }
 
-.aiss-empty-message {
+.searchlens-empty-message {
     padding: 24px;
     text-align: center;
     color: #86868b;
     font-size: 14px;
 }
 
-#aiss_dashboard_widget .inside {
+#searchlens_dashboard_widget .inside {
     margin: 0 !important;
     padding: 0 !important;
 }
 
-.aiss-widget-container {
+.searchlens-widget-container {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
-.aiss-widget-stats-grid {
+.searchlens-widget-stats-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
@@ -484,7 +484,7 @@
     border-bottom: 1px solid #d2d2d7;
 }
 
-.aiss-widget-stat {
+.searchlens-widget-stat {
     text-align: center;
     padding: 12px 8px;
     background: #fff;
@@ -492,7 +492,7 @@
     border: 1px solid #e8e8ed;
 }
 
-.aiss-widget-stat-value {
+.searchlens-widget-stat-value {
     display: block;
     font-size: 24px;
     font-weight: 600;
@@ -500,7 +500,7 @@
     margin-bottom: 4px;
 }
 
-.aiss-widget-stat-label {
+.searchlens-widget-stat-label {
     display: block;
     font-size: 11px;
     color: #86868b;
@@ -509,11 +509,11 @@
     font-weight: 500;
 }
 
-.aiss-widget-section {
+.searchlens-widget-section {
     padding: 16px;
 }
 
-.aiss-widget-section-title {
+.searchlens-widget-section-title {
     margin: 0 0 12px 0;
     font-size: 13px;
     font-weight: 600;
@@ -522,17 +522,17 @@
     letter-spacing: 0.05em;
 }
 
-.aiss-widget-table {
+.searchlens-widget-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 13px;
 }
 
-.aiss-widget-table thead {
+.searchlens-widget-table thead {
     background: #f5f5f7;
 }
 
-.aiss-widget-table th {
+.searchlens-widget-table th {
     padding: 8px 10px;
     text-align: left;
     font-size: 11px;
@@ -543,31 +543,31 @@
     border-bottom: 1px solid #e8e8ed;
 }
 
-.aiss-widget-table td {
+.searchlens-widget-table td {
     padding: 10px;
     border-bottom: 1px solid #f5f5f7;
     color: #1d1d1f;
 }
 
-.aiss-widget-table tbody tr:last-child td {
+.searchlens-widget-table tbody tr:last-child td {
     border-bottom: none;
 }
 
-.aiss-widget-table tbody tr:hover {
+.searchlens-widget-table tbody tr:hover {
     background: #fafafa;
 }
 
-.aiss-widget-query {
+.searchlens-widget-query {
     font-weight: 500;
     color: #1d1d1f;
 }
 
-.aiss-widget-count {
+.searchlens-widget-count {
     font-weight: 600;
     color: #0071e3;
 }
 
-.aiss-widget-badge {
+.searchlens-widget-badge {
     display: inline-block;
     padding: 2px 8px;
     border-radius: 4px;
@@ -575,29 +575,29 @@
     font-weight: 600;
 }
 
-.aiss-widget-badge-success {
+.searchlens-widget-badge-success {
     background: #d1f4e0;
     color: #0a5e2a;
 }
 
-.aiss-widget-badge-warning {
+.searchlens-widget-badge-warning {
     background: #fff3cd;
     color: #856404;
 }
 
-.aiss-widget-badge-error {
+.searchlens-widget-badge-error {
     background: #ffe5e5;
     color: #c41e3a;
 }
 
-.aiss-widget-footer {
+.searchlens-widget-footer {
     padding: 12px 16px;
     background: #f5f5f7;
     border-top: 1px solid #d2d2d7;
     text-align: center;
 }
 
-.aiss-widget-link {
+.searchlens-widget-link {
     display: inline-block;
     padding: 6px 14px;
     background: #0071e3;
@@ -609,23 +609,23 @@
     transition: background 0.2s;
 }
 
-.aiss-widget-link:hover {
+.searchlens-widget-link:hover {
     background: #0077ed;
     color: #fff;
 }
 
-.aiss-widget-empty {
+.searchlens-widget-empty {
     padding: 12px;
     text-align: center;
     color: #86868b;
     font-size: 12px;
 }
 
-.aiss-css-editor-wrapper {
+.searchlens-css-editor-wrapper {
     margin-bottom: 12px;
 }
 
-.aiss-css-editor {
+.searchlens-css-editor {
     width: 100%;
     max-width: 700px;
     font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
@@ -641,25 +641,25 @@
     box-shadow: 0 0 0 transparent;
 }
 
-.aiss-css-editor:focus {
+.searchlens-css-editor:focus {
     outline: none;
     border-color: #0071e3;
     box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
     background: #fff;
 }
 
-.aiss-css-editor::placeholder {
+.searchlens-css-editor::placeholder {
     color: #86868b;
     opacity: 1;
 }
 
-.aiss-css-buttons {
+.searchlens-css-buttons {
     display: flex;
     gap: 8px;
     margin-top: 12px;
 }
 
-.aiss-field .aiss-button {
+.searchlens-field .searchlens-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -673,26 +673,26 @@
     text-decoration: none;
 }
 
-.aiss-field .aiss-button-primary {
+.searchlens-field .searchlens-button-primary {
     background: #0071e3;
     color: #fff;
 }
 
-.aiss-field .aiss-button-primary:hover {
+.searchlens-field .searchlens-button-primary:hover {
     background: #0077ed;
 }
 
-.aiss-field .aiss-button-secondary {
+.searchlens-field .searchlens-button-secondary {
     background: #f5f5f7;
     color: #1d1d1f;
     border: 1px solid #d2d2d7;
 }
 
-.aiss-field .aiss-button-secondary:hover {
+.searchlens-field .searchlens-button-secondary:hover {
     background: #e8e8ed;
 }
 
-.aiss-modal-overlay {
+.searchlens-modal-overlay {
     display: none;
     position: fixed;
     top: 0;
@@ -706,11 +706,11 @@
     backdrop-filter: blur(4px);
 }
 
-.aiss-modal-overlay.aiss-modal-open {
+.searchlens-modal-overlay.searchlens-modal-open {
     display: flex;
 }
 
-.aiss-modal-content {
+.searchlens-modal-content {
     background: #fff;
     padding: 24px;
     border-radius: 12px;
@@ -719,10 +719,10 @@
     overflow: auto;
     position: relative;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    animation: aiss-modal-slide-in 0.2s ease-out;
+    animation: searchlens-modal-slide-in 0.2s ease-out;
 }
 
-@keyframes aiss-modal-slide-in {
+@keyframes searchlens-modal-slide-in {
     from {
         opacity: 0;
         transform: translateY(-20px);
@@ -733,7 +733,7 @@
     }
 }
 
-.aiss-modal-close {
+.searchlens-modal-close {
     position: absolute;
     top: 16px;
     right: 16px;
@@ -751,11 +751,11 @@
     transition: background-color 0.2s;
 }
 
-.aiss-modal-close:hover {
+.searchlens-modal-close:hover {
     background: #f5f5f7;
 }
 
-.aiss-modal-header {
+.searchlens-modal-header {
     margin: 0 0 16px 0;
     font-size: 20px;
     font-weight: 600;
@@ -763,14 +763,14 @@
     padding-right: 40px;
 }
 
-.aiss-modal-description {
+.searchlens-modal-description {
     margin: 0 0 12px 0;
     color: #6e6e73;
     font-size: 14px;
     line-height: 1.5;
 }
 
-.aiss-modal-code {
+.searchlens-modal-code {
     background: #f5f5f7;
     padding: 16px;
     border-radius: 8px;
@@ -782,13 +782,13 @@
     border: 1px solid #d2d2d7;
 }
 
-.aiss-modal-code code {
+.searchlens-modal-code code {
     color: #1d1d1f;
     background: none;
     padding: 0;
 }
 
-.aiss-test-result {
+.searchlens-test-result {
     margin-top: 12px;
     padding: 12px 16px;
     border-radius: 8px;
@@ -796,42 +796,42 @@
     line-height: 1.5;
 }
 
-.aiss-test-result.success {
+.searchlens-test-result.success {
     background: #d1f4e0;
     color: #0a5e2a;
     border: 1px solid #a7e9c0;
 }
 
-.aiss-test-result.error {
+.searchlens-test-result.error {
     background: #ffe5e5;
     color: #c41e3a;
     border: 1px solid #ffb3b3;
 }
 
-.aiss-test-result.info {
+.searchlens-test-result.info {
     background: #e5f3ff;
     color: #0066cc;
     border: 1px solid #b3d9ff;
 }
 
-.aiss-css-editor::-webkit-scrollbar {
+.searchlens-css-editor::-webkit-scrollbar {
     width: 12px;
 }
 
-.aiss-css-editor::-webkit-scrollbar-track {
+.searchlens-css-editor::-webkit-scrollbar-track {
     background: #f5f5f7;
 }
 
-.aiss-css-editor::-webkit-scrollbar-thumb {
+.searchlens-css-editor::-webkit-scrollbar-thumb {
     background: #d2d2d7;
     border-radius: 6px;
 }
 
-.aiss-css-editor::-webkit-scrollbar-thumb:hover {
+.searchlens-css-editor::-webkit-scrollbar-thumb:hover {
     background: #c1c1c7;
 }
 
-.aiss-field .aiss-field-description code {
+.searchlens-field .searchlens-field-description code {
     background: #f5f5f7;
     padding: 2px 6px;
     border-radius: 4px;
@@ -842,94 +842,94 @@
 
 /* Responsive Styles */
 @media screen and (max-width: 1024px) {
-    .aiss-settings-wrap {
+    .searchlens-settings-wrap {
         max-width: 100%;
         margin-right: 20px;
     }
 
-    .aiss-stats-grid {
+    .searchlens-stats-grid {
         grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     }
 }
 
 @media screen and (max-width: 782px) {
-    .aiss-settings-wrap {
+    .searchlens-settings-wrap {
         margin: 20px 10px 20px 0;
     }
 
-    .aiss-header h1 {
+    .searchlens-header h1 {
         font-size: 24px;
     }
 
-    .aiss-header p {
+    .searchlens-header p {
         font-size: 15px;
     }
 
-    .aiss-section-header {
+    .searchlens-section-header {
         padding: 16px 20px;
     }
 
-    .aiss-section-header h2 {
+    .searchlens-section-header h2 {
         font-size: 18px;
     }
 
-    .aiss-field {
+    .searchlens-field {
         padding: 16px 20px;
     }
 
-    .aiss-stats-grid {
+    .searchlens-stats-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
     }
 
-    .aiss-stat-card {
+    .searchlens-stat-card {
         padding: 16px;
     }
 
-    .aiss-stat-value {
+    .searchlens-stat-value {
         font-size: 24px;
     }
 
-    .aiss-stat-label {
+    .searchlens-stat-label {
         font-size: 11px;
     }
 }
 
 @media screen and (max-width: 480px) {
-    .aiss-settings-wrap {
+    .searchlens-settings-wrap {
         margin: 10px 5px 10px 0;
     }
 
-    .aiss-stats-grid {
+    .searchlens-stats-grid {
         grid-template-columns: 1fr 1fr;
         gap: 8px;
     }
 
-    .aiss-stat-card {
+    .searchlens-stat-card {
         padding: 12px;
     }
 
-    .aiss-stat-value {
+    .searchlens-stat-value {
         font-size: 20px;
     }
 
-    .aiss-status-card {
+    .searchlens-status-card {
         flex-direction: column;
         text-align: center;
         gap: 12px;
     }
 
-    .aiss-table th,
-    .aiss-table td {
+    .searchlens-table th,
+    .searchlens-table td {
         padding: 10px 8px;
         font-size: 13px;
     }
 
-    .aiss-css-buttons {
+    .searchlens-css-buttons {
         flex-direction: column;
     }
 
-    .aiss-css-buttons .aiss-button {
+    .searchlens-css-buttons .searchlens-button {
         width: 100%;
     }
 }

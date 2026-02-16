@@ -1,13 +1,13 @@
 (function() {
   // Session cache helpers
-  var CACHE_PREFIX = 'aiss_';
-  var CACHE_VERSION_KEY = 'aiss_version';
+  var CACHE_PREFIX = 'searchlens_';
+  var CACHE_VERSION_KEY = 'searchlens_version';
   var CACHE_TTL = 30 * 60 * 1000; // 30 minutes in milliseconds
 
   function checkCacheVersion() {
     // Invalidate browser cache if server cache version changed (e.g., model changed)
     try {
-      var serverVersion = window.AISSearch && window.AISSearch.cacheVersion;
+      var serverVersion = window.SearchLensAI && window.SearchLensAI.cacheVersion;
       if (!serverVersion) return;
 
       var storedVersion = sessionStorage.getItem(CACHE_VERSION_KEY);
@@ -66,8 +66,8 @@
 
   function logSessionCacheHit(query, resultsCount) {
     // Fire and forget - log session cache hit to analytics
-    if (!window.AISSearch || !window.AISSearch.endpoint) return;
-    var logEndpoint = window.AISSearch.endpoint.replace('/summary', '/log-session-hit');
+    if (!window.SearchLensAI || !window.SearchLensAI.endpoint) return;
+    var logEndpoint = window.SearchLensAI.endpoint.replace('/summary', '/log-session-hit');
     try {
       fetch(logEndpoint, {
         method: 'POST',
@@ -81,13 +81,13 @@
   }
 
   function showSkeleton(container) {
-    container.classList.add('aiss-loading');
+    container.classList.add('searchlens-loading');
     container.innerHTML =
-      '<div class="aiss-skeleton" aria-hidden="true">' +
-        '<div class="aiss-skeleton-line aiss-skeleton-line-full"></div>' +
-        '<div class="aiss-skeleton-line aiss-skeleton-line-full"></div>' +
-        '<div class="aiss-skeleton-line aiss-skeleton-line-medium"></div>' +
-        '<div class="aiss-skeleton-line aiss-skeleton-line-short"></div>' +
+      '<div class="searchlens-skeleton" aria-hidden="true">' +
+        '<div class="searchlens-skeleton-line searchlens-skeleton-line-full"></div>' +
+        '<div class="searchlens-skeleton-line searchlens-skeleton-line-full"></div>' +
+        '<div class="searchlens-skeleton-line searchlens-skeleton-line-medium"></div>' +
+        '<div class="searchlens-skeleton-line searchlens-skeleton-line-short"></div>' +
       '</div>';
   }
 
@@ -100,15 +100,15 @@
   }
 
   ready(function() {
-    if (!window.AISSearch) return;
+    if (!window.SearchLensAI) return;
 
     // Check if server cache was cleared (model changed, etc.) and invalidate browser cache
     checkCacheVersion();
 
-    var container = document.getElementById('aiss-search-summary-content');
+    var container = document.getElementById('searchlens-search-summary-content');
     if (!container) return;
 
-    var q = (window.AISSearch.query || '').trim();
+    var q = (window.SearchLensAI.query || '').trim();
     if (!q) return;
 
     // Show skeleton loading immediately
@@ -117,8 +117,8 @@
     // Check session cache first
     var cached = getFromCache(q);
     if (cached) {
-      container.classList.remove('aiss-loading');
-      container.classList.add('aiss-loaded');
+      container.classList.remove('searchlens-loading');
+      container.classList.add('searchlens-loaded');
       if (cached.answer_html) {
         container.innerHTML = cached.answer_html;
         showFeedback();
@@ -135,20 +135,20 @@
       return;
     }
 
-    var endpoint = window.AISSearch.endpoint + '?q=' + encodeURIComponent(q);
+    var endpoint = window.SearchLensAI.endpoint + '?q=' + encodeURIComponent(q);
 
     // Append JS challenge token for bot detection hardening
-    if (window.AISSearch.botToken && window.AISSearch.botTokenTs) {
-      endpoint += '&bt=' + encodeURIComponent(window.AISSearch.botToken) + '&bts=' + encodeURIComponent(window.AISSearch.botTokenTs);
+    if (window.SearchLensAI.botToken && window.SearchLensAI.botTokenTs) {
+      endpoint += '&bt=' + encodeURIComponent(window.SearchLensAI.botToken) + '&bts=' + encodeURIComponent(window.SearchLensAI.botTokenTs);
     }
 
     // Set timeout with AbortController to actually cancel the request
-    var timeoutMs = (window.AISSearch.requestTimeout || 60) * 1000;
+    var timeoutMs = (window.SearchLensAI.requestTimeout || 60) * 1000;
     var abortController = new AbortController();
     var timeoutId = setTimeout(function() {
       abortController.abort();
-      container.classList.remove('aiss-loading');
-      container.classList.add('aiss-loaded');
+      container.classList.remove('searchlens-loading');
+      container.classList.add('searchlens-loaded');
       container.innerHTML = '<p role="alert" style="margin:0; opacity:0.8;">Request timed out. Please refresh the page to try again.</p>';
     }, timeoutMs);
 
@@ -160,12 +160,12 @@
     ];
     var progressTimers = progressMessages.map(function(msg) {
       return setTimeout(function() {
-        var skeleton = container.querySelector('.aiss-skeleton');
+        var skeleton = container.querySelector('.searchlens-skeleton');
         if (!skeleton) return;
-        var status = skeleton.querySelector('.aiss-skeleton-status');
+        var status = skeleton.querySelector('.searchlens-skeleton-status');
         if (!status) {
           status = document.createElement('p');
-          status.className = 'aiss-skeleton-status';
+          status.className = 'searchlens-skeleton-status';
           status.style.cssText = 'margin:0.5rem 0 0; font-size:0.8rem; opacity:0.7;';
           status.setAttribute('role', 'status');
           status.setAttribute('aria-live', 'polite');
@@ -201,8 +201,8 @@
       })
       .then(function(data) {
         clearTimeout(timeoutId);
-        container.classList.remove('aiss-loading');
-        container.classList.add('aiss-loaded');
+        container.classList.remove('searchlens-loading');
+        container.classList.add('searchlens-loaded');
 
         if (data && data.answer_html) {
           // Cache successful responses
@@ -215,7 +215,7 @@
 
         if (data && data.error) {
           // Cache no-results responses so we don't re-hit the server
-          var noResultsCode = (window.AISSearch && window.AISSearch.errorCodes && window.AISSearch.errorCodes.noResults) || 'no_results';
+          var noResultsCode = (window.SearchLensAI && window.SearchLensAI.errorCodes && window.SearchLensAI.errorCodes.noResults) || 'no_results';
           if (data.error_code === noResultsCode) {
             saveToCache(q, data);
           }
@@ -237,22 +237,22 @@
         if (error.name === 'AbortError') {
           return;
         }
-        container.classList.remove('aiss-loading');
-        container.classList.add('aiss-loaded');
+        container.classList.remove('searchlens-loading');
+        container.classList.add('searchlens-loaded');
         container.innerHTML = '<p role="alert" style="margin:0; opacity:0.8;">AI summary is not available right now.</p>';
       });
 
     // Sources toggle handler (persists expanded state in localStorage)
-    var SOURCES_STATE_KEY = 'aiss_sources_expanded';
+    var SOURCES_STATE_KEY = 'searchlens_sources_expanded';
 
     document.addEventListener('click', function(e) {
-      var btn = e.target.closest('.aiss-sources-toggle');
+      var btn = e.target.closest('.searchlens-sources-toggle');
       if (!btn) return;
 
-      var wrapper = btn.closest('.aiss-sources');
+      var wrapper = btn.closest('.searchlens-sources');
       if (!wrapper) return;
 
-      var list = wrapper.querySelector('.aiss-sources-list');
+      var list = wrapper.querySelector('.searchlens-sources-list');
       if (!list) return;
 
       var isHidden = list.hasAttribute('hidden');
@@ -276,10 +276,10 @@
     try {
       if (localStorage.getItem(SOURCES_STATE_KEY) === '1') {
         var observer = new MutationObserver(function(mutations, obs) {
-          var btn = document.querySelector('.aiss-sources-toggle');
+          var btn = document.querySelector('.searchlens-sources-toggle');
           if (btn) {
             obs.disconnect();
-            var list = btn.closest('.aiss-sources') && btn.closest('.aiss-sources').querySelector('.aiss-sources-list');
+            var list = btn.closest('.searchlens-sources') && btn.closest('.searchlens-sources').querySelector('.searchlens-sources-list');
             if (list && list.hasAttribute('hidden')) {
               list.removeAttribute('hidden');
               btn.textContent = btn.getAttribute('data-label-hide') || 'Hide sources';
@@ -293,20 +293,20 @@
 
     // Feedback button handler
     document.addEventListener('click', function(e) {
-      var btn = e.target.closest('.aiss-feedback-btn');
+      var btn = e.target.closest('.searchlens-feedback-btn');
       if (!btn) return;
 
-      var feedbackContainer = document.getElementById('aiss-feedback');
+      var feedbackContainer = document.getElementById('searchlens-feedback');
       if (!feedbackContainer) return;
 
       var helpful = btn.getAttribute('data-helpful') === '1';
-      var q = (window.AISSearch.query || '').trim();
-      var feedbackEndpoint = window.AISSearch.feedbackEndpoint;
+      var q = (window.SearchLensAI.query || '').trim();
+      var feedbackEndpoint = window.SearchLensAI.feedbackEndpoint;
 
       if (!q || !feedbackEndpoint) return;
 
       // Disable buttons immediately
-      var buttons = feedbackContainer.querySelectorAll('.aiss-feedback-btn');
+      var buttons = feedbackContainer.querySelectorAll('.searchlens-feedback-btn');
       buttons.forEach(function(b) { b.disabled = true; });
 
       fetch(feedbackEndpoint, {
@@ -314,14 +314,14 @@
         credentials: 'same-origin',
         headers: {
           'Content-Type': 'application/json',
-          'X-WP-Nonce': window.AISSearch.nonce || ''
+          'X-WP-Nonce': window.SearchLensAI.nonce || ''
         },
         body: JSON.stringify({ q: q, helpful: helpful ? 1 : 0 })
       })
       .then(function(response) { return response.json(); })
       .then(function(data) {
-        var prompt = feedbackContainer.querySelector('.aiss-feedback-prompt');
-        var thanks = feedbackContainer.querySelector('.aiss-feedback-thanks');
+        var prompt = feedbackContainer.querySelector('.searchlens-feedback-prompt');
+        var thanks = feedbackContainer.querySelector('.searchlens-feedback-thanks');
         if (prompt) prompt.style.display = 'none';
         if (thanks) {
           thanks.style.display = 'block';
@@ -339,12 +339,12 @@
    * Show the feedback prompt after a successful summary load.
    */
   function showFeedback() {
-    var feedback = document.getElementById('aiss-feedback');
+    var feedback = document.getElementById('searchlens-feedback');
     if (feedback) {
       feedback.style.display = 'block';
     }
   }
 
   // Expose for use after fetch completes
-  window.aissShowFeedback = showFeedback;
+  window.searchlensShowFeedback = showFeedback;
 })();
