@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin Name: AI Search Summary
  * Description: Add an OpenAI powered AI summary to WordPress search results without delaying normal results, with analytics, cache control, and collapsible sources.
- * Version: 1.0.5.3
+ * Version: 1.0.5.4
  * Author: Jose Castillo
  * Author URI: https://github.com/RivianTrackr/
  * License: GPL v2 or later
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Domain Path: /languages
  */
 
-define( 'AI_SEARCH_VERSION', '1.0.5.3' );
+define( 'AI_SEARCH_VERSION', '1.0.5.4' );
 define( 'AISS_MODELS_CACHE_TTL', 7 * DAY_IN_SECONDS );
 define( 'AISS_MIN_CACHE_TTL', 60 );
 define( 'AISS_MAX_CACHE_TTL', 86400 );
@@ -4943,14 +4943,52 @@ class AI_Search_Summary {
             }
         }
 
-        // 6. High ratio of non-alphanumeric characters (gibberish)
+        // 6. Server variable / vulnerability scanner probes
+        // Bots send CGI environment variable names to test if the site echoes them back.
+        $scanner_probes = array(
+            'QUERY_STRING',
+            'DOCUMENT_ROOT',
+            'SERVER_NAME',
+            'SERVER_ADDR',
+            'REMOTE_ADDR',
+            'REMOTE_HOST',
+            'HTTP_HOST',
+            'HTTP_USER_AGENT',
+            'HTTP_REFERER',
+            'HTTP_ACCEPT',
+            'PATH_INFO',
+            'SCRIPT_FILENAME',
+            'SCRIPT_NAME',
+            'PHP_SELF',
+            'REQUEST_URI',
+            'REQUEST_METHOD',
+            'CONTENT_TYPE',
+            'CONTENT_LENGTH',
+            'SERVER_SOFTWARE',
+            'SERVER_PROTOCOL',
+            'GATEWAY_INTERFACE',
+            'SERVER_PORT',
+            'PATH_TRANSLATED',
+            'AUTH_TYPE',
+        );
+        foreach ( $scanner_probes as $probe ) {
+            if ( stripos( $normalized, strtolower( $probe ) ) !== false ) {
+                if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                    // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+                    error_log( '[AI Search Summary] Blocked scanner probe query (variable: ' . $probe . '): ' . substr( $value, 0, 100 ) );
+                }
+                return true;
+            }
+        }
+
+        // 7. High ratio of non-alphanumeric characters (gibberish)
         $alpha_count = preg_match_all( '/[a-z0-9]/i', $value );
         $total_len   = max( 1, strlen( $value ) );
         if ( $total_len > 10 && ( $alpha_count / $total_len ) < 0.5 ) {
             return true;
         }
 
-        // 7. Admin-configurable blocklist
+        // 8. Admin-configurable blocklist
         $options   = $this->get_options();
         $blocklist = isset( $options['spam_blocklist'] ) ? $options['spam_blocklist'] : '';
         if ( ! empty( $blocklist ) ) {

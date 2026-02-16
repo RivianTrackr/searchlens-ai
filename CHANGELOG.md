@@ -5,6 +5,14 @@ All notable changes to AI Search Summary will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.5.4] - 2026-02-16
+
+### Fixed
+
+- **Block scanner probe queries** — Searches containing CGI/server environment variable names (`QUERY_STRING`, `DOCUMENT_ROOT`, `SERVER_NAME`, `REMOTE_ADDR`, etc.) are now rejected by the spam filter. Vulnerability scanners and bots commonly send these as search terms to test for server information disclosure; blocking them prevents wasted OpenAI API calls and keeps analytics clean.
+
+---
+
 ## [1.0.5.3] - 2026-02-16
 
 ### Changed
