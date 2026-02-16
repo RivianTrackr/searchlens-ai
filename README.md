@@ -43,9 +43,9 @@ A powerful WordPress plugin that adds AI-powered summaries to your search result
 ### Widgets & Shortcodes
 
 - **Trending Searches Widget** - Display popular search terms in your sidebar
-- **`[aiss_trending]` Shortcode** - Embed trending searches anywhere on your site
+- **`[searchlens_trending]` Shortcode** - Embed trending searches anywhere on your site
   - Configurable limit, title, subtitle, colors, and time period
-  - Example: `[aiss_trending limit="5" title="Popular Searches" time_period="24" time_unit="hours"]`
+  - Example: `[searchlens_trending limit="5" title="Popular Searches" time_period="24" time_unit="hours"]`
 
 ### Customization
 
@@ -83,7 +83,7 @@ A powerful WordPress plugin that adds AI-powered summaries to your search result
 Add to your `wp-config.php` for maximum security:
 
 ```php
-define( 'AISS_API_KEY', 'sk-proj-your-api-key-here' );
+define( 'SEARCHLENS_API_KEY', 'sk-proj-your-api-key-here' );
 ```
 
 **Benefits:**
@@ -94,7 +94,7 @@ define( 'AISS_API_KEY', 'sk-proj-your-api-key-here' );
 **Using environment variables:**
 
 ```php
-define( 'AISS_API_KEY', getenv('OPENAI_API_KEY') );
+define( 'SEARCHLENS_API_KEY', getenv('OPENAI_API_KEY') );
 ```
 
 ### Settings Overview
@@ -113,7 +113,7 @@ Navigate to **WP Admin → SearchLens AI → Settings** to configure:
 
 ## REST API Endpoints
 
-The plugin provides REST API endpoints under `/wp-json/aiss/v1/`:
+The plugin provides REST API endpoints under `/wp-json/searchlens/v1/`:
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
@@ -123,7 +123,7 @@ The plugin provides REST API endpoints under `/wp-json/aiss/v1/`:
 
 ## Shortcode Reference
 
-### `[aiss_trending]`
+### `[searchlens_trending]`
 
 Display trending search queries anywhere on your site.
 
@@ -142,7 +142,7 @@ Display trending search queries anywhere on your site.
 **Example:**
 
 ```
-[aiss_trending limit="10" title="What People Are Searching" time_period="7" time_unit="days" color="#f5f5f5"]
+[searchlens_trending limit="10" title="What People Are Searching" time_period="7" time_unit="days" color="#f5f5f5"]
 ```
 
 ## Hooks & Filters
@@ -153,14 +153,14 @@ The plugin integrates with WordPress through standard hooks:
 - `template_redirect` - Logs no-results searches
 - `rest_api_init` - Registers REST API endpoints
 - `widgets_init` - Registers trending widget
-- `aiss_daily_log_purge` - Scheduled log cleanup
+- `searchlens_daily_log_purge` - Scheduled log cleanup
 
 ## Database Tables
 
 The plugin creates two custom tables:
 
-- `wp_aiss_logs` - Stores search events, AI responses, timing, and errors
-- `wp_aiss_feedback` - Stores user feedback with IP hashing
+- `wp_searchlens_logs` - Stores search events, AI responses, timing, and errors
+- `wp_searchlens_feedback` - Stores user feedback with IP hashing
 
 ## Documentation
 

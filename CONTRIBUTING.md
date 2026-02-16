@@ -120,7 +120,7 @@ private function calculate_success_rate( $success_count, $total ) {
 
 - Mobile-first responsive design
 - Use CSS custom properties where appropriate
-- Prefix classes with `aiss-` to avoid conflicts
+- Prefix classes with `searchlens-` to avoid conflicts
 - Use flexbox for layouts
 - Keep specificity low
 
@@ -296,15 +296,15 @@ Mockups, examples, or other context
 ### Useful Constants
 
 The plugin defines several constants you can use:
-- `AI_SEARCH_VERSION` - Current plugin version
-- `AISS_MIN_CACHE_TTL` - Minimum cache time (60s)
-- `AISS_MAX_CACHE_TTL` - Maximum cache time (86400s)
-- `AISS_CONTENT_LENGTH` - Post content length (400 chars)
-- `AISS_EXCERPT_LENGTH` - Excerpt length (200 chars)
+- `SEARCHLENS_VERSION` - Current plugin version
+- `SEARCHLENS_MIN_CACHE_TTL` - Minimum cache time (60s)
+- `SEARCHLENS_MAX_CACHE_TTL` - Maximum cache time (86400s)
+- `SEARCHLENS_CONTENT_LENGTH` - Post content length (400 chars)
+- `SEARCHLENS_EXCERPT_LENGTH` - Excerpt length (200 chars)
 
 ### Database Tables
 
-Analytics data is stored in `wp_aiss_logs` table:
+Analytics data is stored in `wp_searchlens_logs` table:
 - `search_query` - The search term
 - `results_count` - Number of posts found
 - `ai_success` - Whether AI summary succeeded (0/1)

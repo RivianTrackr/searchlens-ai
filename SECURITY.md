@@ -42,7 +42,7 @@ By default, OpenAI API keys are stored in the WordPress options table in plain t
 Add this line to your `wp-config.php` file (before "That's all, stop editing!"):
 
 ```php
-define( 'AISS_API_KEY', 'sk-proj-your-api-key-here' );
+define( 'SEARCHLENS_API_KEY', 'sk-proj-your-api-key-here' );
 ```
 
 **Benefits of using a constant:**
@@ -55,7 +55,7 @@ define( 'AISS_API_KEY', 'sk-proj-your-api-key-here' );
 
 ```php
 // In wp-config.php
-define( 'AISS_API_KEY', getenv('OPENAI_API_KEY') );
+define( 'SEARCHLENS_API_KEY', getenv('OPENAI_API_KEY') );
 ```
 
 Then set `OPENAI_API_KEY` in your server's environment configuration.
@@ -97,7 +97,7 @@ Then set `OPENAI_API_KEY` in your server's environment configuration.
 
 ### WordPress REST API Endpoint
 
-The plugin exposes a public REST API endpoint at `/wp-json/aiss/v1/summary` with `permission_callback => '__return_true'`. This is intentional for search functionality but means:
+The plugin exposes a public REST API endpoint at `/wp-json/searchlens/v1/summary` with `permission_callback => '__return_true'`. This is intentional for search functionality but means:
 
 - Anyone can trigger AI searches on your site
 - Rate limiting is implemented to prevent abuse

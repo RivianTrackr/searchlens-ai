@@ -48,7 +48,7 @@ SearchLens AI is a powerful WordPress plugin that adds AI-powered summaries to y
 = Widgets & Shortcodes =
 
 * **Trending Searches Widget** - Display popular search terms in your sidebar
-* **[aiss_trending] Shortcode** - Embed trending searches anywhere on your site
+* **[searchlens_trending] Shortcode** - Embed trending searches anywhere on your site
 
 = Customization =
 
@@ -87,7 +87,7 @@ Your use of this plugin constitutes acceptance of OpenAI's terms. No personal us
 
 For maximum security, add your API key to `wp-config.php` instead of storing it in the database:
 
-`define( 'AISS_API_KEY', 'sk-proj-your-api-key-here' );`
+`define( 'SEARCHLENS_API_KEY', 'sk-proj-your-api-key-here' );`
 
 Benefits:
 * API key not stored in database (protected from SQL injection/database leaks)
@@ -96,7 +96,7 @@ Benefits:
 
 Using environment variables:
 
-`define( 'AISS_API_KEY', getenv('OPENAI_API_KEY') );`
+`define( 'SEARCHLENS_API_KEY', getenv('OPENAI_API_KEY') );`
 
 == Frequently Asked Questions ==
 
