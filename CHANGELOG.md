@@ -5,6 +5,15 @@ All notable changes to AI Search Summary will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.5.2] - 2026-02-16
+
+### Fixed
+
+- **Direct file access protection** — Added `ABSPATH` guard to the main `ai-search-summary.php` plugin file to satisfy the `missing_direct_file_access_protection` plugin check.
+- **Prepared SQL placeholder warning** — Added `ReplacementsWrongNumber` to the phpcs ignore directive on the dynamic `IN()` bulk-delete query, resolving the false-positive `PreparedSQLPlaceholders.ReplacementsWrongNumber` warning caused by the spread operator.
+
+---
+
 ## [1.0.5.1] - 2026-02-16
 
 ### Changed

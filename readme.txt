@@ -4,7 +4,7 @@ Tags: search, ai, openai, summary, chatgpt
 Requires at least: 6.9
 Tested up to: 6.9
 Requires PHP: 8.4
-Stable tag: 1.0.5.1
+Stable tag: 1.0.5.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -164,6 +164,10 @@ The plugin is designed with privacy in mind:
 
 == Changelog ==
 
+= 1.0.5.2 =
+* Fixed: Added ABSPATH direct access guard to main plugin file
+* Fixed: Resolved PreparedSQLPlaceholders.ReplacementsWrongNumber phpcs warning on bulk-delete query
+
 = 1.0.5.1 =
 * Changed: Show OpenAI badge, sources, and feedback now default to off (opt-in only)
 * Fixed: Added direct file access protection to index.php and uninstall.php
@@ -234,6 +238,9 @@ The plugin is designed with privacy in mind:
 * Security headers and prepared statements
 
 == Upgrade Notice ==
+
+= 1.0.5.2 =
+Fixes direct file access protection on main plugin file and resolves prepared SQL placeholder phpcs warning.
 
 = 1.0.5.1 =
 Credits and badges now default to hidden — enable them in Settings > AI Search Summary if desired. Includes direct access protection and prepared SQL fixes for plugin directory compliance.

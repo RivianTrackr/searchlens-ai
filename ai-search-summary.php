@@ -1,9 +1,12 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 declare(strict_types=1);
 /**
  * Plugin Name: AI Search Summary
  * Description: Add an OpenAI powered AI summary to WordPress search results without delaying normal results, with analytics, cache control, and collapsible sources.
- * Version: 1.0.5.1
+ * Version: 1.0.5.2
  * Author: Jose Castillo
  * Author URI: https://github.com/RivianTrackr/
  * License: GPL v2 or later
@@ -14,7 +17,7 @@ declare(strict_types=1);
  * Domain Path: /languages
  */
 
-define( 'AI_SEARCH_VERSION', '1.0.5.1' );
+define( 'AI_SEARCH_VERSION', '1.0.5.2' );
 define( 'AISS_MODELS_CACHE_TTL', 7 * DAY_IN_SECONDS );
 define( 'AISS_MIN_CACHE_TTL', 60 );
 define( 'AISS_MAX_CACHE_TTL', 86400 );
@@ -1348,8 +1351,8 @@ class AI_Search_Summary {
 
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $deleted = $wpdb->query(
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber -- $placeholders is a safe list of %d tokens, count is dynamic
             $wpdb->prepare(
-                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- $placeholders is a safe list of %d tokens
                 "DELETE FROM %i WHERE id IN ($placeholders)",
                 $table_name,
                 ...$ids
