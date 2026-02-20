@@ -5,6 +5,23 @@ All notable changes to RivianTrackr AI Search Summary will be documented in this
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0.2] - 2026-02-20
+
+### Security
+
+- **CSS sanitizer: SVG data URIs blocked** — Removed `svg+xml` from the allowed MIME types in `data:` URI validation within the custom CSS sanitizer. SVG data URIs can contain embedded JavaScript and were a potential XSS vector.
+- **CSV export: Formula injection prevention** — Cell values in analytics CSV exports that begin with `=`, `+`, `-`, or `@` are now prefixed with a tab character to prevent formula injection when opened in spreadsheet applications.
+- **Frontend requests: Nonce authentication** — The frontend JavaScript now sends the `X-WP-Nonce` header with summary and session cache hit REST API requests, ensuring requests are authenticated against the logged-in user's session.
+- **Source links: `rel="noopener noreferrer"` added** — External source article links now include `rel="noopener noreferrer"` to prevent reverse tabnapping attacks.
+- **Model fetch: `wp_safe_remote_get` used** — The OpenAI model list fetch now uses `wp_safe_remote_get()` instead of `wp_remote_get()`, enforcing WordPress's safe URL validation.
+
+### Fixed
+
+- **`hex_to_rgb()` return type corrected** — The method's return type declaration was `array` but it could return `false` on invalid input. Now correctly typed as `array|false`.
+- **Duplicate ABSPATH guard removed** — Removed a redundant `defined('ABSPATH')` check that was dead code.
+
+---
+
 ## [1.1.0.1] - 2026-02-20
 
 ### Added
