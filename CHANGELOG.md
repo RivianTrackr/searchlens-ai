@@ -5,6 +5,15 @@ All notable changes to RivianTrackr AI Search Summary will be documented in this
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0.1] - 2026-02-20
+
+### Added
+
+- **Model column in analytics** — The Recent Events table now displays which AI model (e.g. `gpt-4o`, `claude-sonnet-4-6`) was used for each search, making it easy to compare response times across models and providers.
+- **`ai_model` column in logs table** — New nullable `ai_model` column stores the model ID for each logged search event. Existing rows show a dash. The column is added automatically via `dbDelta` on upgrade.
+
+---
+
 ## [1.1.0] - 2026-02-20
 
 ### Added

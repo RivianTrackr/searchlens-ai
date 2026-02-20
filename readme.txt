@@ -4,7 +4,7 @@ Tags: search, ai, openai, anthropic, claude, summary, chatgpt
 Requires at least: 6.9
 Tested up to: 6.9
 Requires PHP: 8.4
-Stable tag: 1.1.0
+Stable tag: 1.1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -175,6 +175,10 @@ The plugin is designed with privacy in mind:
 
 == Changelog ==
 
+= 1.1.0.1 =
+* Added: Model column in Recent Events analytics table — see which AI model was used for each search
+* Added: ai_model column in logs database table (auto-migrated on upgrade)
+
 = 1.1.0 =
 * Added: Anthropic Claude as an alternative AI provider — choose between OpenAI and Anthropic in Settings
 * Added: Separate Anthropic API key field with test connection validation and wp-config.php constant support
@@ -282,6 +286,9 @@ The plugin is designed with privacy in mind:
 * Security headers and prepared statements
 
 == Upgrade Notice ==
+
+= 1.1.0.1 =
+Analytics now shows which AI model was used for each search event, making it easy to compare response times across models.
 
 = 1.1.0 =
 Multi-provider support: Choose between OpenAI and Anthropic Claude for AI-powered search summaries. Existing OpenAI setups continue working unchanged — just upgrade and optionally switch to Anthropic in Settings.
