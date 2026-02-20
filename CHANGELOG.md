@@ -5,6 +5,19 @@ All notable changes to RivianTrackr AI Search Summary will be documented in this
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.7.1] - 2026-02-20
+
+### Changed
+
+- **Plugin renamed to "AI Search Summary"** — Simplified the display name from "RivianTrackr AI Search Summary" to "AI Search Summary" in the plugin header, admin sidebar menu, and submenu page titles for a cleaner look.
+
+### Removed
+
+- **Legacy SQL migration script deleted** — Removed `sql/transfer-logs-feedback.sql` (manual phpMyAdmin script for transferring data from old `searchlens_` tables).
+- **Automatic migration code removed** — Removed the `maybe_run_migrations()` method and its `admin_init` hook. This handled legacy schema upgrades (adding columns, creating the feedback table, and renaming `searchlens_` tables/options/transients/cron hooks to `riviantrackr_` prefix). No longer needed now that the rename migration has been applied.
+
+---
+
 ## [1.0.7] - 2026-02-20
 
 ### Changed

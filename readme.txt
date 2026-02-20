@@ -4,7 +4,7 @@ Tags: search, ai, openai, summary, chatgpt
 Requires at least: 6.9
 Tested up to: 6.9
 Requires PHP: 8.4
-Stable tag: 1.0.7
+Stable tag: 1.0.7.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -164,6 +164,11 @@ The plugin is designed with privacy in mind:
 
 == Changelog ==
 
+= 1.0.7.1 =
+* Changed: Plugin display name simplified to "AI Search Summary" in admin sidebar, menu pages, and plugin header
+* Removed: Legacy SQL migration script (sql/transfer-logs-feedback.sql)
+* Removed: Automatic migration code (maybe_run_migrations) for legacy searchlens-to-riviantrackr prefix upgrades
+
 = 1.0.7 =
 * Changed: Plugin renamed from "SearchLens AI" to "RivianTrackr AI Search Summary" (display name, slug, text domain, main PHP file)
 * Changed: All internal prefixes replaced from `searchlens` to `riviantrackr` (constants, options, transients, database tables, REST namespace, AJAX actions, shortcode, cron hook, CSS classes, JS globals, asset filenames)
@@ -256,6 +261,9 @@ The plugin is designed with privacy in mind:
 * Security headers and prepared statements
 
 == Upgrade Notice ==
+
+= 1.0.7.1 =
+Simplified plugin display name to "AI Search Summary". Removed legacy SQL migration script and automatic migration code.
 
 = 1.0.7 =
 Plugin renamed from SearchLens AI to RivianTrackr AI Search Summary. All internal prefixes changed from `searchlens` to `riviantrackr`. Database tables, options, transients, and cron hooks are migrated automatically on upgrade. GitHub repository renamed to riviantrackr-ai-search-summary.

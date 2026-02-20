@@ -4,9 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 /**
- * Plugin Name: RivianTrackr AI Search Summary
+ * Plugin Name: AI Search Summary
  * Description: Add an OpenAI powered AI summary to WordPress search results without delaying normal results, with analytics, cache control, and collapsible sources.
- * Version: 1.0.7
+ * Version: 1.0.7.1
  * Author: Jose Castillo
  * Author URI: https://github.com/RivianTrackr/
  * License: GPL v2 or later
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Domain Path: /languages
  */
 
-define( 'RIVIANTRACKR_VERSION', '1.0.7' );
+define( 'RIVIANTRACKR_VERSION', '1.0.7.1' );
 define( 'RIVIANTRACKR_MODELS_CACHE_TTL', 7 * DAY_IN_SECONDS );
 define( 'RIVIANTRACKR_MIN_CACHE_TTL', 60 );
 define( 'RIVIANTRACKR_MAX_CACHE_TTL', 86400 );
@@ -87,7 +87,7 @@ class RivianTrackr_AI_Search_Summary {
 
         // Register settings on admin_init (the recommended hook for Settings API)
         add_action( 'admin_init', array( $this, 'register_settings' ) );
-        add_action( 'admin_init', array( $this, 'maybe_run_migrations' ) );
+
         add_action( 'admin_init', array( $this, 'add_security_headers' ) );
         add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
         add_action( 'wp_dashboard_setup', array( $this, 'register_dashboard_widget' ) );
@@ -352,98 +352,6 @@ class RivianTrackr_AI_Search_Summary {
         self::add_missing_indexes(); // Ensure indexes exist
         $this->logs_table_checked = false;
         return $this->logs_table_is_available();
-    }
-
-    /**
-     * Run database migrations if needed.
-     * Called on admin_init to ensure schema is up to date.
-     */
-    public function maybe_run_migrations() {
-        $db_version = get_option( 'riviantrackr_db_version', '1.0' );
-
-        // Version 1.1 adds cache_hit column
-        if ( version_compare( $db_version, '1.1', '<' ) ) {
-            self::add_missing_columns();
-            self::add_missing_indexes();
-            update_option( 'riviantrackr_db_version', '1.1' );
-            $db_version = '1.1';
-        }
-
-        // Version 1.2 adds feedback table
-        if ( version_compare( $db_version, '1.2', '<' ) ) {
-            self::create_feedback_table();
-            update_option( 'riviantrackr_db_version', '1.2' );
-            $db_version = '1.2';
-        }
-
-        // Version 1.3: Rename from SearchLens AI to RivianTrackr AI Search Summary
-        // Migrate database tables, options, transients, and cron hooks from searchlens_ to riviantrackr_ prefix
-        if ( version_compare( $db_version, '1.3', '<' ) ) {
-            global $wpdb;
-
-            // Rename database tables
-            $old_logs = $wpdb->prefix . 'searchlens_logs';
-            $new_logs = self::get_logs_table_name();
-            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-            if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $old_logs ) ) === $old_logs ) {
-                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-                $wpdb->query( $wpdb->prepare( 'RENAME TABLE %i TO %i', $old_logs, $new_logs ) );
-            }
-
-            $old_feedback = $wpdb->prefix . 'searchlens_feedback';
-            $new_feedback = self::get_feedback_table_name();
-            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-            if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $old_feedback ) ) === $old_feedback ) {
-                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-                $wpdb->query( $wpdb->prepare( 'RENAME TABLE %i TO %i', $old_feedback, $new_feedback ) );
-            }
-
-            // Migrate options from old prefix to new prefix
-            $old_opts = get_option( 'searchlens_options', null );
-            if ( null !== $old_opts ) {
-                update_option( 'riviantrackr_options', $old_opts );
-                delete_option( 'searchlens_options' );
-            }
-
-            $options_to_migrate = array(
-                'searchlens_models_cache'    => 'riviantrackr_models_cache',
-                'searchlens_cache_keys'      => 'riviantrackr_cache_keys',
-                'searchlens_cache_namespace' => 'riviantrackr_cache_namespace',
-                'searchlens_db_version'      => 'riviantrackr_db_version',
-            );
-            foreach ( $options_to_migrate as $old_key => $new_key ) {
-                $val = get_option( $old_key, null );
-                if ( null !== $val ) {
-                    update_option( $new_key, $val );
-                    delete_option( $old_key );
-                }
-            }
-
-            // Clean up old transients
-            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-            $wpdb->query(
-                "DELETE FROM {$wpdb->options}
-                 WHERE option_name LIKE '_transient_searchlens_%'
-                    OR option_name LIKE '_transient_timeout_searchlens_%'"
-            );
-
-            // Re-schedule cron under new hook name
-            $old_cron_ts = wp_next_scheduled( 'searchlens_daily_log_purge' );
-            if ( $old_cron_ts ) {
-                wp_unschedule_event( $old_cron_ts, 'searchlens_daily_log_purge' );
-                $migrated_opts = get_option( 'riviantrackr_options', array() );
-                if ( ! empty( $migrated_opts['auto_purge_enabled'] ) ) {
-                    wp_schedule_event( time() + HOUR_IN_SECONDS, 'daily', 'riviantrackr_daily_log_purge' );
-                }
-            }
-
-            update_option( 'riviantrackr_db_version', '1.3' );
-
-            if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[RivianTrackr AI Search Summary] Migration from searchlens_ to riviantrackr_ prefix complete.' );
-            }
-        }
     }
 
     private function logs_table_is_available(): bool {
@@ -1091,8 +999,8 @@ class RivianTrackr_AI_Search_Summary {
         $parent_slug = 'riviantrackr-settings';
 
         add_menu_page(
-            'RivianTrackr AI Search Summary',
-            'RivianTrackr AI Search Summary',
+            'AI Search Summary',
+            'AI Search Summary',
             $capability,
             $parent_slug,
             array( $this, 'render_settings_page' ),
@@ -1102,7 +1010,7 @@ class RivianTrackr_AI_Search_Summary {
 
         add_submenu_page(
             $parent_slug,
-            'RivianTrackr AI Search Summary Settings',
+            'AI Search Summary Settings',
             'Settings',
             $capability,
             $parent_slug,
@@ -1111,7 +1019,7 @@ class RivianTrackr_AI_Search_Summary {
 
         add_submenu_page(
             $parent_slug,
-            'RivianTrackr AI Search Summary Analytics',
+            'AI Search Summary Analytics',
             'Analytics',
             $capability,
             'riviantrackr-analytics',
