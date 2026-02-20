@@ -1,9 +1,38 @@
 # Changelog
 
-All notable changes to SearchLens AI will be documented in this file.
+All notable changes to RivianTrackr AI Search Summary will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.0.7] - 2026-02-20
+
+### Changed
+
+- **Plugin renamed from "SearchLens AI" to "RivianTrackr AI Search Summary"** — Display name, slug, text domain, and main PHP file updated.
+- Main plugin file renamed from `searchlens-ai.php` to `riviantrackr-ai-search-summary.php`
+- Text domain changed from `searchlens-ai` to `riviantrackr-ai-search-summary`
+- Admin menu label changed from "SearchLens AI" to "RivianTrackr AI Search Summary"
+- Dashboard widget title updated to "RivianTrackr AI Search Summary"
+- Translation template renamed to `riviantrackr-ai-search-summary.pot`
+- **All internal prefixes replaced: `searchlens` → `riviantrackr`** — Every internal identifier updated:
+  - Constants: `SEARCHLENS_*` → `RIVIANTRACKR_*`
+  - Options: `searchlens_options` → `riviantrackr_options`
+  - Transients: `searchlens_*` → `riviantrackr_*`
+  - Database tables: `wp_searchlens_logs` / `wp_searchlens_feedback` → `wp_riviantrackr_logs` / `wp_riviantrackr_feedback`
+  - AJAX actions: `wp_ajax_searchlens_*` → `wp_ajax_riviantrackr_*`
+  - REST namespace: `searchlens/v1` → `riviantrackr/v1`
+  - Shortcode: `[searchlens_trending]` → `[riviantrackr_trending]`
+  - Cron hook: `searchlens_daily_log_purge` → `riviantrackr_daily_log_purge`
+  - Script/style handles: `searchlens-*` → `riviantrackr-*`
+  - JS globals: `SearchLensAI` → `RivianTrackrAI`, `SearchLensAdmin` → `RivianTrackrAdmin`
+  - Widget class: `SearchLens_Trending_Widget` → `RivianTrackr_Trending_Widget`
+  - CSS classes: `.searchlens-*` → `.riviantrackr-*`
+  - Asset filenames: `searchlens.js`/`searchlens.css`/`searchlens-admin.css` → `riviantrackr.js`/`riviantrackr.css`/`riviantrackr-admin.css`
+- **Automatic data migration on upgrade** — Activating 1.0.7 renames the old database tables and migrates stored options/transients/cron hooks from `searchlens` to `riviantrackr` prefix. No manual SQL needed.
+- GitHub repository renamed from `searchlens-ai` to `riviantrackr-ai-search-summary`
+
+---
 
 ## [1.0.6] - 2026-02-16
 
@@ -210,4 +239,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-This is the first official release of SearchLens AI, consolidating all development work into a stable 1.0.0 version.
+This is the first official release, consolidating all development work into a stable 1.0.0 version.

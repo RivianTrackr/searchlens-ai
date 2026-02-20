@@ -1,13 +1,13 @@
 (function() {
   // Session cache helpers
-  var CACHE_PREFIX = 'searchlens_';
-  var CACHE_VERSION_KEY = 'searchlens_version';
+  var CACHE_PREFIX = 'riviantrackr_';
+  var CACHE_VERSION_KEY = 'riviantrackr_version';
   var CACHE_TTL = 30 * 60 * 1000; // 30 minutes in milliseconds
 
   function checkCacheVersion() {
     // Invalidate browser cache if server cache version changed (e.g., model changed)
     try {
-      var serverVersion = window.SearchLensAI && window.SearchLensAI.cacheVersion;
+      var serverVersion = window.RivianTrackrAI && window.RivianTrackrAI.cacheVersion;
       if (!serverVersion) return;
 
       var storedVersion = sessionStorage.getItem(CACHE_VERSION_KEY);
@@ -66,8 +66,8 @@
 
   function logSessionCacheHit(query, resultsCount) {
     // Fire and forget - log session cache hit to analytics
-    if (!window.SearchLensAI || !window.SearchLensAI.endpoint) return;
-    var logEndpoint = window.SearchLensAI.endpoint.replace('/summary', '/log-session-hit');
+    if (!window.RivianTrackrAI || !window.RivianTrackrAI.endpoint) return;
+    var logEndpoint = window.RivianTrackrAI.endpoint.replace('/summary', '/log-session-hit');
     try {
       fetch(logEndpoint, {
         method: 'POST',
@@ -81,13 +81,13 @@
   }
 
   function showSkeleton(container) {
-    container.classList.add('searchlens-loading');
+    container.classList.add('riviantrackr-loading');
     container.innerHTML =
-      '<div class="searchlens-skeleton" aria-hidden="true">' +
-        '<div class="searchlens-skeleton-line searchlens-skeleton-line-full"></div>' +
-        '<div class="searchlens-skeleton-line searchlens-skeleton-line-full"></div>' +
-        '<div class="searchlens-skeleton-line searchlens-skeleton-line-medium"></div>' +
-        '<div class="searchlens-skeleton-line searchlens-skeleton-line-short"></div>' +
+      '<div class="riviantrackr-skeleton" aria-hidden="true">' +
+        '<div class="riviantrackr-skeleton-line riviantrackr-skeleton-line-full"></div>' +
+        '<div class="riviantrackr-skeleton-line riviantrackr-skeleton-line-full"></div>' +
+        '<div class="riviantrackr-skeleton-line riviantrackr-skeleton-line-medium"></div>' +
+        '<div class="riviantrackr-skeleton-line riviantrackr-skeleton-line-short"></div>' +
       '</div>';
   }
 
@@ -100,15 +100,15 @@
   }
 
   ready(function() {
-    if (!window.SearchLensAI) return;
+    if (!window.RivianTrackrAI) return;
 
     // Check if server cache was cleared (model changed, etc.) and invalidate browser cache
     checkCacheVersion();
 
-    var container = document.getElementById('searchlens-search-summary-content');
+    var container = document.getElementById('riviantrackr-search-summary-content');
     if (!container) return;
 
-    var q = (window.SearchLensAI.query || '').trim();
+    var q = (window.RivianTrackrAI.query || '').trim();
     if (!q) return;
 
     // Show skeleton loading immediately
@@ -117,8 +117,8 @@
     // Check session cache first
     var cached = getFromCache(q);
     if (cached) {
-      container.classList.remove('searchlens-loading');
-      container.classList.add('searchlens-loaded');
+      container.classList.remove('riviantrackr-loading');
+      container.classList.add('riviantrackr-loaded');
       if (cached.answer_html) {
         container.innerHTML = cached.answer_html;
         showFeedback();
@@ -135,20 +135,20 @@
       return;
     }
 
-    var endpoint = window.SearchLensAI.endpoint + '?q=' + encodeURIComponent(q);
+    var endpoint = window.RivianTrackrAI.endpoint + '?q=' + encodeURIComponent(q);
 
     // Append JS challenge token for bot detection hardening
-    if (window.SearchLensAI.botToken && window.SearchLensAI.botTokenTs) {
-      endpoint += '&bt=' + encodeURIComponent(window.SearchLensAI.botToken) + '&bts=' + encodeURIComponent(window.SearchLensAI.botTokenTs);
+    if (window.RivianTrackrAI.botToken && window.RivianTrackrAI.botTokenTs) {
+      endpoint += '&bt=' + encodeURIComponent(window.RivianTrackrAI.botToken) + '&bts=' + encodeURIComponent(window.RivianTrackrAI.botTokenTs);
     }
 
     // Set timeout with AbortController to actually cancel the request
-    var timeoutMs = (window.SearchLensAI.requestTimeout || 60) * 1000;
+    var timeoutMs = (window.RivianTrackrAI.requestTimeout || 60) * 1000;
     var abortController = new AbortController();
     var timeoutId = setTimeout(function() {
       abortController.abort();
-      container.classList.remove('searchlens-loading');
-      container.classList.add('searchlens-loaded');
+      container.classList.remove('riviantrackr-loading');
+      container.classList.add('riviantrackr-loaded');
       container.innerHTML = '<p role="alert" style="margin:0; opacity:0.8;">Request timed out. Please refresh the page to try again.</p>';
     }, timeoutMs);
 
@@ -160,12 +160,12 @@
     ];
     var progressTimers = progressMessages.map(function(msg) {
       return setTimeout(function() {
-        var skeleton = container.querySelector('.searchlens-skeleton');
+        var skeleton = container.querySelector('.riviantrackr-skeleton');
         if (!skeleton) return;
-        var status = skeleton.querySelector('.searchlens-skeleton-status');
+        var status = skeleton.querySelector('.riviantrackr-skeleton-status');
         if (!status) {
           status = document.createElement('p');
-          status.className = 'searchlens-skeleton-status';
+          status.className = 'riviantrackr-skeleton-status';
           status.style.cssText = 'margin:0.5rem 0 0; font-size:0.8rem; opacity:0.7;';
           status.setAttribute('role', 'status');
           status.setAttribute('aria-live', 'polite');
@@ -201,8 +201,8 @@
       })
       .then(function(data) {
         clearTimeout(timeoutId);
-        container.classList.remove('searchlens-loading');
-        container.classList.add('searchlens-loaded');
+        container.classList.remove('riviantrackr-loading');
+        container.classList.add('riviantrackr-loaded');
 
         if (data && data.answer_html) {
           // Cache successful responses
@@ -215,7 +215,7 @@
 
         if (data && data.error) {
           // Cache no-results responses so we don't re-hit the server
-          var noResultsCode = (window.SearchLensAI && window.SearchLensAI.errorCodes && window.SearchLensAI.errorCodes.noResults) || 'no_results';
+          var noResultsCode = (window.RivianTrackrAI && window.RivianTrackrAI.errorCodes && window.RivianTrackrAI.errorCodes.noResults) || 'no_results';
           if (data.error_code === noResultsCode) {
             saveToCache(q, data);
           }
@@ -237,22 +237,22 @@
         if (error.name === 'AbortError') {
           return;
         }
-        container.classList.remove('searchlens-loading');
-        container.classList.add('searchlens-loaded');
+        container.classList.remove('riviantrackr-loading');
+        container.classList.add('riviantrackr-loaded');
         container.innerHTML = '<p role="alert" style="margin:0; opacity:0.8;">AI summary is not available right now.</p>';
       });
 
     // Sources toggle handler (persists expanded state in localStorage)
-    var SOURCES_STATE_KEY = 'searchlens_sources_expanded';
+    var SOURCES_STATE_KEY = 'riviantrackr_sources_expanded';
 
     document.addEventListener('click', function(e) {
-      var btn = e.target.closest('.searchlens-sources-toggle');
+      var btn = e.target.closest('.riviantrackr-sources-toggle');
       if (!btn) return;
 
-      var wrapper = btn.closest('.searchlens-sources');
+      var wrapper = btn.closest('.riviantrackr-sources');
       if (!wrapper) return;
 
-      var list = wrapper.querySelector('.searchlens-sources-list');
+      var list = wrapper.querySelector('.riviantrackr-sources-list');
       if (!list) return;
 
       var isHidden = list.hasAttribute('hidden');
@@ -276,10 +276,10 @@
     try {
       if (localStorage.getItem(SOURCES_STATE_KEY) === '1') {
         var observer = new MutationObserver(function(mutations, obs) {
-          var btn = document.querySelector('.searchlens-sources-toggle');
+          var btn = document.querySelector('.riviantrackr-sources-toggle');
           if (btn) {
             obs.disconnect();
-            var list = btn.closest('.searchlens-sources') && btn.closest('.searchlens-sources').querySelector('.searchlens-sources-list');
+            var list = btn.closest('.riviantrackr-sources') && btn.closest('.riviantrackr-sources').querySelector('.riviantrackr-sources-list');
             if (list && list.hasAttribute('hidden')) {
               list.removeAttribute('hidden');
               btn.textContent = btn.getAttribute('data-label-hide') || 'Hide sources';
@@ -293,20 +293,20 @@
 
     // Feedback button handler
     document.addEventListener('click', function(e) {
-      var btn = e.target.closest('.searchlens-feedback-btn');
+      var btn = e.target.closest('.riviantrackr-feedback-btn');
       if (!btn) return;
 
-      var feedbackContainer = document.getElementById('searchlens-feedback');
+      var feedbackContainer = document.getElementById('riviantrackr-feedback');
       if (!feedbackContainer) return;
 
       var helpful = btn.getAttribute('data-helpful') === '1';
-      var q = (window.SearchLensAI.query || '').trim();
-      var feedbackEndpoint = window.SearchLensAI.feedbackEndpoint;
+      var q = (window.RivianTrackrAI.query || '').trim();
+      var feedbackEndpoint = window.RivianTrackrAI.feedbackEndpoint;
 
       if (!q || !feedbackEndpoint) return;
 
       // Disable buttons immediately
-      var buttons = feedbackContainer.querySelectorAll('.searchlens-feedback-btn');
+      var buttons = feedbackContainer.querySelectorAll('.riviantrackr-feedback-btn');
       buttons.forEach(function(b) { b.disabled = true; });
 
       fetch(feedbackEndpoint, {
@@ -314,14 +314,14 @@
         credentials: 'same-origin',
         headers: {
           'Content-Type': 'application/json',
-          'X-WP-Nonce': window.SearchLensAI.nonce || ''
+          'X-WP-Nonce': window.RivianTrackrAI.nonce || ''
         },
         body: JSON.stringify({ q: q, helpful: helpful ? 1 : 0 })
       })
       .then(function(response) { return response.json(); })
       .then(function(data) {
-        var prompt = feedbackContainer.querySelector('.searchlens-feedback-prompt');
-        var thanks = feedbackContainer.querySelector('.searchlens-feedback-thanks');
+        var prompt = feedbackContainer.querySelector('.riviantrackr-feedback-prompt');
+        var thanks = feedbackContainer.querySelector('.riviantrackr-feedback-thanks');
         if (prompt) prompt.style.display = 'none';
         if (thanks) {
           thanks.style.display = 'block';
@@ -339,12 +339,12 @@
    * Show the feedback prompt after a successful summary load.
    */
   function showFeedback() {
-    var feedback = document.getElementById('searchlens-feedback');
+    var feedback = document.getElementById('riviantrackr-feedback');
     if (feedback) {
       feedback.style.display = 'block';
     }
   }
 
   // Expose for use after fetch completes
-  window.searchlensShowFeedback = showFeedback;
+  window.riviantrackrShowFeedback = showFeedback;
 })();

@@ -4,75 +4,75 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 /**
- * Plugin Name: SearchLens AI
+ * Plugin Name: RivianTrackr AI Search Summary
  * Description: Add an OpenAI powered AI summary to WordPress search results without delaying normal results, with analytics, cache control, and collapsible sources.
- * Version: 1.0.6
+ * Version: 1.0.7
  * Author: Jose Castillo
  * Author URI: https://github.com/RivianTrackr/
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Requires at least: 6.9
  * Requires PHP: 8.4
- * Text Domain: searchlens-ai
+ * Text Domain: riviantrackr-ai-search-summary
  * Domain Path: /languages
  */
 
-define( 'SEARCHLENS_VERSION', '1.0.6' );
-define( 'SEARCHLENS_MODELS_CACHE_TTL', 7 * DAY_IN_SECONDS );
-define( 'SEARCHLENS_MIN_CACHE_TTL', 60 );
-define( 'SEARCHLENS_MAX_CACHE_TTL', 86400 );
-define( 'SEARCHLENS_DEFAULT_CACHE_TTL', 3600 );
-define( 'SEARCHLENS_CONTENT_LENGTH', 400 );
-define( 'SEARCHLENS_EXCERPT_LENGTH', 200 );
-define( 'SEARCHLENS_MAX_SOURCES_DISPLAY', 5 );
-define( 'SEARCHLENS_API_TIMEOUT', 60 );
-define( 'SEARCHLENS_RATE_LIMIT_WINDOW', 70 );
-define( 'SEARCHLENS_MAX_TOKENS', 1500 ); // Default; overridden by the admin setting
-define( 'SEARCHLENS_IP_RATE_LIMIT', 10 );         // Summary requests per minute per IP
-define( 'SEARCHLENS_IP_LOG_RATE_LIMIT', 60 );    // Logging/feedback requests per minute per IP
+define( 'RIVIANTRACKR_VERSION', '1.0.7' );
+define( 'RIVIANTRACKR_MODELS_CACHE_TTL', 7 * DAY_IN_SECONDS );
+define( 'RIVIANTRACKR_MIN_CACHE_TTL', 60 );
+define( 'RIVIANTRACKR_MAX_CACHE_TTL', 86400 );
+define( 'RIVIANTRACKR_DEFAULT_CACHE_TTL', 3600 );
+define( 'RIVIANTRACKR_CONTENT_LENGTH', 400 );
+define( 'RIVIANTRACKR_EXCERPT_LENGTH', 200 );
+define( 'RIVIANTRACKR_MAX_SOURCES_DISPLAY', 5 );
+define( 'RIVIANTRACKR_API_TIMEOUT', 60 );
+define( 'RIVIANTRACKR_RATE_LIMIT_WINDOW', 70 );
+define( 'RIVIANTRACKR_MAX_TOKENS', 1500 ); // Default; overridden by the admin setting
+define( 'RIVIANTRACKR_IP_RATE_LIMIT', 10 );         // Summary requests per minute per IP
+define( 'RIVIANTRACKR_IP_LOG_RATE_LIMIT', 60 );    // Logging/feedback requests per minute per IP
 
 // Pagination defaults
-define( 'SEARCHLENS_PER_PAGE_QUERIES', 20 );
-define( 'SEARCHLENS_PER_PAGE_ERRORS', 10 );
-define( 'SEARCHLENS_PER_PAGE_EVENTS', 50 );
+define( 'RIVIANTRACKR_PER_PAGE_QUERIES', 20 );
+define( 'RIVIANTRACKR_PER_PAGE_ERRORS', 10 );
+define( 'RIVIANTRACKR_PER_PAGE_EVENTS', 50 );
 
 // Input validation limits
-define( 'SEARCHLENS_QUERY_MIN_LENGTH', 2 );
-define( 'SEARCHLENS_QUERY_MAX_LENGTH', 500 );
-define( 'SEARCHLENS_QUERY_MAX_BYTES', 2000 );
-define( 'SEARCHLENS_ERROR_MAX_LENGTH', 500 );
-define( 'SEARCHLENS_CUSTOM_CSS_MAX_LENGTH', 10000 );
+define( 'RIVIANTRACKR_QUERY_MIN_LENGTH', 2 );
+define( 'RIVIANTRACKR_QUERY_MAX_LENGTH', 500 );
+define( 'RIVIANTRACKR_QUERY_MAX_BYTES', 2000 );
+define( 'RIVIANTRACKR_ERROR_MAX_LENGTH', 500 );
+define( 'RIVIANTRACKR_CUSTOM_CSS_MAX_LENGTH', 10000 );
 
 // Analytics badge thresholds
-define( 'SEARCHLENS_BADGE_SUCCESS_HIGH', 90 );
-define( 'SEARCHLENS_BADGE_SUCCESS_MED', 70 );
-define( 'SEARCHLENS_BADGE_CACHE_HIGH', 50 );
-define( 'SEARCHLENS_BADGE_CACHE_MED', 25 );
-define( 'SEARCHLENS_BADGE_HELPFUL_HIGH', 70 );
-define( 'SEARCHLENS_BADGE_HELPFUL_MED', 40 );
+define( 'RIVIANTRACKR_BADGE_SUCCESS_HIGH', 90 );
+define( 'RIVIANTRACKR_BADGE_SUCCESS_MED', 70 );
+define( 'RIVIANTRACKR_BADGE_CACHE_HIGH', 50 );
+define( 'RIVIANTRACKR_BADGE_CACHE_MED', 25 );
+define( 'RIVIANTRACKR_BADGE_HELPFUL_HIGH', 70 );
+define( 'RIVIANTRACKR_BADGE_HELPFUL_MED', 40 );
 
 // Large table optimization threshold
-define( 'SEARCHLENS_LARGE_TABLE_THRESHOLD', 100000 );
+define( 'RIVIANTRACKR_LARGE_TABLE_THRESHOLD', 100000 );
 
 // Error codes for structured API responses
-define( 'SEARCHLENS_ERROR_BOT_DETECTED', 'bot_detected' );
-define( 'SEARCHLENS_ERROR_RATE_LIMITED', 'rate_limited' );
-define( 'SEARCHLENS_ERROR_NOT_CONFIGURED', 'not_configured' );
-define( 'SEARCHLENS_ERROR_INVALID_QUERY', 'invalid_query' );
-define( 'SEARCHLENS_ERROR_API_ERROR', 'api_error' );
-define( 'SEARCHLENS_ERROR_NO_RESULTS', 'no_results' );
+define( 'RIVIANTRACKR_ERROR_BOT_DETECTED', 'bot_detected' );
+define( 'RIVIANTRACKR_ERROR_RATE_LIMITED', 'rate_limited' );
+define( 'RIVIANTRACKR_ERROR_NOT_CONFIGURED', 'not_configured' );
+define( 'RIVIANTRACKR_ERROR_INVALID_QUERY', 'invalid_query' );
+define( 'RIVIANTRACKR_ERROR_API_ERROR', 'api_error' );
+define( 'RIVIANTRACKR_ERROR_NO_RESULTS', 'no_results' );
 
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class SearchLens_AI {
+class RivianTrackr_AI_Search_Summary {
 
-    private $option_name         = 'searchlens_options';
-    private $models_cache_option = 'searchlens_models_cache';
-    private $cache_keys_option      = 'searchlens_cache_keys';
-    private $cache_namespace_option = 'searchlens_cache_namespace';
+    private $option_name         = 'riviantrackr_options';
+    private $models_cache_option = 'riviantrackr_models_cache';
+    private $cache_keys_option      = 'riviantrackr_cache_keys';
+    private $cache_namespace_option = 'riviantrackr_cache_namespace';
     private $cache_prefix;
     private $cache_ttl           = 3600;
 
@@ -83,7 +83,7 @@ class SearchLens_AI {
 
     public function __construct() {
 
-        $this->cache_prefix = 'searchlens_v' . str_replace( '.', '_', SEARCHLENS_VERSION ) . '_';
+        $this->cache_prefix = 'riviantrackr_v' . str_replace( '.', '_', RIVIANTRACKR_VERSION ) . '_';
 
         // Register settings on admin_init (the recommended hook for Settings API)
         add_action( 'admin_init', array( $this, 'register_settings' ) );
@@ -96,18 +96,18 @@ class SearchLens_AI {
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_assets' ) );
         add_action( 'rest_api_init', array( $this, 'register_rest_routes' ) );
         add_filter( 'rest_post_dispatch', array( $this, 'add_rate_limit_headers' ), 10, 3 );
-        add_action( 'wp_ajax_searchlens_test_api_key', array( $this, 'ajax_test_api_key' ) );
-        add_action( 'wp_ajax_searchlens_refresh_models', array( $this, 'ajax_refresh_models' ) );
-        add_action( 'wp_ajax_searchlens_clear_cache', array( $this, 'ajax_clear_cache' ) );
-        add_action( 'wp_ajax_searchlens_purge_spam', array( $this, 'ajax_purge_spam' ) );
-        add_action( 'wp_ajax_searchlens_bulk_delete_logs', array( $this, 'ajax_bulk_delete_logs' ) );
-        add_action( 'wp_ajax_searchlens_gdpr_purge_queries', array( $this, 'ajax_gdpr_purge_queries' ) );
-        add_action( 'admin_post_searchlens_export_csv', array( $this, 'handle_csv_export' ) );
-        add_action( 'searchlens_daily_log_purge', array( $this, 'run_scheduled_purge' ) );
+        add_action( 'wp_ajax_riviantrackr_test_api_key', array( $this, 'ajax_test_api_key' ) );
+        add_action( 'wp_ajax_riviantrackr_refresh_models', array( $this, 'ajax_refresh_models' ) );
+        add_action( 'wp_ajax_riviantrackr_clear_cache', array( $this, 'ajax_clear_cache' ) );
+        add_action( 'wp_ajax_riviantrackr_purge_spam', array( $this, 'ajax_purge_spam' ) );
+        add_action( 'wp_ajax_riviantrackr_bulk_delete_logs', array( $this, 'ajax_bulk_delete_logs' ) );
+        add_action( 'wp_ajax_riviantrackr_gdpr_purge_queries', array( $this, 'ajax_gdpr_purge_queries' ) );
+        add_action( 'admin_post_riviantrackr_export_csv', array( $this, 'handle_csv_export' ) );
+        add_action( 'riviantrackr_daily_log_purge', array( $this, 'run_scheduled_purge' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );
         add_action( 'admin_print_styles-index.php', array( $this, 'enqueue_dashboard_widget_css' ) );
         add_action( 'widgets_init', array( $this, 'register_trending_widget' ) );
-        add_shortcode( 'searchlens_trending', array( $this, 'render_trending_shortcode' ) );
+        add_shortcode( 'riviantrackr_trending', array( $this, 'render_trending_shortcode' ) );
 
         add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $this, 'add_plugin_settings_link' ) );
 
@@ -127,7 +127,7 @@ class SearchLens_AI {
     public function add_security_headers() {
         // Only add headers on our plugin pages
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only page routing check, not form processing
-        if ( ! isset( $_GET['page'] ) || strpos( sanitize_text_field( wp_unslash( $_GET['page'] ) ), 'searchlens' ) !== 0 ) {
+        if ( ! isset( $_GET['page'] ) || strpos( sanitize_text_field( wp_unslash( $_GET['page'] ) ), 'riviantrackr' ) !== 0 ) {
             return;
         }
 
@@ -150,7 +150,7 @@ class SearchLens_AI {
     }
 
     public function add_plugin_settings_link( $links ) {
-        $url = admin_url( 'admin.php?page=searchlens-settings' );
+        $url = admin_url( 'admin.php?page=riviantrackr-settings' );
         $settings_link = '<a href="' . esc_url( $url ) . '">Settings</a>';
         array_unshift( $links, $settings_link );
         return $links;
@@ -158,21 +158,21 @@ class SearchLens_AI {
 
     public function enqueue_dashboard_widget_css() {
         wp_enqueue_style(
-            'searchlens-admin',
-            plugin_dir_url( __FILE__ ) . 'assets/searchlens-admin.css',
+            'riviantrackr-admin',
+            plugin_dir_url( __FILE__ ) . 'assets/riviantrackr-admin.css',
             array(),
-            SEARCHLENS_VERSION
+            RIVIANTRACKR_VERSION
         );
     }
 
     private static function get_logs_table_name(): string {
         global $wpdb;
-        return $wpdb->prefix . 'searchlens_logs';
+        return $wpdb->prefix . 'riviantrackr_logs';
     }
 
     private static function get_feedback_table_name(): string {
         global $wpdb;
-        return $wpdb->prefix . 'searchlens_feedback';
+        return $wpdb->prefix . 'riviantrackr_feedback';
     }
 
 
@@ -250,7 +250,7 @@ class SearchLens_AI {
             $wpdb->query( $wpdb->prepare( 'ALTER TABLE %i ADD INDEX search_query_created (search_query(100), created_at)', $table_name ) );
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[SearchLens AI] Added search_query_created index' );
+                error_log( '[RivianTrackr AI Search Summary] Added search_query_created index' );
             }
         }
 
@@ -260,7 +260,7 @@ class SearchLens_AI {
             $wpdb->query( $wpdb->prepare( 'ALTER TABLE %i ADD INDEX ai_success_created (ai_success, created_at)', $table_name ) );
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[SearchLens AI] Added ai_success_created index' );
+                error_log( '[RivianTrackr AI Search Summary] Added ai_success_created index' );
             }
         }
 
@@ -270,7 +270,7 @@ class SearchLens_AI {
             $wpdb->query( $wpdb->prepare( 'ALTER TABLE %i ADD INDEX cache_hit_created (cache_hit, created_at)', $table_name ) );
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[SearchLens AI] Added cache_hit_created index' );
+                error_log( '[RivianTrackr AI Search Summary] Added cache_hit_created index' );
             }
         }
 
@@ -280,7 +280,7 @@ class SearchLens_AI {
             $wpdb->query( $wpdb->prepare( 'ALTER TABLE %i ADD INDEX results_count (results_count)', $table_name ) );
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[SearchLens AI] Added results_count index' );
+                error_log( '[RivianTrackr AI Search Summary] Added results_count index' );
             }
         }
 
@@ -312,7 +312,7 @@ class SearchLens_AI {
             $wpdb->query( $wpdb->prepare( 'ALTER TABLE %i ADD COLUMN cache_hit tinyint(1) NULL DEFAULT NULL AFTER ai_error', $table_name ) );
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[SearchLens AI] Added cache_hit column' );
+                error_log( '[RivianTrackr AI Search Summary] Added cache_hit column' );
             }
         }
 
@@ -322,7 +322,7 @@ class SearchLens_AI {
             $wpdb->query( $wpdb->prepare( 'ALTER TABLE %i ADD COLUMN response_time_ms int unsigned NULL DEFAULT NULL AFTER cache_hit', $table_name ) );
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[SearchLens AI] Added response_time_ms column' );
+                error_log( '[RivianTrackr AI Search Summary] Added response_time_ms column' );
             }
         }
 
@@ -340,9 +340,9 @@ class SearchLens_AI {
      * Clean up scheduled events on plugin deactivation.
      */
     public static function deactivate() {
-        $timestamp = wp_next_scheduled( 'searchlens_daily_log_purge' );
+        $timestamp = wp_next_scheduled( 'riviantrackr_daily_log_purge' );
         if ( $timestamp ) {
-            wp_unschedule_event( $timestamp, 'searchlens_daily_log_purge' );
+            wp_unschedule_event( $timestamp, 'riviantrackr_daily_log_purge' );
         }
     }
 
@@ -359,20 +359,90 @@ class SearchLens_AI {
      * Called on admin_init to ensure schema is up to date.
      */
     public function maybe_run_migrations() {
-        $db_version = get_option( 'searchlens_db_version', '1.0' );
+        $db_version = get_option( 'riviantrackr_db_version', '1.0' );
 
         // Version 1.1 adds cache_hit column
         if ( version_compare( $db_version, '1.1', '<' ) ) {
             self::add_missing_columns();
             self::add_missing_indexes();
-            update_option( 'searchlens_db_version', '1.1' );
+            update_option( 'riviantrackr_db_version', '1.1' );
             $db_version = '1.1';
         }
 
         // Version 1.2 adds feedback table
         if ( version_compare( $db_version, '1.2', '<' ) ) {
             self::create_feedback_table();
-            update_option( 'searchlens_db_version', '1.2' );
+            update_option( 'riviantrackr_db_version', '1.2' );
+            $db_version = '1.2';
+        }
+
+        // Version 1.3: Rename from SearchLens AI to RivianTrackr AI Search Summary
+        // Migrate database tables, options, transients, and cron hooks from searchlens_ to riviantrackr_ prefix
+        if ( version_compare( $db_version, '1.3', '<' ) ) {
+            global $wpdb;
+
+            // Rename database tables
+            $old_logs = $wpdb->prefix . 'searchlens_logs';
+            $new_logs = self::get_logs_table_name();
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $old_logs ) ) === $old_logs ) {
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+                $wpdb->query( $wpdb->prepare( 'RENAME TABLE %i TO %i', $old_logs, $new_logs ) );
+            }
+
+            $old_feedback = $wpdb->prefix . 'searchlens_feedback';
+            $new_feedback = self::get_feedback_table_name();
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $old_feedback ) ) === $old_feedback ) {
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+                $wpdb->query( $wpdb->prepare( 'RENAME TABLE %i TO %i', $old_feedback, $new_feedback ) );
+            }
+
+            // Migrate options from old prefix to new prefix
+            $old_opts = get_option( 'searchlens_options', null );
+            if ( null !== $old_opts ) {
+                update_option( 'riviantrackr_options', $old_opts );
+                delete_option( 'searchlens_options' );
+            }
+
+            $options_to_migrate = array(
+                'searchlens_models_cache'    => 'riviantrackr_models_cache',
+                'searchlens_cache_keys'      => 'riviantrackr_cache_keys',
+                'searchlens_cache_namespace' => 'riviantrackr_cache_namespace',
+                'searchlens_db_version'      => 'riviantrackr_db_version',
+            );
+            foreach ( $options_to_migrate as $old_key => $new_key ) {
+                $val = get_option( $old_key, null );
+                if ( null !== $val ) {
+                    update_option( $new_key, $val );
+                    delete_option( $old_key );
+                }
+            }
+
+            // Clean up old transients
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            $wpdb->query(
+                "DELETE FROM {$wpdb->options}
+                 WHERE option_name LIKE '_transient_searchlens_%'
+                    OR option_name LIKE '_transient_timeout_searchlens_%'"
+            );
+
+            // Re-schedule cron under new hook name
+            $old_cron_ts = wp_next_scheduled( 'searchlens_daily_log_purge' );
+            if ( $old_cron_ts ) {
+                wp_unschedule_event( $old_cron_ts, 'searchlens_daily_log_purge' );
+                $migrated_opts = get_option( 'riviantrackr_options', array() );
+                if ( ! empty( $migrated_opts['auto_purge_enabled'] ) ) {
+                    wp_schedule_event( time() + HOUR_IN_SECONDS, 'daily', 'riviantrackr_daily_log_purge' );
+                }
+            }
+
+            update_option( 'riviantrackr_db_version', '1.3' );
+
+            if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+                error_log( '[RivianTrackr AI Search Summary] Migration from searchlens_ to riviantrackr_ prefix complete.' );
+            }
         }
     }
 
@@ -452,7 +522,7 @@ class SearchLens_AI {
             $sanitized_error = sanitize_text_field( $sanitized_error );
             // Limit error message length to prevent oversized storage
             if ( function_exists( 'mb_substr' ) ) {
-                $sanitized_error = mb_substr( $sanitized_error, 0, SEARCHLENS_ERROR_MAX_LENGTH, 'UTF-8' );
+                $sanitized_error = mb_substr( $sanitized_error, 0, RIVIANTRACKR_ERROR_MAX_LENGTH, 'UTF-8' );
             } else {
                 $sanitized_error = substr( $sanitized_error, 0, 500 );
             }
@@ -490,7 +560,7 @@ class SearchLens_AI {
         if ( false === $result && defined( 'WP_DEBUG' ) && WP_DEBUG ) {
             // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
             error_log(
-                '[SearchLens AI] Failed to log search event: ' .
+                '[RivianTrackr AI Search Summary] Failed to log search event: ' .
                 $wpdb->last_error .
                 ' | Query: ' . substr( $search_query, 0, 50 )
             );
@@ -575,7 +645,7 @@ class SearchLens_AI {
      * @return bool True if API key constant is defined and not empty.
      */
     public function is_api_key_from_constant() {
-        return defined( 'SEARCHLENS_API_KEY' ) && ! empty( SEARCHLENS_API_KEY );
+        return defined( 'RIVIANTRACKR_API_KEY' ) && ! empty( RIVIANTRACKR_API_KEY );
     }
 
     public function get_options(): array {
@@ -588,10 +658,10 @@ class SearchLens_AI {
             'api_key_valid'        => null,
             'model'                => '',
             'max_posts'            => 20,
-            'max_tokens'           => SEARCHLENS_MAX_TOKENS,
+            'max_tokens'           => RIVIANTRACKR_MAX_TOKENS,
             'enable'               => 0,
             'max_calls_per_minute' => 30,
-            'cache_ttl'            => SEARCHLENS_DEFAULT_CACHE_TTL,
+            'cache_ttl'            => RIVIANTRACKR_DEFAULT_CACHE_TTL,
             'request_timeout'      => 60,
             'site_name'            => get_bloginfo( 'name' ),
             'site_description'     => '',
@@ -607,8 +677,8 @@ class SearchLens_AI {
             'anonymize_queries'       => 0,
             'spam_blocklist'          => '',
             'post_types'              => array(),
-            'max_sources_display'     => SEARCHLENS_MAX_SOURCES_DISPLAY,
-            'content_length'          => SEARCHLENS_CONTENT_LENGTH,
+            'max_sources_display'     => RIVIANTRACKR_MAX_SOURCES_DISPLAY,
+            'content_length'          => RIVIANTRACKR_CONTENT_LENGTH,
         );
 
         $opts = get_option( $this->option_name, array() );
@@ -616,7 +686,7 @@ class SearchLens_AI {
 
         // Override API key if defined via constant (more secure than database storage)
         if ( $this->is_api_key_from_constant() ) {
-            $this->options_cache['api_key'] = SEARCHLENS_API_KEY;
+            $this->options_cache['api_key'] = RIVIANTRACKR_API_KEY;
         }
 
         return $this->options_cache;
@@ -672,7 +742,7 @@ class SearchLens_AI {
         // Max tokens: min 500, max 16000, default 1500
         $output['max_tokens'] = isset($input['max_tokens'])
             ? max(500, min(16000, intval($input['max_tokens'])))
-            : SEARCHLENS_MAX_TOKENS;
+            : RIVIANTRACKR_MAX_TOKENS;
 
         $output['enable'] = isset($input['enable']) && $input['enable'] ? 1 : 0;
 
@@ -698,14 +768,14 @@ class SearchLens_AI {
             
         if (isset($input['cache_ttl'])) {
             $ttl = intval($input['cache_ttl']);
-            if ($ttl < SEARCHLENS_MIN_CACHE_TTL) {
-                $ttl = SEARCHLENS_MIN_CACHE_TTL;
-            } elseif ($ttl > SEARCHLENS_MAX_CACHE_TTL) {
-                $ttl = SEARCHLENS_MAX_CACHE_TTL;
+            if ($ttl < RIVIANTRACKR_MIN_CACHE_TTL) {
+                $ttl = RIVIANTRACKR_MIN_CACHE_TTL;
+            } elseif ($ttl > RIVIANTRACKR_MAX_CACHE_TTL) {
+                $ttl = RIVIANTRACKR_MAX_CACHE_TTL;
             }
             $output['cache_ttl'] = $ttl;
         } else {
-            $output['cache_ttl'] = SEARCHLENS_DEFAULT_CACHE_TTL;
+            $output['cache_ttl'] = RIVIANTRACKR_DEFAULT_CACHE_TTL;
         }
 
         // Request timeout: min 10 seconds, max 300 seconds, default 60
@@ -781,21 +851,21 @@ class SearchLens_AI {
         $old_purge_enabled = isset( $old_options['auto_purge_enabled'] ) ? $old_options['auto_purge_enabled'] : 0;
         if ( $output['auto_purge_enabled'] && ! $old_purge_enabled ) {
             // Enable: schedule daily purge if not already scheduled
-            if ( ! wp_next_scheduled( 'searchlens_daily_log_purge' ) ) {
-                wp_schedule_event( time() + HOUR_IN_SECONDS, 'daily', 'searchlens_daily_log_purge' );
+            if ( ! wp_next_scheduled( 'riviantrackr_daily_log_purge' ) ) {
+                wp_schedule_event( time() + HOUR_IN_SECONDS, 'daily', 'riviantrackr_daily_log_purge' );
             }
         } elseif ( ! $output['auto_purge_enabled'] && $old_purge_enabled ) {
             // Disable: unschedule the cron
-            $timestamp = wp_next_scheduled( 'searchlens_daily_log_purge' );
+            $timestamp = wp_next_scheduled( 'riviantrackr_daily_log_purge' );
             if ( $timestamp ) {
-                wp_unschedule_event( $timestamp, 'searchlens_daily_log_purge' );
+                wp_unschedule_event( $timestamp, 'riviantrackr_daily_log_purge' );
             }
         }
 
         // Auto-clear cache when model, token limit, or display settings change
         $old_model       = isset( $old_options['model'] ) ? $old_options['model'] : '';
         $old_show_sources = isset( $old_options['show_sources'] ) ? $old_options['show_sources'] : 0;
-        $old_max_tokens  = isset( $old_options['max_tokens'] ) ? (int) $old_options['max_tokens'] : SEARCHLENS_MAX_TOKENS;
+        $old_max_tokens  = isset( $old_options['max_tokens'] ) ? (int) $old_options['max_tokens'] : RIVIANTRACKR_MAX_TOKENS;
 
         $cache_invalidating_change = false;
         if ( $output['model'] !== $old_model && ! empty( $output['model'] ) ) {
@@ -870,7 +940,7 @@ class SearchLens_AI {
         );
 
         // Limit length to prevent DoS
-        $max_length = SEARCHLENS_CUSTOM_CSS_MAX_LENGTH;
+        $max_length = RIVIANTRACKR_CUSTOM_CSS_MAX_LENGTH;
         if ( strlen( $css ) > $max_length ) {
             $css = substr( $css, 0, $max_length );
         }
@@ -927,59 +997,59 @@ class SearchLens_AI {
 
         // Target the summary container and content (badge keeps its default dark style)
         $css = "
-.searchlens-summary-inner {
+.riviantrackr-summary-inner {
     background-color: {$bg};
     border-color: {$border_rgba};
 }
-.searchlens-summary-inner,
-.searchlens-summary-inner .searchlens-summary-header h2,
-.searchlens-summary-inner .searchlens-disclaimer {
+.riviantrackr-summary-inner,
+.riviantrackr-summary-inner .riviantrackr-summary-header h2,
+.riviantrackr-summary-inner .riviantrackr-disclaimer {
     color: {$text};
 }
-.searchlens-openai-badge,
-.searchlens-openai-badge .searchlens-openai-text {
+.riviantrackr-openai-badge,
+.riviantrackr-openai-badge .riviantrackr-openai-text {
     color: #e5e7eb;
 }
-.searchlens-search-summary-content {
+.riviantrackr-search-summary-content {
     color: {$text};
 }
-.searchlens-search-summary-content a,
-.searchlens-search-summary-content a:visited {
+.riviantrackr-search-summary-content a,
+.riviantrackr-search-summary-content a:visited {
     color: {$accent};
 }
-.searchlens-search-summary-content a:hover,
-.searchlens-search-summary-content a:active,
-.searchlens-search-summary-content a:focus {
+.riviantrackr-search-summary-content a:hover,
+.riviantrackr-search-summary-content a:active,
+.riviantrackr-search-summary-content a:focus {
     color: {$accent};
     opacity: 0.8;
 }
-.searchlens-sources-toggle {
+.riviantrackr-sources-toggle {
     color: {$text};
 }
-.searchlens-sources-toggle:hover,
-.searchlens-sources-toggle:active,
-.searchlens-sources-toggle:focus {
+.riviantrackr-sources-toggle:hover,
+.riviantrackr-sources-toggle:active,
+.riviantrackr-sources-toggle:focus {
     color: {$accent};
 }
-.searchlens-sources-list a,
-.searchlens-sources-list a:visited {
+.riviantrackr-sources-list a,
+.riviantrackr-sources-list a:visited {
     color: {$accent};
 }
-.searchlens-sources-list a:hover,
-.searchlens-sources-list a:active,
-.searchlens-sources-list a:focus {
+.riviantrackr-sources-list a:hover,
+.riviantrackr-sources-list a:active,
+.riviantrackr-sources-list a:focus {
     color: {$accent};
     opacity: 0.8;
 }
-.searchlens-sources-list span {
+.riviantrackr-sources-list span {
     color: {$text};
     opacity: 0.8;
 }
-.searchlens-spinner {
+.riviantrackr-spinner {
     border-color: rgba({$text_rgb['r']},{$text_rgb['g']},{$text_rgb['b']},0.3);
     border-top-color: {$accent};
 }
-.searchlens-skeleton-line {
+.riviantrackr-skeleton-line {
     background-color: rgba({$text_rgb['r']},{$text_rgb['g']},{$text_rgb['b']},0.15);
     background-image: linear-gradient(
         90deg,
@@ -1018,11 +1088,11 @@ class SearchLens_AI {
 
     public function add_settings_page() {
         $capability  = 'manage_options';
-        $parent_slug = 'searchlens-settings';
+        $parent_slug = 'riviantrackr-settings';
 
         add_menu_page(
-            'SearchLens AI',
-            'SearchLens AI',
+            'RivianTrackr AI Search Summary',
+            'RivianTrackr AI Search Summary',
             $capability,
             $parent_slug,
             array( $this, 'render_settings_page' ),
@@ -1032,7 +1102,7 @@ class SearchLens_AI {
 
         add_submenu_page(
             $parent_slug,
-            'SearchLens AI Settings',
+            'RivianTrackr AI Search Summary Settings',
             'Settings',
             $capability,
             $parent_slug,
@@ -1041,17 +1111,17 @@ class SearchLens_AI {
 
         add_submenu_page(
             $parent_slug,
-            'SearchLens AI Analytics',
+            'RivianTrackr AI Search Summary Analytics',
             'Analytics',
             $capability,
-            'searchlens-analytics',
+            'riviantrackr-analytics',
             array( $this, 'render_analytics_page' )
         );
     }
 
     public function register_settings() {
         register_setting(
-            'searchlens_group',
+            'riviantrackr_group',
             $this->option_name,
             array(
                 'type' => 'array',
@@ -1062,7 +1132,7 @@ class SearchLens_AI {
                     'max_posts'            => 20,
                     'enable'               => 0,
                     'max_calls_per_minute' => 30,
-                    'cache_ttl'            => SEARCHLENS_DEFAULT_CACHE_TTL,
+                    'cache_ttl'            => RIVIANTRACKR_DEFAULT_CACHE_TTL,
                     'request_timeout'      => 60,
                     'site_name'            => '',
                     'site_description'     => '',
@@ -1168,7 +1238,7 @@ class SearchLens_AI {
         }
 
         // Verify nonce
-        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'searchlens_test_key' ) ) {
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'riviantrackr_test_key' ) ) {
             wp_send_json_error( array( 'message' => 'Invalid nonce.' ) );
         }
 
@@ -1177,7 +1247,7 @@ class SearchLens_AI {
 
         if ( $api_key === '__USE_CONSTANT__' ) {
             if ( $this->is_api_key_from_constant() ) {
-                $api_key = SEARCHLENS_API_KEY;
+                $api_key = RIVIANTRACKR_API_KEY;
             } else {
                 wp_send_json_error( array( 'message' => 'API key constant is not defined.' ) );
                 return;
@@ -1199,7 +1269,7 @@ class SearchLens_AI {
             wp_send_json_error( array( 'message' => 'Permission denied.' ) );
         }
 
-        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'searchlens_refresh_models' ) ) {
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'riviantrackr_refresh_models' ) ) {
             wp_send_json_error( array( 'message' => 'Invalid security token. Please refresh the page.' ) );
         }
 
@@ -1221,7 +1291,7 @@ class SearchLens_AI {
             wp_send_json_error( array( 'message' => 'Permission denied.' ) );
         }
 
-        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'searchlens_clear_cache' ) ) {
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'riviantrackr_clear_cache' ) ) {
             wp_send_json_error( array( 'message' => 'Invalid security token. Please refresh the page.' ) );
         }
 
@@ -1243,7 +1313,7 @@ class SearchLens_AI {
             wp_send_json_error( array( 'message' => 'Permission denied.' ) );
         }
 
-        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'searchlens_purge_spam' ) ) {
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'riviantrackr_purge_spam' ) ) {
             wp_send_json_error( array( 'message' => 'Invalid security token. Please refresh the page.' ) );
         }
 
@@ -1313,7 +1383,7 @@ class SearchLens_AI {
         }
 
         // Clear the analytics cache so stats refresh
-        delete_transient( 'searchlens_analytics_overview' );
+        delete_transient( 'riviantrackr_analytics_overview' );
 
         wp_send_json_success( array(
             'message' => number_format( $deleted ) . ' spam log entries deleted across ' . count( $spam_queries ) . ' spam queries.',
@@ -1330,7 +1400,7 @@ class SearchLens_AI {
             wp_send_json_error( array( 'message' => 'Permission denied.' ) );
         }
 
-        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'searchlens_bulk_delete_logs' ) ) {
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'riviantrackr_bulk_delete_logs' ) ) {
             wp_send_json_error( array( 'message' => 'Invalid security token. Please refresh the page.' ) );
         }
 
@@ -1359,7 +1429,7 @@ class SearchLens_AI {
         );
         // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
 
-        delete_transient( 'searchlens_analytics_overview' );
+        delete_transient( 'riviantrackr_analytics_overview' );
 
         wp_send_json_success( array(
             'message' => number_format( (int) $deleted ) . ' log entries deleted.',
@@ -1379,7 +1449,7 @@ class SearchLens_AI {
             wp_send_json_error( array( 'message' => 'Permission denied.' ) );
         }
 
-        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'searchlens_gdpr_purge' ) ) {
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'riviantrackr_gdpr_purge' ) ) {
             wp_send_json_error( array( 'message' => 'Invalid security token. Please refresh the page.' ) );
         }
 
@@ -1407,7 +1477,7 @@ class SearchLens_AI {
             $count++;
         }
 
-        delete_transient( 'searchlens_analytics_overview' );
+        delete_transient( 'riviantrackr_analytics_overview' );
 
         wp_send_json_success( array(
             'message'    => number_format( $count ) . ' search queries anonymized.',
@@ -1423,7 +1493,7 @@ class SearchLens_AI {
             wp_die( 'Permission denied.', 'Error', array( 'response' => 403 ) );
         }
 
-        if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'searchlens_export_csv' ) ) {
+        if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'riviantrackr_export_csv' ) ) {
             wp_die( 'Invalid security token.', 'Error', array( 'response' => 403 ) );
         }
 
@@ -1447,7 +1517,7 @@ class SearchLens_AI {
         $from_datetime = $from_date . ' 00:00:00';
         $to_datetime   = $to_date . ' 23:59:59';
 
-        $filename = 'searchlens-' . $export_type . '-' . $from_date . '-to-' . $to_date . '.csv';
+        $filename = 'riviantrackr-' . $export_type . '-' . $from_date . '-to-' . $to_date . '.csv';
         $rows     = array();
         $headers  = array();
 
@@ -1598,7 +1668,7 @@ class SearchLens_AI {
 
         if ( defined( 'WP_DEBUG' ) && WP_DEBUG && $deleted !== false ) {
             // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-            error_log( '[SearchLens AI] Auto-purge: deleted ' . $deleted . ' log entries older than ' . $days . ' days.' );
+            error_log( '[RivianTrackr AI Search Summary] Auto-purge: deleted ' . $deleted . ' log entries older than ' . $days . ' days.' );
         }
     }
 
@@ -1606,14 +1676,14 @@ class SearchLens_AI {
         $options = $this->get_options();
         $custom_css = isset( $options['custom_css'] ) ? $options['custom_css'] : '';
         ?>
-        <div class="searchlens-css-editor-wrapper">
+        <div class="riviantrackr-css-editor-wrapper">
             <textarea 
                 name="<?php echo esc_attr( $this->option_name ); ?>[custom_css]"
-                id="searchlens-custom-css"
-                class="searchlens-css-editor"
+                id="riviantrackr-custom-css"
+                class="riviantrackr-css-editor"
                 rows="15"
                 placeholder="/* Add your custom CSS here */
-    .searchlens-summary {
+    .riviantrackr-summary {
         /* Your custom styles */
     }"><?php echo esc_textarea( $custom_css ); ?></textarea>
         </div>
@@ -1621,65 +1691,65 @@ class SearchLens_AI {
         <p class="description">
             Add custom CSS to style the AI search summary. This will override the default styles.
             <br>
-            <strong>Tip:</strong> Target classes like <code>.searchlens-summary</code>, <code>.searchlens-summary-inner</code>, <code>.searchlens-openai-badge</code>, etc.
+            <strong>Tip:</strong> Target classes like <code>.riviantrackr-summary</code>, <code>.riviantrackr-summary-inner</code>, <code>.riviantrackr-openai-badge</code>, etc.
         </p>
         
-        <div class="searchlens-css-buttons">
-            <button type="button" id="searchlens-reset-css" class="searchlens-button searchlens-button-secondary">
+        <div class="riviantrackr-css-buttons">
+            <button type="button" id="riviantrackr-reset-css" class="riviantrackr-button riviantrackr-button-secondary">
                 Reset to Empty
             </button>
-            <button type="button" id="searchlens-view-default-css" class="searchlens-button searchlens-button-secondary">
+            <button type="button" id="riviantrackr-view-default-css" class="riviantrackr-button riviantrackr-button-secondary">
                 View Default CSS
             </button>
         </div>
         
         <!-- Modal HTML -->
-        <div id="searchlens-default-css-modal" class="searchlens-modal-overlay">
-            <div class="searchlens-modal-content">
-                <button type="button" id="searchlens-close-modal" class="searchlens-modal-close" aria-label="Close">×</button>
-                <h2 class="searchlens-modal-header">Default CSS Reference</h2>
-                <p class="searchlens-modal-description">
+        <div id="riviantrackr-default-css-modal" class="riviantrackr-modal-overlay">
+            <div class="riviantrackr-modal-content">
+                <button type="button" id="riviantrackr-close-modal" class="riviantrackr-modal-close" aria-label="Close">×</button>
+                <h2 class="riviantrackr-modal-header">Default CSS Reference</h2>
+                <p class="riviantrackr-modal-description">
                     Copy and modify these default styles to customize your AI search summary.
                 </p>
-                <pre class="searchlens-modal-code"><code><?php echo esc_html( $this->get_default_css() ); ?></code></pre>
+                <pre class="riviantrackr-modal-code"><code><?php echo esc_html( $this->get_default_css() ); ?></code></pre>
             </div>
         </div>
         <?php
     }
 
     private function get_default_css() {
-        return '@keyframes searchlens-spin {
+        return '@keyframes riviantrackr-spin {
   to { transform: rotate(360deg); }
 }
 
-.searchlens-summary-content {
+.riviantrackr-summary-content {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-top: 0.75rem;
 }
 
-.searchlens-spinner {
+.riviantrackr-spinner {
   width: 14px;
   height: 14px;
   border-radius: 50%;
   border: 2px solid rgba(148,163,184,0.5);
   border-top-color: #fba919;
   display: inline-block;
-  animation: searchlens-spin 0.7s linear infinite;
+  animation: riviantrackr-spin 0.7s linear infinite;
   flex-shrink: 0;
 }
 
-.searchlens-loading-text {
+.riviantrackr-loading-text {
   margin: 0;
   opacity: 0.8;
 }
 
-.searchlens-summary-content.searchlens-loaded {
+.riviantrackr-summary-content.riviantrackr-loaded {
   display: block;
 }
 
-.searchlens-openai-badge {
+.riviantrackr-openai-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
@@ -1694,7 +1764,7 @@ class SearchLens_AI {
   opacity: 0.95;
 }
 
-.searchlens-openai-mark {
+.riviantrackr-openai-mark {
   width: 10px;
   height: 10px;
   border-radius: 999px;
@@ -1703,7 +1773,7 @@ class SearchLens_AI {
   flex-shrink: 0;
 }
 
-.searchlens-openai-mark::after {
+.riviantrackr-openai-mark::after {
   content: "";
   position: absolute;
   inset: 2px;
@@ -1711,12 +1781,12 @@ class SearchLens_AI {
   background: linear-gradient(135deg,#fba919,#3b82f6);
 }
 
-.searchlens-sources {
+.riviantrackr-sources {
   margin-top: 1rem;
   font-size: 0.85rem;
 }
 
-.searchlens-sources-toggle {
+.riviantrackr-sources-toggle {
   border: none;
   background: none;
   padding: 0;
@@ -1729,31 +1799,31 @@ class SearchLens_AI {
   color: #e5e7eb;
 }
 
-.searchlens-sources-list {
+.riviantrackr-sources-list {
   margin: 0;
   padding-left: 1.1rem;
   font-size: 0.85rem;
 }
 
-.searchlens-sources-list li {
+.riviantrackr-sources-list li {
   margin-bottom: 0.4rem;
 }
 
-.searchlens-sources-list li:last-child {
+.riviantrackr-sources-list li:last-child {
   margin-bottom: 0;
 }
 
-.searchlens-sources-list a {
+.riviantrackr-sources-list a {
   color: #fba919;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
-.searchlens-sources-list a:hover {
+.riviantrackr-sources-list a:hover {
   opacity: 0.9;
 }
 
-.searchlens-sources-list span {
+.riviantrackr-sources-list span {
   display: block;
   opacity: 0.8;
   color: #cbd5f5;
@@ -1795,7 +1865,7 @@ class SearchLens_AI {
         if ( is_wp_error( $response ) ) {
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[SearchLens AI] Model list error: ' . $response->get_error_message() );
+                error_log( '[RivianTrackr AI Search Summary] Model list error: ' . $response->get_error_message() );
             }
             return array();
         }
@@ -1806,7 +1876,7 @@ class SearchLens_AI {
         if ( $code < 200 || $code >= 300 ) {
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[SearchLens AI] Model list HTTP error ' . $code . ' body: ' . $body );
+                error_log( '[RivianTrackr AI Search Summary] Model list HTTP error ' . $code . ' body: ' . $body );
             }
             return array();
         }
@@ -1872,7 +1942,7 @@ class SearchLens_AI {
         // Use cached models if they exist and are still within TTL.
         if ( ! empty( $cached_models ) && $updated_at > 0 ) {
             $age = time() - $updated_at;
-            if ( $age >= 0 && $age < SEARCHLENS_MODELS_CACHE_TTL ) {
+            if ( $age >= 0 && $age < RIVIANTRACKR_MODELS_CACHE_TTL ) {
                 $models = $cached_models;
             }
         }
@@ -1978,20 +2048,20 @@ class SearchLens_AI {
         $setup_complete = $has_api_key && $is_enabled;
         ?>
         
-        <div class="searchlens-settings-wrap">
+        <div class="riviantrackr-settings-wrap">
             <!-- Header -->
-            <div class="searchlens-header">
-                <h1>SearchLens AI Settings</h1>
+            <div class="riviantrackr-header">
+                <h1>RivianTrackr AI Search Summary Settings</h1>
                 <p>Configure OpenAI-powered search summaries for your site.</p>
             </div>
 
             <!-- Status Card -->
-            <div class="searchlens-status-card <?php echo $setup_complete ? 'active' : ''; ?>">
-                <div class="searchlens-status-icon">
+            <div class="riviantrackr-status-card <?php echo $setup_complete ? 'active' : ''; ?>">
+                <div class="riviantrackr-status-icon">
                     <?php echo $setup_complete ? '✓' : '○'; ?>
                 </div>
-                <div class="searchlens-status-content">
-                    <h3><?php echo $setup_complete ? 'SearchLens AI Active' : 'Setup Required'; ?></h3>
+                <div class="riviantrackr-status-content">
+                    <h3><?php echo $setup_complete ? 'RivianTrackr AI Search Summary Active' : 'Setup Required'; ?></h3>
                     <p>
                         <?php 
                         if ( $setup_complete ) {
@@ -2008,45 +2078,45 @@ class SearchLens_AI {
 
             <?php
             // WordPress settings API handles success/error messages automatically
-            settings_errors( 'searchlens_group' );
+            settings_errors( 'riviantrackr_group' );
             ?>
 
             <form method="post" action="options.php">
-                <?php settings_fields( 'searchlens_group' ); ?>
+                <?php settings_fields( 'riviantrackr_group' ); ?>
 
                 <!-- Section 1: Getting Started (Most Important) -->
-                <div class="searchlens-section">
-                    <div class="searchlens-section-header">
+                <div class="riviantrackr-section">
+                    <div class="riviantrackr-section-header">
                         <h2>Getting Started</h2>
                         <p>Essential settings to enable AI search</p>
                     </div>
-                    <div class="searchlens-section-content">
+                    <div class="riviantrackr-section-content">
                         <!-- Enable Toggle -->
-                        <div class="searchlens-field">
-                            <div class="searchlens-field-label">
-                                <label>SearchLens AI</label>
+                        <div class="riviantrackr-field">
+                            <div class="riviantrackr-field-label">
+                                <label>RivianTrackr AI Search Summary</label>
                             </div>
-                            <div class="searchlens-field-description">
+                            <div class="riviantrackr-field-description">
                                 Enable or disable AI-powered search summaries site-wide
                             </div>
-                            <div class="searchlens-toggle-wrapper">
-                                <label class="searchlens-toggle">
+                            <div class="riviantrackr-toggle-wrapper">
+                                <label class="riviantrackr-toggle">
                                     <input type="checkbox" 
                                            name="<?php echo esc_attr( $this->option_name ); ?>[enable]"
                                            value="1" 
                                            <?php checked( $options['enable'], 1 ); ?> />
-                                    <span class="searchlens-toggle-slider"></span>
+                                    <span class="riviantrackr-toggle-slider"></span>
                                 </label>
-                                <span class="searchlens-toggle-label">
+                                <span class="riviantrackr-toggle-label">
                                     <?php echo $options['enable'] ? 'Enabled' : 'Disabled'; ?>
                                 </span>
                             </div>
                         </div>
 
                         <!-- API Key -->
-                        <div class="searchlens-field">
-                            <div class="searchlens-field-label">
-                                <label for="searchlens-api-key">OpenAI API Key</label>
+                        <div class="riviantrackr-field">
+                            <div class="riviantrackr-field-label">
+                                <label for="riviantrackr-api-key">OpenAI API Key</label>
                                 <?php
                                 $key_valid = isset( $options['api_key_valid'] ) ? $options['api_key_valid'] : null;
                                 if ( $this->is_api_key_from_constant() || ( ! empty( $options['api_key'] ) && $key_valid === true ) ) : ?>
@@ -2056,14 +2126,14 @@ class SearchLens_AI {
                                 <?php endif; ?>
                             </div>
                             <?php if ( $this->is_api_key_from_constant() ) : ?>
-                                <div class="searchlens-field-description" style="background: #d1fae5; border: 1px solid #10b981; padding: 12px; border-radius: 6px; margin-bottom: 12px;">
+                                <div class="riviantrackr-field-description" style="background: #d1fae5; border: 1px solid #10b981; padding: 12px; border-radius: 6px; margin-bottom: 12px;">
                                     <strong style="color: #065f46;">&#x1F512; Secure Mode:</strong>
-                                    API key is defined via <code>SEARCHLENS_API_KEY</code> constant in wp-config.php.
+                                    API key is defined via <code>RIVIANTRACKR_API_KEY</code> constant in wp-config.php.
                                     <br><span style="color: #047857;">This is more secure than storing in the database.</span>
                                 </div>
-                                <div class="searchlens-field-input">
+                                <div class="riviantrackr-field-input">
                                     <input type="password"
-                                           id="searchlens-api-key"
+                                           id="riviantrackr-api-key"
                                            value="<?php echo esc_attr( str_repeat( '•', 20 ) ); ?>"
                                            disabled
                                            style="background: #f3f4f6; cursor: not-allowed;" />
@@ -2072,49 +2142,49 @@ class SearchLens_AI {
                                            value="" />
                                 </div>
                             <?php else : ?>
-                                <div class="searchlens-field-description">
+                                <div class="riviantrackr-field-description">
                                     Get your API key from <a href="https://platform.openai.com/api-keys" target="_blank">OpenAI Platform</a>.
-                                    <br><em style="color: #6b7280; font-size: 12px;">Tip: For better security, define <code>SEARCHLENS_API_KEY</code> in wp-config.php instead.</em>
+                                    <br><em style="color: #6b7280; font-size: 12px;">Tip: For better security, define <code>RIVIANTRACKR_API_KEY</code> in wp-config.php instead.</em>
                                 </div>
-                                <div class="searchlens-field-input">
+                                <div class="riviantrackr-field-input">
                                     <input type="password"
-                                           id="searchlens-api-key"
+                                           id="riviantrackr-api-key"
                                            name="<?php echo esc_attr( $this->option_name ); ?>[api_key]"
                                            value="<?php echo esc_attr( $options['api_key'] ); ?>"
                                            placeholder="sk-proj-..."
                                            autocomplete="off" />
                                 </div>
                             <?php endif; ?>
-                            <div class="searchlens-field-actions">
+                            <div class="riviantrackr-field-actions">
                                 <button type="button"
-                                        id="searchlens-test-key-btn"
-                                        class="searchlens-button searchlens-button-secondary">
+                                        id="riviantrackr-test-key-btn"
+                                        class="riviantrackr-button riviantrackr-button-secondary">
                                     Test Connection
                                 </button>
                             </div>
-                            <div id="searchlens-test-result" style="margin-top: 12px;"></div>
+                            <div id="riviantrackr-test-result" style="margin-top: 12px;"></div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Section: Site Configuration -->
-                <div class="searchlens-section">
-                    <div class="searchlens-section-header">
+                <div class="riviantrackr-section">
+                    <div class="riviantrackr-section-header">
                         <h2>Site Configuration</h2>
                         <p>Configure how your site is described to the AI</p>
                     </div>
-                    <div class="searchlens-section-content">
+                    <div class="riviantrackr-section-content">
                         <!-- Site Name -->
-                        <div class="searchlens-field">
-                            <div class="searchlens-field-label">
-                                <label for="searchlens-site-name">Site Name</label>
+                        <div class="riviantrackr-field">
+                            <div class="riviantrackr-field-label">
+                                <label for="riviantrackr-site-name">Site Name</label>
                             </div>
-                            <div class="searchlens-field-description">
+                            <div class="riviantrackr-field-description">
                                 The name of your site (used in AI responses and loading text)
                             </div>
-                            <div class="searchlens-field-input">
+                            <div class="riviantrackr-field-input">
                                 <input type="text"
-                                       id="searchlens-site-name"
+                                       id="riviantrackr-site-name"
                                        name="<?php echo esc_attr( $this->option_name ); ?>[site_name]"
                                        value="<?php echo esc_attr( isset( $options['site_name'] ) ? $options['site_name'] : get_bloginfo( 'name' ) ); ?>"
                                        placeholder="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" />
@@ -2122,16 +2192,16 @@ class SearchLens_AI {
                         </div>
 
                         <!-- Site Description -->
-                        <div class="searchlens-field">
-                            <div class="searchlens-field-label">
-                                <label for="searchlens-site-description">Site Description</label>
+                        <div class="riviantrackr-field">
+                            <div class="riviantrackr-field-label">
+                                <label for="riviantrackr-site-description">Site Description</label>
                             </div>
-                            <div class="searchlens-field-description">
+                            <div class="riviantrackr-field-description">
                                 Describe your site's focus/niche (e.g., "a technology news site" or "a cooking and recipe blog"). This helps the AI understand context.
                             </div>
-                            <div class="searchlens-field-input">
+                            <div class="riviantrackr-field-input">
                                 <input type="text"
-                                       id="searchlens-site-description"
+                                       id="riviantrackr-site-description"
                                        name="<?php echo esc_attr( $this->option_name ); ?>[site_description]"
                                        value="<?php echo esc_attr( isset( $options['site_description'] ) ? $options['site_description'] : '' ); ?>"
                                        placeholder="e.g., a technology news and reviews site" />
@@ -2139,58 +2209,58 @@ class SearchLens_AI {
                         </div>
 
                         <!-- Show OpenAI Badge -->
-                        <div class="searchlens-field">
-                            <div class="searchlens-field-label">
+                        <div class="riviantrackr-field">
+                            <div class="riviantrackr-field-label">
                                 <label>Show "Powered by OpenAI" Badge</label>
                             </div>
-                            <div class="searchlens-field-description">
+                            <div class="riviantrackr-field-description">
                                 Display the OpenAI attribution badge on search summaries
                             </div>
-                            <div class="searchlens-toggle-wrapper">
-                                <label class="searchlens-toggle">
+                            <div class="riviantrackr-toggle-wrapper">
+                                <label class="riviantrackr-toggle">
                                     <input type="checkbox"
                                            name="<?php echo esc_attr( $this->option_name ); ?>[show_openai_badge]"
                                            value="1"
                                            <?php checked( isset( $options['show_openai_badge'] ) ? $options['show_openai_badge'] : 0, 1 ); ?> />
-                                    <span class="searchlens-toggle-slider"></span>
+                                    <span class="riviantrackr-toggle-slider"></span>
                                 </label>
-                                <span class="searchlens-toggle-label">
+                                <span class="riviantrackr-toggle-label">
                                     <?php echo ( isset( $options['show_openai_badge'] ) && $options['show_openai_badge'] ) ? 'Visible' : 'Hidden'; ?>
                                 </span>
                             </div>
                         </div>
 
                         <!-- Show Sources -->
-                        <div class="searchlens-field">
-                            <div class="searchlens-field-label">
+                        <div class="riviantrackr-field">
+                            <div class="riviantrackr-field-label">
                                 <label>Show Sources</label>
                             </div>
-                            <div class="searchlens-field-description">
+                            <div class="riviantrackr-field-description">
                                 Display a collapsible list of source articles used to generate the summary
                             </div>
-                            <div class="searchlens-toggle-wrapper">
-                                <label class="searchlens-toggle">
+                            <div class="riviantrackr-toggle-wrapper">
+                                <label class="riviantrackr-toggle">
                                     <input type="checkbox"
                                            name="<?php echo esc_attr( $this->option_name ); ?>[show_sources]"
                                            value="1"
                                            <?php checked( isset( $options['show_sources'] ) ? $options['show_sources'] : 0, 1 ); ?> />
-                                    <span class="searchlens-toggle-slider"></span>
+                                    <span class="riviantrackr-toggle-slider"></span>
                                 </label>
-                                <span class="searchlens-toggle-label">
+                                <span class="riviantrackr-toggle-label">
                                     <?php echo ( isset( $options['show_sources'] ) && $options['show_sources'] ) ? 'Visible' : 'Hidden'; ?>
                                 </span>
                             </div>
                         </div>
 
                         <!-- Max Sources Display -->
-                        <div class="searchlens-field">
-                            <div class="searchlens-field-label">
+                        <div class="riviantrackr-field">
+                            <div class="riviantrackr-field-label">
                                 <label>Max Sources Displayed</label>
                             </div>
-                            <div class="searchlens-field-description">
+                            <div class="riviantrackr-field-description">
                                 Maximum number of source articles shown beneath the AI summary (1 &ndash; 20)
                             </div>
-                            <div class="searchlens-field-input">
+                            <div class="riviantrackr-field-input">
                                 <input type="number"
                                        name="<?php echo esc_attr( $this->option_name ); ?>[max_sources_display]"
                                        value="<?php echo esc_attr( isset( $options['max_sources_display'] ) ? $options['max_sources_display'] : 5 ); ?>"
@@ -2201,22 +2271,22 @@ class SearchLens_AI {
                         </div>
 
                         <!-- Show Feedback -->
-                        <div class="searchlens-field">
-                            <div class="searchlens-field-label">
+                        <div class="riviantrackr-field">
+                            <div class="riviantrackr-field-label">
                                 <label>Show Feedback Prompt</label>
                             </div>
-                            <div class="searchlens-field-description">
+                            <div class="riviantrackr-field-description">
                                 Display "Was this helpful?" voting buttons after summaries
                             </div>
-                            <div class="searchlens-toggle-wrapper">
-                                <label class="searchlens-toggle">
+                            <div class="riviantrackr-toggle-wrapper">
+                                <label class="riviantrackr-toggle">
                                     <input type="checkbox"
                                            name="<?php echo esc_attr( $this->option_name ); ?>[show_feedback]"
                                            value="1"
                                            <?php checked( isset( $options['show_feedback'] ) ? $options['show_feedback'] : 0, 1 ); ?> />
-                                    <span class="searchlens-toggle-slider"></span>
+                                    <span class="riviantrackr-toggle-slider"></span>
                                 </label>
-                                <span class="searchlens-toggle-label">
+                                <span class="riviantrackr-toggle-label">
                                     <?php echo ( isset( $options['show_feedback'] ) && $options['show_feedback'] ) ? 'Visible' : 'Hidden'; ?>
                                 </span>
                             </div>
@@ -2225,18 +2295,18 @@ class SearchLens_AI {
                 </div>
 
                 <!-- Section 2: AI Configuration -->
-                <div class="searchlens-section">
-                    <div class="searchlens-section-header">
+                <div class="riviantrackr-section">
+                    <div class="riviantrackr-section-header">
                         <h2>AI Configuration</h2>
                         <p>Customize how AI generates search summaries</p>
                     </div>
-                    <div class="searchlens-section-content">
+                    <div class="riviantrackr-section-content">
                         <!-- Model Selection -->
-                        <div class="searchlens-field">
-                            <div class="searchlens-field-label">
+                        <div class="riviantrackr-field">
+                            <div class="riviantrackr-field-label">
                                 <label>AI Model</label>
                             </div>
-                            <div class="searchlens-field-input">
+                            <div class="riviantrackr-field-input">
                                 <?php
                                 $models = $this->get_available_models_for_dropdown( $options['api_key'] );
                                 if ( ! empty( $options['model'] ) && ! in_array( $options['model'], $models, true ) ) {
@@ -2254,13 +2324,13 @@ class SearchLens_AI {
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-                            <div class="searchlens-field-actions">
-                                <button type="button" id="searchlens-refresh-models-btn"
-                                        class="searchlens-button searchlens-button-secondary"
-                                        data-nonce="<?php echo esc_attr( wp_create_nonce( 'searchlens_refresh_models' ) ); ?>">
+                            <div class="riviantrackr-field-actions">
+                                <button type="button" id="riviantrackr-refresh-models-btn"
+                                        class="riviantrackr-button riviantrackr-button-secondary"
+                                        data-nonce="<?php echo esc_attr( wp_create_nonce( 'riviantrackr_refresh_models' ) ); ?>">
                                     Refresh Models
                                 </button>
-                                <span id="searchlens-refresh-models-result" style="margin-left: 12px;"></span>
+                                <span id="riviantrackr-refresh-models-result" style="margin-left: 12px;"></span>
                             </div>
                             <?php if ( is_array( $cache ) && ! empty( $cache['updated_at'] ) ) : ?>
                                 <div style="margin-top: 8px; font-size: 13px; color: #86868b;">
@@ -2270,14 +2340,14 @@ class SearchLens_AI {
                         </div>
 
                         <!-- Max Posts -->
-                        <div class="searchlens-field">
-                            <div class="searchlens-field-label">
+                        <div class="riviantrackr-field">
+                            <div class="riviantrackr-field-label">
                                 <label>Context Size</label>
                             </div>
-                            <div class="searchlens-field-description">
+                            <div class="riviantrackr-field-description">
                                 Number of posts to send as context (more posts = better answers, higher cost)
                             </div>
-                            <div class="searchlens-field-input">
+                            <div class="riviantrackr-field-input">
                                 <input type="number"
                                        name="<?php echo esc_attr( $this->option_name ); ?>[max_posts]"
                                        value="<?php echo esc_attr( $options['max_posts'] ); ?>"
@@ -2287,17 +2357,17 @@ class SearchLens_AI {
                         </div>
 
                         <!-- Content Length -->
-                        <div class="searchlens-field">
-                            <div class="searchlens-field-label">
+                        <div class="riviantrackr-field">
+                            <div class="riviantrackr-field-label">
                                 <label>Content Length Per Post</label>
                             </div>
-                            <div class="searchlens-field-description">
+                            <div class="riviantrackr-field-description">
                                 Characters of post content sent to the AI per article (100 &ndash; 2,000). Higher values give the AI more context but increase token usage and cost.
                             </div>
-                            <div class="searchlens-field-input">
+                            <div class="riviantrackr-field-input">
                                 <input type="number"
                                        name="<?php echo esc_attr( $this->option_name ); ?>[content_length]"
-                                       value="<?php echo esc_attr( isset( $options['content_length'] ) ? $options['content_length'] : SEARCHLENS_CONTENT_LENGTH ); ?>"
+                                       value="<?php echo esc_attr( isset( $options['content_length'] ) ? $options['content_length'] : RIVIANTRACKR_CONTENT_LENGTH ); ?>"
                                        min="100"
                                        max="2000"
                                        step="50" />
@@ -2306,14 +2376,14 @@ class SearchLens_AI {
                         </div>
 
                         <!-- Post Types -->
-                        <div class="searchlens-field">
-                            <div class="searchlens-field-label">
+                        <div class="riviantrackr-field">
+                            <div class="riviantrackr-field-label">
                                 <label>Post Types</label>
                             </div>
-                            <div class="searchlens-field-description">
+                            <div class="riviantrackr-field-description">
                                 Choose which post types to include in AI search results. If none are selected, all public post types are included.
                             </div>
-                            <div class="searchlens-field-input">
+                            <div class="riviantrackr-field-input">
                                 <?php
                                 $public_post_types = get_post_types( array( 'public' => true ), 'objects' );
                                 $selected_types    = isset( $options['post_types'] ) && is_array( $options['post_types'] ) ? $options['post_types'] : array();
@@ -2332,17 +2402,17 @@ class SearchLens_AI {
                         </div>
 
                         <!-- Max Tokens -->
-                        <div class="searchlens-field">
-                            <div class="searchlens-field-label">
+                        <div class="riviantrackr-field">
+                            <div class="riviantrackr-field-label">
                                 <label>Max Response Tokens</label>
                             </div>
-                            <div class="searchlens-field-description">
+                            <div class="riviantrackr-field-description">
                                 Maximum tokens in the AI response (500 &ndash; 16,000). Lower values = shorter answers and lower cost.
                             </div>
-                            <div class="searchlens-field-input">
+                            <div class="riviantrackr-field-input">
                                 <input type="number"
                                        name="<?php echo esc_attr( $this->option_name ); ?>[max_tokens]"
-                                       value="<?php echo esc_attr( isset( $options['max_tokens'] ) ? $options['max_tokens'] : SEARCHLENS_MAX_TOKENS ); ?>"
+                                       value="<?php echo esc_attr( isset( $options['max_tokens'] ) ? $options['max_tokens'] : RIVIANTRACKR_MAX_TOKENS ); ?>"
                                        min="500"
                                        max="16000"
                                        step="100" />
@@ -2353,21 +2423,21 @@ class SearchLens_AI {
                 </div>
 
                 <!-- Section 3: Performance -->
-                <div class="searchlens-section">
-                    <div class="searchlens-section-header">
+                <div class="riviantrackr-section">
+                    <div class="riviantrackr-section-header">
                         <h2>Performance</h2>
                         <p>Control rate limits and caching behavior</p>
                     </div>
-                    <div class="searchlens-section-content">
+                    <div class="riviantrackr-section-content">
                         <!-- Cache TTL -->
-                        <div class="searchlens-field">
-                            <div class="searchlens-field-label">
+                        <div class="riviantrackr-field">
+                            <div class="riviantrackr-field-label">
                                 <label>Cache Duration</label>
                             </div>
-                            <div class="searchlens-field-description">
+                            <div class="riviantrackr-field-description">
                                 How long to cache AI summaries (60 seconds to 24 hours)
                             </div>
-                            <div class="searchlens-field-input">
+                            <div class="riviantrackr-field-input">
                                 <input type="number"
                                        name="<?php echo esc_attr( $this->option_name ); ?>[cache_ttl]"
                                        value="<?php echo esc_attr( isset( $options['cache_ttl'] ) ? $options['cache_ttl'] : 3600 ); ?>"
@@ -2376,25 +2446,25 @@ class SearchLens_AI {
                                        step="60" />
                                 <span style="margin-left: 8px; color: #86868b; font-size: 14px;">seconds</span>
                             </div>
-                            <div class="searchlens-field-actions">
-                                <button type="button" id="searchlens-clear-cache-btn"
-                                        class="searchlens-button searchlens-button-secondary"
-                                        data-nonce="<?php echo esc_attr( wp_create_nonce( 'searchlens_clear_cache' ) ); ?>">
+                            <div class="riviantrackr-field-actions">
+                                <button type="button" id="riviantrackr-clear-cache-btn"
+                                        class="riviantrackr-button riviantrackr-button-secondary"
+                                        data-nonce="<?php echo esc_attr( wp_create_nonce( 'riviantrackr_clear_cache' ) ); ?>">
                                     Clear Cache Now
                                 </button>
-                                <span id="searchlens-clear-cache-result" style="margin-left: 12px;"></span>
+                                <span id="riviantrackr-clear-cache-result" style="margin-left: 12px;"></span>
                             </div>
                         </div>
 
                         <!-- Rate Limit -->
-                        <div class="searchlens-field">
-                            <div class="searchlens-field-label">
+                        <div class="riviantrackr-field">
+                            <div class="riviantrackr-field-label">
                                 <label>Rate Limit</label>
                             </div>
-                            <div class="searchlens-field-description">
+                            <div class="riviantrackr-field-description">
                                 Maximum AI calls per minute across the entire site (0 = unlimited)
                             </div>
-                            <div class="searchlens-field-input">
+                            <div class="riviantrackr-field-input">
                                 <input type="number"
                                        name="<?php echo esc_attr( $this->option_name ); ?>[max_calls_per_minute]"
                                        value="<?php echo esc_attr( isset( $options['max_calls_per_minute'] ) ? $options['max_calls_per_minute'] : 30 ); ?>"
@@ -2405,14 +2475,14 @@ class SearchLens_AI {
                         </div>
 
                         <!-- Request Timeout -->
-                        <div class="searchlens-field">
-                            <div class="searchlens-field-label">
+                        <div class="riviantrackr-field">
+                            <div class="riviantrackr-field-label">
                                 <label>Request Timeout</label>
                             </div>
-                            <div class="searchlens-field-description">
+                            <div class="riviantrackr-field-description">
                                 How long to wait for AI response before timing out (10-300 seconds). Reasoning models like GPT-5, o1, and o3 may need 120-300 seconds.
                             </div>
-                            <div class="searchlens-field-input">
+                            <div class="riviantrackr-field-input">
                                 <input type="number"
                                        name="<?php echo esc_attr( $this->option_name ); ?>[request_timeout]"
                                        value="<?php echo esc_attr( isset( $options['request_timeout'] ) ? $options['request_timeout'] : 60 ); ?>"
@@ -2426,61 +2496,61 @@ class SearchLens_AI {
                 </div>
 
                 <!-- Section 4: Appearance -->
-                <div class="searchlens-section">
-                    <div class="searchlens-section-header">
+                <div class="riviantrackr-section">
+                    <div class="riviantrackr-section-header">
                         <h2>Appearance</h2>
                         <p>Customize the look of AI summaries to match your theme</p>
                     </div>
-                    <div class="searchlens-section-content">
-                        <div class="searchlens-field">
-                            <div class="searchlens-field-label">
-                                <label for="searchlens-color-background">Background Color</label>
+                    <div class="riviantrackr-section-content">
+                        <div class="riviantrackr-field">
+                            <div class="riviantrackr-field-label">
+                                <label for="riviantrackr-color-background">Background Color</label>
                             </div>
-                            <div class="searchlens-field-description">
+                            <div class="riviantrackr-field-description">
                                 Hex color code (e.g. #121e2b)
                             </div>
-                            <div class="searchlens-field-input">
+                            <div class="riviantrackr-field-input">
                                 <input type="text"
-                                       id="searchlens-color-background"
+                                       id="riviantrackr-color-background"
                                        name="<?php echo esc_attr( $this->option_name ); ?>[color_background]"
                                        value="<?php echo esc_attr( isset( $options['color_background'] ) ? $options['color_background'] : '#121e2b' ); ?>"
                                        placeholder="#121e2b" />
                             </div>
                         </div>
-                        <div class="searchlens-field">
-                            <div class="searchlens-field-label">
-                                <label for="searchlens-color-text">Text Color</label>
+                        <div class="riviantrackr-field">
+                            <div class="riviantrackr-field-label">
+                                <label for="riviantrackr-color-text">Text Color</label>
                             </div>
-                            <div class="searchlens-field-input">
+                            <div class="riviantrackr-field-input">
                                 <input type="text"
-                                       id="searchlens-color-text"
+                                       id="riviantrackr-color-text"
                                        name="<?php echo esc_attr( $this->option_name ); ?>[color_text]"
                                        value="<?php echo esc_attr( isset( $options['color_text'] ) ? $options['color_text'] : '#e5e7eb' ); ?>"
                                        placeholder="#e5e7eb" />
                             </div>
                         </div>
-                        <div class="searchlens-field">
-                            <div class="searchlens-field-label">
-                                <label for="searchlens-color-accent">Accent Color</label>
+                        <div class="riviantrackr-field">
+                            <div class="riviantrackr-field-label">
+                                <label for="riviantrackr-color-accent">Accent Color</label>
                             </div>
-                            <div class="searchlens-field-description">
+                            <div class="riviantrackr-field-description">
                                 Used for links and highlights
                             </div>
-                            <div class="searchlens-field-input">
+                            <div class="riviantrackr-field-input">
                                 <input type="text"
-                                       id="searchlens-color-accent"
+                                       id="riviantrackr-color-accent"
                                        name="<?php echo esc_attr( $this->option_name ); ?>[color_accent]"
                                        value="<?php echo esc_attr( isset( $options['color_accent'] ) ? $options['color_accent'] : '#fba919' ); ?>"
                                        placeholder="#fba919" />
                             </div>
                         </div>
-                        <div class="searchlens-field">
-                            <div class="searchlens-field-label">
-                                <label for="searchlens-color-border">Border Color</label>
+                        <div class="riviantrackr-field">
+                            <div class="riviantrackr-field-label">
+                                <label for="riviantrackr-color-border">Border Color</label>
                             </div>
-                            <div class="searchlens-field-input">
+                            <div class="riviantrackr-field-input">
                                 <input type="text"
-                                       id="searchlens-color-border"
+                                       id="riviantrackr-color-border"
                                        name="<?php echo esc_attr( $this->option_name ); ?>[color_border]"
                                        value="<?php echo esc_attr( isset( $options['color_border'] ) ? $options['color_border'] : '#94a3b8' ); ?>"
                                        placeholder="#94a3b8" />
@@ -2488,11 +2558,11 @@ class SearchLens_AI {
                         </div>
 
                         <!-- Custom CSS -->
-                        <div class="searchlens-field">
-                            <div class="searchlens-field-label">
+                        <div class="riviantrackr-field">
+                            <div class="riviantrackr-field-label">
                                 <label>Custom CSS</label>
                             </div>
-                            <div class="searchlens-field-description">
+                            <div class="riviantrackr-field-description">
                                 Override default styles with your own CSS for complete control
                             </div>
                             <?php $this->field_custom_css(); ?>
@@ -2501,53 +2571,53 @@ class SearchLens_AI {
                 </div>
 
                 <!-- Section 5: Advanced -->
-                <div class="searchlens-section">
-                    <div class="searchlens-section-header">
+                <div class="riviantrackr-section">
+                    <div class="riviantrackr-section-header">
                         <h2>Advanced</h2>
                         <p>Settings for advanced users</p>
                     </div>
-                    <div class="searchlens-section-content">
-                        <div id="searchlens-advanced-toggle-wrap" style="padding: 20px 24px;">
-                            <button type="button" id="searchlens-advanced-toggle" class="searchlens-button searchlens-button-secondary" style="font-size: 13px; padding: 8px 16px;">
+                    <div class="riviantrackr-section-content">
+                        <div id="riviantrackr-advanced-toggle-wrap" style="padding: 20px 24px;">
+                            <button type="button" id="riviantrackr-advanced-toggle" class="riviantrackr-button riviantrackr-button-secondary" style="font-size: 13px; padding: 8px 16px;">
                                 Show Advanced Settings
                             </button>
                         </div>
-                        <div id="searchlens-advanced-settings" style="display: none;">
+                        <div id="riviantrackr-advanced-settings" style="display: none;">
                             <div style="background: #fef3c7; border: 1px solid #f59e0b; border-radius: 6px; padding: 12px 16px; margin: 0 24px; font-size: 13px; color: #92400e;">
                                 <strong>Warning:</strong> These settings are intended for advanced users. Incorrect changes may affect plugin behavior, API costs, or data retention. Proceed with caution.
                             </div>
-                        <div class="searchlens-field">
-                            <div class="searchlens-field-label">
+                        <div class="riviantrackr-field">
+                            <div class="riviantrackr-field-label">
                                 <label>Allow Reasoning Models</label>
                             </div>
-                            <div class="searchlens-field-description">
+                            <div class="riviantrackr-field-description">
                                 Enable reasoning models (GPT-5, o1, o3, etc.) in the model dropdown. These models are significantly slower (60-300s) and more expensive due to hidden reasoning tokens. They do not produce better search summaries than standard models like GPT-4o or GPT-4.1.
                             </div>
-                            <div class="searchlens-toggle-wrapper">
-                                <label class="searchlens-toggle">
+                            <div class="riviantrackr-toggle-wrapper">
+                                <label class="riviantrackr-toggle">
                                     <input type="checkbox"
                                            name="<?php echo esc_attr( $this->option_name ); ?>[allow_reasoning_models]"
                                            value="1"
                                            <?php checked( ! empty( $options['allow_reasoning_models'] ), true ); ?> />
-                                    <span class="searchlens-toggle-slider"></span>
+                                    <span class="riviantrackr-toggle-slider"></span>
                                 </label>
-                                <span class="searchlens-toggle-label">
+                                <span class="riviantrackr-toggle-label">
                                     <?php echo ! empty( $options['allow_reasoning_models'] ) ? 'Enabled' : 'Disabled'; ?>
                                 </span>
                             </div>
                         </div>
 
                         <!-- Spam Blocklist -->
-                        <div class="searchlens-field">
-                            <div class="searchlens-field-label">
-                                <label for="searchlens-spam-blocklist">Spam Blocklist</label>
+                        <div class="riviantrackr-field">
+                            <div class="riviantrackr-field-label">
+                                <label for="riviantrackr-spam-blocklist">Spam Blocklist</label>
                             </div>
-                            <div class="searchlens-field-description">
+                            <div class="riviantrackr-field-description">
                                 Block search queries containing these terms. One term per line (case-insensitive). Built-in spam detection already blocks URLs, emails, phone numbers, and common spam keywords automatically.
                             </div>
-                            <div class="searchlens-field-input">
+                            <div class="riviantrackr-field-input">
                                 <textarea
-                                    id="searchlens-spam-blocklist"
+                                    id="riviantrackr-spam-blocklist"
                                     name="<?php echo esc_attr( $this->option_name ); ?>[spam_blocklist]"
                                     rows="6"
                                     style="width: 100%; max-width: 500px; font-family: monospace; font-size: 13px;"
@@ -2556,63 +2626,63 @@ class SearchLens_AI {
                         </div>
 
                         <!-- Preserve Data on Uninstall -->
-                        <div class="searchlens-field">
-                            <div class="searchlens-field-label">
+                        <div class="riviantrackr-field">
+                            <div class="riviantrackr-field-label">
                                 <label>Preserve Data on Uninstall</label>
                             </div>
-                            <div class="searchlens-field-description">
+                            <div class="riviantrackr-field-description">
                                 Keep all plugin data (settings, analytics logs, and feedback) when the plugin is deleted. Enable this if you plan to reinstall the plugin later and want to retain your existing data.
                             </div>
-                            <div class="searchlens-toggle-wrapper">
-                                <label class="searchlens-toggle">
+                            <div class="riviantrackr-toggle-wrapper">
+                                <label class="riviantrackr-toggle">
                                     <input type="checkbox"
                                            name="<?php echo esc_attr( $this->option_name ); ?>[preserve_data_on_uninstall]"
                                            value="1"
                                            <?php checked( ! empty( $options['preserve_data_on_uninstall'] ), true ); ?> />
-                                    <span class="searchlens-toggle-slider"></span>
+                                    <span class="riviantrackr-toggle-slider"></span>
                                 </label>
-                                <span class="searchlens-toggle-label">
+                                <span class="riviantrackr-toggle-label">
                                     <?php echo ! empty( $options['preserve_data_on_uninstall'] ) ? 'Enabled' : 'Disabled'; ?>
                                 </span>
                             </div>
                         </div>
 
                         <!-- Privacy: Anonymize Search Queries -->
-                        <div class="searchlens-field">
-                            <div class="searchlens-field-label">
+                        <div class="riviantrackr-field">
+                            <div class="riviantrackr-field-label">
                                 <label>Anonymize Search Queries</label>
                             </div>
-                            <div class="searchlens-field-description">
+                            <div class="riviantrackr-field-description">
                                 When enabled, new search queries are stored as SHA-256 hashes instead of plain text. Aggregate analytics (totals, success rates) are preserved, but individual query text is not recoverable. Recommended for GDPR/privacy compliance.
                             </div>
-                            <div class="searchlens-toggle-wrapper">
-                                <label class="searchlens-toggle">
+                            <div class="riviantrackr-toggle-wrapper">
+                                <label class="riviantrackr-toggle">
                                     <input type="checkbox"
                                            name="<?php echo esc_attr( $this->option_name ); ?>[anonymize_queries]"
                                            value="1"
                                            <?php checked( ! empty( $options['anonymize_queries'] ), true ); ?> />
-                                    <span class="searchlens-toggle-slider"></span>
+                                    <span class="riviantrackr-toggle-slider"></span>
                                 </label>
-                                <span class="searchlens-toggle-label">
+                                <span class="riviantrackr-toggle-label">
                                     <?php echo ! empty( $options['anonymize_queries'] ) ? 'Enabled' : 'Disabled'; ?>
                                 </span>
                             </div>
                             <div style="margin-top: 12px;">
-                                <button type="button" id="searchlens-gdpr-purge-btn" class="searchlens-button searchlens-button-secondary" style="font-size: 13px; padding: 6px 12px;">
+                                <button type="button" id="riviantrackr-gdpr-purge-btn" class="riviantrackr-button riviantrackr-button-secondary" style="font-size: 13px; padding: 6px 12px;">
                                     Anonymize Existing Queries
                                 </button>
-                                <span id="searchlens-gdpr-purge-result" style="font-size: 13px; margin-left: 8px;"></span>
+                                <span id="riviantrackr-gdpr-purge-result" style="font-size: 13px; margin-left: 8px;"></span>
                                 <p style="font-size: 12px; color: #6e6e73; margin-top: 4px;">
                                     Retroactively replace all stored query text with SHA-256 hashes. This cannot be undone.
                                 </p>
                             </div>
                         </div>
-                        </div><!-- /#searchlens-advanced-settings -->
+                        </div><!-- /#riviantrackr-advanced-settings -->
                     </div>
                 </div>
 
-                <div class="searchlens-footer-actions">
-                    <?php submit_button( 'Save Settings', 'primary searchlens-button searchlens-button-primary', 'submit', false ); ?>
+                <div class="riviantrackr-footer-actions">
+                    <?php submit_button( 'Save Settings', 'primary riviantrackr-button riviantrackr-button-primary', 'submit', false ); ?>
                 </div>
             </form>
         </div>
@@ -2633,9 +2703,9 @@ class SearchLens_AI {
 
         // Handle the create/repair action (POST for security)
         if (
-            isset( $_POST['searchlens_build_logs'] ) &&
+            isset( $_POST['riviantrackr_build_logs'] ) &&
             isset( $_POST['_wpnonce'] ) &&
-            wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'searchlens_build_logs' )
+            wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'riviantrackr_build_logs' )
         ) {
             $logs_built = $this->ensure_logs_table();
             if ( ! $logs_built ) {
@@ -2645,12 +2715,12 @@ class SearchLens_AI {
 
         // Handle the purge old logs action (POST for security)
         if (
-            isset( $_POST['searchlens_purge_logs'] ) &&
-            isset( $_POST['searchlens_purge_days'] ) &&
+            isset( $_POST['riviantrackr_purge_logs'] ) &&
+            isset( $_POST['riviantrackr_purge_days'] ) &&
             isset( $_POST['_wpnonce'] ) &&
-            wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'searchlens_purge_logs' )
+            wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'riviantrackr_purge_logs' )
         ) {
-            $days = absint( $_POST['searchlens_purge_days'] );
+            $days = absint( $_POST['riviantrackr_purge_days'] );
             if ( $days < 1 ) {
                 $days = 30;
             }
@@ -2664,44 +2734,44 @@ class SearchLens_AI {
         }
         ?>
 
-        <div class="searchlens-settings-wrap">
+        <div class="riviantrackr-settings-wrap">
             <!-- Header -->
-            <div class="searchlens-header">
+            <div class="riviantrackr-header">
                 <h1>Analytics</h1>
                 <p>Track AI search usage, success rates, and identify trends.</p>
             </div>
 
             <!-- Notifications -->
             <?php if ( $logs_built && empty( $logs_error ) ) : ?>
-                <div class="searchlens-notice searchlens-notice-success">
+                <div class="riviantrackr-notice riviantrackr-notice-success">
                     Analytics table has been created or repaired successfully.
                 </div>
             <?php elseif ( ! empty( $logs_error ) ) : ?>
-                <div class="searchlens-notice searchlens-notice-error">
+                <div class="riviantrackr-notice riviantrackr-notice-error">
                     <?php echo esc_html( $logs_error ); ?>
                 </div>
             <?php endif; ?>
 
             <?php if ( $logs_purged ) : ?>
-                <div class="searchlens-notice searchlens-notice-success">
+                <div class="riviantrackr-notice riviantrackr-notice-success">
                     <?php echo esc_html( number_format( $purge_count ) ); ?> old log entries have been deleted.
                 </div>
             <?php elseif ( ! empty( $purge_error ) ) : ?>
-                <div class="searchlens-notice searchlens-notice-error">
+                <div class="riviantrackr-notice riviantrackr-notice-error">
                     <?php echo esc_html( $purge_error ); ?>
                 </div>
             <?php endif; ?>
 
             <?php if ( ! $this->logs_table_is_available() ) : ?>
                 <!-- No Data State -->
-                <div class="searchlens-empty-state">
-                    <div class="searchlens-empty-icon">📊</div>
+                <div class="riviantrackr-empty-state">
+                    <div class="riviantrackr-empty-icon">📊</div>
                     <h3>No Analytics Data Yet</h3>
                     <p>After visitors use search, analytics data will appear here.</p>
                     <form method="post" style="display: inline;">
-                        <?php wp_nonce_field( 'searchlens_build_logs' ); ?>
-                        <button type="submit" name="searchlens_build_logs" value="1"
-                                class="searchlens-button searchlens-button-primary">
+                        <?php wp_nonce_field( 'riviantrackr_build_logs' ); ?>
+                        <button type="submit" name="riviantrackr_build_logs" value="1"
+                                class="riviantrackr-button riviantrackr-button-primary">
                             Create Analytics Table
                         </button>
                     </form>
@@ -2754,7 +2824,7 @@ class SearchLens_AI {
             return;
         }
 
-        $base_url = admin_url( 'admin.php?page=searchlens-analytics' );
+        $base_url = admin_url( 'admin.php?page=riviantrackr-analytics' );
 
         // Preserve other pagination params when navigating
         $preserve_params = array( 'queries_page', 'errors_page', 'events_page' );
@@ -2766,11 +2836,11 @@ class SearchLens_AI {
         }
         // phpcs:enable WordPress.Security.NonceVerification.Recommended
         ?>
-        <div class="searchlens-pagination" style="margin: 20px; padding-top: 16px; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
-            <div class="searchlens-pagination-info" style="font-size: 13px; color: #6e6e73;">
+        <div class="riviantrackr-pagination" style="margin: 20px; padding-top: 16px; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
+            <div class="riviantrackr-pagination-info" style="font-size: 13px; color: #6e6e73;">
                 Page <?php echo esc_html( $current_page ); ?> of <?php echo esc_html( $total_pages ); ?>
             </div>
-            <div class="searchlens-pagination-buttons" style="display: flex; gap: 8px;">
+            <div class="riviantrackr-pagination-buttons" style="display: flex; gap: 8px;">
                 <?php if ( $current_page > 1 ) : ?>
                     <a href="<?php echo esc_url( add_query_arg( $param_name, $current_page - 1, $base_url ) ); ?>"
                        style="display: inline-block; padding: 8px 16px; font-size: 13px; font-weight: 500; color: #374151; background: #fff; border: 1px solid #d1d5db; border-radius: 6px; text-decoration: none; transition: all 0.15s ease;">
@@ -2803,10 +2873,10 @@ class SearchLens_AI {
 
         // Get estimated row count to optimize queries for large datasets
         $estimated_rows = $this->get_estimated_row_count( $table_name );
-        $is_large_table = $estimated_rows > SEARCHLENS_LARGE_TABLE_THRESHOLD;
+        $is_large_table = $estimated_rows > RIVIANTRACKR_LARGE_TABLE_THRESHOLD;
 
         // Get cached overview stats (5-minute TTL)
-        $cache_key = 'searchlens_analytics_overview';
+        $cache_key = 'riviantrackr_analytics_overview';
         $cached_stats = get_transient( $cache_key );
 
         if ( false === $cached_stats ) {
@@ -2882,7 +2952,7 @@ class SearchLens_AI {
         );
 
         // Pagination for Top Queries
-        $queries_per_page = SEARCHLENS_PER_PAGE_QUERIES;
+        $queries_per_page = RIVIANTRACKR_PER_PAGE_QUERIES;
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only pagination parameter on admin page
         $queries_page     = isset( $_GET['queries_page'] ) ? max( 1, absint( wp_unslash( $_GET['queries_page'] ) ) ) : 1;
         $queries_offset   = ( $queries_page - 1 ) * $queries_per_page;
@@ -2923,7 +2993,7 @@ class SearchLens_AI {
         $total_queries_pages = max( 1, (int) ceil( $total_unique_queries / $queries_per_page ) );
 
         // Pagination for Top Errors
-        $errors_per_page = SEARCHLENS_PER_PAGE_ERRORS;
+        $errors_per_page = RIVIANTRACKR_PER_PAGE_ERRORS;
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only pagination parameter on admin page
         $errors_page     = isset( $_GET['errors_page'] ) ? max( 1, absint( wp_unslash( $_GET['errors_page'] ) ) ) : 1;
         $errors_offset   = ( $errors_page - 1 ) * $errors_per_page;
@@ -2952,7 +3022,7 @@ class SearchLens_AI {
         );
 
         // Pagination for recent events
-        $events_per_page = SEARCHLENS_PER_PAGE_EVENTS;
+        $events_per_page = RIVIANTRACKR_PER_PAGE_EVENTS;
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- This is a read-only pagination parameter on an admin page
         $current_page    = isset( $_GET['events_page'] ) ? max( 1, absint( wp_unslash( $_GET['events_page'] ) ) ) : 1;
         $events_offset   = ( $current_page - 1 ) * $events_per_page;
@@ -2983,42 +3053,42 @@ class SearchLens_AI {
         ?>
 
         <!-- Overview Stats Grid -->
-        <div class="searchlens-stats-grid">
-            <div class="searchlens-stat-card">
-                <div class="searchlens-stat-label">Total Searches</div>
-                <div class="searchlens-stat-value"><?php echo number_format( $total_searches ); ?></div>
+        <div class="riviantrackr-stats-grid">
+            <div class="riviantrackr-stat-card">
+                <div class="riviantrackr-stat-label">Total Searches</div>
+                <div class="riviantrackr-stat-value"><?php echo number_format( $total_searches ); ?></div>
             </div>
-            <div class="searchlens-stat-card">
-                <div class="searchlens-stat-label">Success Rate</div>
-                <div class="searchlens-stat-value"><?php echo esc_html( $success_rate ); ?>%</div>
+            <div class="riviantrackr-stat-card">
+                <div class="riviantrackr-stat-label">Success Rate</div>
+                <div class="riviantrackr-stat-value"><?php echo esc_html( $success_rate ); ?>%</div>
             </div>
-            <div class="searchlens-stat-card">
-                <div class="searchlens-stat-label">Cache Hit Rate</div>
-                <div class="searchlens-stat-value"><?php echo esc_html( $cache_hit_rate ); ?>%</div>
+            <div class="riviantrackr-stat-card">
+                <div class="riviantrackr-stat-label">Cache Hit Rate</div>
+                <div class="riviantrackr-stat-value"><?php echo esc_html( $cache_hit_rate ); ?>%</div>
             </div>
-            <div class="searchlens-stat-card">
-                <div class="searchlens-stat-label">Cache Hits</div>
-                <div class="searchlens-stat-value"><?php echo number_format( $cache_hits ); ?></div>
+            <div class="riviantrackr-stat-card">
+                <div class="riviantrackr-stat-label">Cache Hits</div>
+                <div class="riviantrackr-stat-value"><?php echo number_format( $cache_hits ); ?></div>
             </div>
-            <div class="searchlens-stat-card">
-                <div class="searchlens-stat-label">Cache Misses</div>
-                <div class="searchlens-stat-value"><?php echo number_format( $cache_misses ); ?></div>
+            <div class="riviantrackr-stat-card">
+                <div class="riviantrackr-stat-label">Cache Misses</div>
+                <div class="riviantrackr-stat-value"><?php echo number_format( $cache_misses ); ?></div>
             </div>
-            <div class="searchlens-stat-card">
-                <div class="searchlens-stat-label">Last 24 Hours</div>
-                <div class="searchlens-stat-value"><?php echo number_format( $last_24 ); ?></div>
+            <div class="riviantrackr-stat-card">
+                <div class="riviantrackr-stat-label">Last 24 Hours</div>
+                <div class="riviantrackr-stat-value"><?php echo number_format( $last_24 ); ?></div>
             </div>
-            <div class="searchlens-stat-card">
-                <div class="searchlens-stat-label">Total Errors</div>
-                <div class="searchlens-stat-value"><?php echo number_format( $error_count ); ?></div>
+            <div class="riviantrackr-stat-card">
+                <div class="riviantrackr-stat-label">Total Errors</div>
+                <div class="riviantrackr-stat-value"><?php echo number_format( $error_count ); ?></div>
             </div>
-            <div class="searchlens-stat-card">
-                <div class="searchlens-stat-label">No Results</div>
-                <div class="searchlens-stat-value"><?php echo number_format( $no_results_count ); ?></div>
+            <div class="riviantrackr-stat-card">
+                <div class="riviantrackr-stat-label">No Results</div>
+                <div class="riviantrackr-stat-value"><?php echo number_format( $no_results_count ); ?></div>
             </div>
-            <div class="searchlens-stat-card">
-                <div class="searchlens-stat-label">Avg Response Time</div>
-                <div class="searchlens-stat-value"><?php
+            <div class="riviantrackr-stat-card">
+                <div class="riviantrackr-stat-label">Avg Response Time</div>
+                <div class="riviantrackr-stat-value"><?php
                     if ( $avg_response_time !== null ) {
                         if ( $avg_response_time >= 1000 ) {
                             echo esc_html( number_format( $avg_response_time / 1000, 1 ) . 's' );
@@ -3030,9 +3100,9 @@ class SearchLens_AI {
                     }
                 ?></div>
             </div>
-            <div class="searchlens-stat-card">
-                <div class="searchlens-stat-label">Helpful Rate</div>
-                <div class="searchlens-stat-value"><?php
+            <div class="riviantrackr-stat-card">
+                <div class="riviantrackr-stat-label">Helpful Rate</div>
+                <div class="riviantrackr-stat-value"><?php
                     if ( $feedback_stats['total_votes'] > 0 ) {
                         echo esc_html( $feedback_stats['helpful_rate'] . '%' );
                     } else {
@@ -3040,34 +3110,34 @@ class SearchLens_AI {
                     }
                 ?></div>
             </div>
-            <div class="searchlens-stat-card">
-                <div class="searchlens-stat-label">Total Votes</div>
-                <div class="searchlens-stat-value"><?php echo number_format( $feedback_stats['total_votes'] ); ?></div>
+            <div class="riviantrackr-stat-card">
+                <div class="riviantrackr-stat-label">Total Votes</div>
+                <div class="riviantrackr-stat-value"><?php echo number_format( $feedback_stats['total_votes'] ); ?></div>
             </div>
         </div>
 
         <!-- Badge Legend -->
         <div style="margin-bottom: 16px; padding: 12px 16px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 12px; color: #6e6e73; display: flex; flex-wrap: wrap; gap: 16px; align-items: center;">
             <span style="font-weight: 600; color: #374151;">Badge Thresholds:</span>
-            <span><span class="searchlens-badge searchlens-badge-success" style="font-size: 11px; padding: 2px 6px;">AI Success</span> &ge;<?php echo esc_html( SEARCHLENS_BADGE_SUCCESS_HIGH ); ?>%</span>
-            <span><span class="searchlens-badge searchlens-badge-warning" style="font-size: 11px; padding: 2px 6px;">AI Success</span> &ge;<?php echo esc_html( SEARCHLENS_BADGE_SUCCESS_MED ); ?>%</span>
-            <span><span class="searchlens-badge searchlens-badge-success" style="font-size: 11px; padding: 2px 6px;">Cache</span> &ge;<?php echo esc_html( SEARCHLENS_BADGE_CACHE_HIGH ); ?>%</span>
-            <span><span class="searchlens-badge searchlens-badge-warning" style="font-size: 11px; padding: 2px 6px;">Cache</span> &ge;<?php echo esc_html( SEARCHLENS_BADGE_CACHE_MED ); ?>%</span>
-            <span><span class="searchlens-badge searchlens-badge-success" style="font-size: 11px; padding: 2px 6px;">Helpful</span> &ge;<?php echo esc_html( SEARCHLENS_BADGE_HELPFUL_HIGH ); ?>%</span>
-            <span><span class="searchlens-badge searchlens-badge-warning" style="font-size: 11px; padding: 2px 6px;">Helpful</span> &ge;<?php echo esc_html( SEARCHLENS_BADGE_HELPFUL_MED ); ?>%</span>
-            <span><span class="searchlens-badge searchlens-badge-error" style="font-size: 11px; padding: 2px 6px;">Any</span> below thresholds</span>
+            <span><span class="riviantrackr-badge riviantrackr-badge-success" style="font-size: 11px; padding: 2px 6px;">AI Success</span> &ge;<?php echo esc_html( RIVIANTRACKR_BADGE_SUCCESS_HIGH ); ?>%</span>
+            <span><span class="riviantrackr-badge riviantrackr-badge-warning" style="font-size: 11px; padding: 2px 6px;">AI Success</span> &ge;<?php echo esc_html( RIVIANTRACKR_BADGE_SUCCESS_MED ); ?>%</span>
+            <span><span class="riviantrackr-badge riviantrackr-badge-success" style="font-size: 11px; padding: 2px 6px;">Cache</span> &ge;<?php echo esc_html( RIVIANTRACKR_BADGE_CACHE_HIGH ); ?>%</span>
+            <span><span class="riviantrackr-badge riviantrackr-badge-warning" style="font-size: 11px; padding: 2px 6px;">Cache</span> &ge;<?php echo esc_html( RIVIANTRACKR_BADGE_CACHE_MED ); ?>%</span>
+            <span><span class="riviantrackr-badge riviantrackr-badge-success" style="font-size: 11px; padding: 2px 6px;">Helpful</span> &ge;<?php echo esc_html( RIVIANTRACKR_BADGE_HELPFUL_HIGH ); ?>%</span>
+            <span><span class="riviantrackr-badge riviantrackr-badge-warning" style="font-size: 11px; padding: 2px 6px;">Helpful</span> &ge;<?php echo esc_html( RIVIANTRACKR_BADGE_HELPFUL_MED ); ?>%</span>
+            <span><span class="riviantrackr-badge riviantrackr-badge-error" style="font-size: 11px; padding: 2px 6px;">Any</span> below thresholds</span>
         </div>
 
         <!-- Daily Stats Section -->
-        <div class="searchlens-section">
-            <div class="searchlens-section-header">
+        <div class="riviantrackr-section">
+            <div class="riviantrackr-section-header">
                 <h2>Last 14 Days</h2>
                 <p>Daily search volume and success rates</p>
             </div>
-            <div class="searchlens-section-content">
+            <div class="riviantrackr-section-content">
                 <?php if ( ! empty( $daily_stats ) ) : ?>
-                    <div class="searchlens-table-wrapper">
-                        <table class="searchlens-table">
+                    <div class="riviantrackr-table-wrapper">
+                        <table class="riviantrackr-table">
                             <thead>
                                 <tr>
                                     <th>Date</th>
@@ -3091,17 +3161,17 @@ class SearchLens_AI {
                                         <td><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $row->day ) ) ); ?></td>
                                         <td><?php echo number_format( $day_total ); ?></td>
                                         <td>
-                                            <span class="searchlens-badge searchlens-badge-<?php echo $day_rate >= SEARCHLENS_BADGE_SUCCESS_HIGH ? 'success' : ( $day_rate >= SEARCHLENS_BADGE_SUCCESS_MED ? 'warning' : 'error' ); ?>">
+                                            <span class="riviantrackr-badge riviantrackr-badge-<?php echo $day_rate >= RIVIANTRACKR_BADGE_SUCCESS_HIGH ? 'success' : ( $day_rate >= RIVIANTRACKR_BADGE_SUCCESS_MED ? 'warning' : 'error' ); ?>">
                                                 <?php echo esc_html( $day_rate ); ?>%
                                             </span>
                                         </td>
                                         <td>
                                             <?php if ( $day_cache_total > 0 ) : ?>
-                                                <span class="searchlens-badge searchlens-badge-<?php echo $day_cache_rate >= SEARCHLENS_BADGE_CACHE_HIGH ? 'success' : ( $day_cache_rate >= SEARCHLENS_BADGE_CACHE_MED ? 'warning' : 'error' ); ?>">
+                                                <span class="riviantrackr-badge riviantrackr-badge-<?php echo $day_cache_rate >= RIVIANTRACKR_BADGE_CACHE_HIGH ? 'success' : ( $day_cache_rate >= RIVIANTRACKR_BADGE_CACHE_MED ? 'warning' : 'error' ); ?>">
                                                     <?php echo esc_html( $day_cache_rate ); ?>%
                                                 </span>
                                             <?php else : ?>
-                                                <span class="searchlens-badge">N/A</span>
+                                                <span class="riviantrackr-badge">N/A</span>
                                             <?php endif; ?>
                                         </td>
                                     </tr>
@@ -3110,14 +3180,14 @@ class SearchLens_AI {
                         </table>
                     </div>
                 <?php else : ?>
-                    <div class="searchlens-empty-message">No recent activity yet.</div>
+                    <div class="riviantrackr-empty-message">No recent activity yet.</div>
                 <?php endif; ?>
             </div>
         </div>
 
         <!-- Top Queries Section -->
-        <div class="searchlens-section">
-            <div class="searchlens-section-header">
+        <div class="riviantrackr-section">
+            <div class="riviantrackr-section-header">
                 <h2>Top Search Queries</h2>
                 <p>
                     <?php
@@ -3136,10 +3206,10 @@ class SearchLens_AI {
                     ?>
                 </p>
             </div>
-            <div class="searchlens-section-content">
+            <div class="riviantrackr-section-content">
                 <?php if ( ! empty( $top_queries ) ) : ?>
-                    <div class="searchlens-table-wrapper">
-                        <table class="searchlens-table">
+                    <div class="riviantrackr-table-wrapper">
+                        <table class="riviantrackr-table">
                             <thead>
                                 <tr>
                                     <th>Query</th>
@@ -3159,16 +3229,16 @@ class SearchLens_AI {
                                     $helpful_rate = $vote_count > 0 ? round( ( $helpful_count / $vote_count ) * 100 ) : null;
                                     ?>
                                     <tr>
-                                        <td class="searchlens-query-cell" title="<?php echo esc_attr( $row->search_query ); ?>"><?php echo esc_html( $row->search_query ); ?></td>
+                                        <td class="riviantrackr-query-cell" title="<?php echo esc_attr( $row->search_query ); ?>"><?php echo esc_html( $row->search_query ); ?></td>
                                         <td><?php echo number_format( $total_q ); ?></td>
                                         <td>
-                                            <span class="searchlens-badge searchlens-badge-<?php echo $success_q_rate >= SEARCHLENS_BADGE_SUCCESS_HIGH ? 'success' : ( $success_q_rate >= SEARCHLENS_BADGE_SUCCESS_MED ? 'warning' : 'error' ); ?>">
+                                            <span class="riviantrackr-badge riviantrackr-badge-<?php echo $success_q_rate >= RIVIANTRACKR_BADGE_SUCCESS_HIGH ? 'success' : ( $success_q_rate >= RIVIANTRACKR_BADGE_SUCCESS_MED ? 'warning' : 'error' ); ?>">
                                                 <?php echo esc_html( $success_q_rate ); ?>%
                                             </span>
                                         </td>
                                         <td>
                                             <?php if ( $helpful_rate !== null ) : ?>
-                                                <span class="searchlens-badge searchlens-badge-<?php echo $helpful_rate >= SEARCHLENS_BADGE_HELPFUL_HIGH ? 'success' : ( $helpful_rate >= SEARCHLENS_BADGE_HELPFUL_MED ? 'warning' : 'error' ); ?>">
+                                                <span class="riviantrackr-badge riviantrackr-badge-<?php echo $helpful_rate >= RIVIANTRACKR_BADGE_HELPFUL_HIGH ? 'success' : ( $helpful_rate >= RIVIANTRACKR_BADGE_HELPFUL_MED ? 'warning' : 'error' ); ?>">
                                                     <?php echo esc_html( $helpful_rate ); ?>%
                                                 </span>
                                                 <span style="font-size:0.75rem; opacity:0.6;">(<?php echo esc_html( $vote_count ); ?>)</span>
@@ -3187,7 +3257,7 @@ class SearchLens_AI {
                     <?php endif; ?>
 
                 <?php else : ?>
-                    <div class="searchlens-empty-message">No search data yet.</div>
+                    <div class="riviantrackr-empty-message">No search data yet.</div>
                 <?php endif; ?>
             </div>
         </div>
@@ -3196,8 +3266,8 @@ class SearchLens_AI {
 
         <!-- Top Errors Section -->
         <?php if ( ! empty( $top_errors ) || $errors_page > 1 ) : ?>
-            <div class="searchlens-section">
-                <div class="searchlens-section-header">
+            <div class="riviantrackr-section">
+                <div class="riviantrackr-section-header">
                     <h2>Top AI Errors</h2>
                     <p>
                         <?php
@@ -3216,10 +3286,10 @@ class SearchLens_AI {
                         ?>
                     </p>
                 </div>
-                <div class="searchlens-section-content">
+                <div class="riviantrackr-section-content">
                     <?php if ( ! empty( $top_errors ) ) : ?>
-                        <div class="searchlens-table-wrapper">
-                            <table class="searchlens-table">
+                        <div class="riviantrackr-table-wrapper">
+                            <table class="riviantrackr-table">
                                 <thead>
                                     <tr>
                                         <th>Error Message</th>
@@ -3229,7 +3299,7 @@ class SearchLens_AI {
                                 <tbody>
                                     <?php foreach ( $top_errors as $err ) : ?>
                                         <tr>
-                                            <td class="searchlens-error-cell">
+                                            <td class="riviantrackr-error-cell">
                                                 <?php
                                                 $msg = (string) $err->ai_error;
                                                 if ( strlen( $msg ) > 80 ) {
@@ -3250,16 +3320,16 @@ class SearchLens_AI {
                         <?php endif; ?>
 
                     <?php else : ?>
-                        <div class="searchlens-empty-message">No errors on this page.</div>
+                        <div class="riviantrackr-empty-message">No errors on this page.</div>
                     <?php endif; ?>
                 </div>
             </div>
         <?php endif; ?>
 
         <!-- Recent Events Section -->
-        <div class="searchlens-section">
-            <div class="searchlens-section-header">
-                <h2>Recent SearchLens AI Events</h2>
+        <div class="riviantrackr-section">
+            <div class="riviantrackr-section-header">
+                <h2>Recent RivianTrackr AI Search Summary Events</h2>
                 <p>
                     <?php
                     $start_num = $events_offset + 1;
@@ -3277,20 +3347,20 @@ class SearchLens_AI {
                     ?>
                 </p>
             </div>
-            <div class="searchlens-section-content">
+            <div class="riviantrackr-section-content">
                 <?php if ( ! empty( $recent_events ) ) : ?>
                     <div style="margin: 16px 20px 8px; display: flex; align-items: center; gap: 12px;">
-                        <button type="button" id="searchlens-bulk-delete-btn"
-                                class="searchlens-button searchlens-button-secondary" style="font-size: 13px; padding: 6px 12px; display: none;">
+                        <button type="button" id="riviantrackr-bulk-delete-btn"
+                                class="riviantrackr-button riviantrackr-button-secondary" style="font-size: 13px; padding: 6px 12px; display: none;">
                             Delete Selected
                         </button>
-                        <span id="searchlens-bulk-delete-result" style="font-size: 13px;"></span>
+                        <span id="riviantrackr-bulk-delete-result" style="font-size: 13px;"></span>
                     </div>
-                    <div class="searchlens-table-wrapper">
-                        <table class="searchlens-table searchlens-table-compact" id="searchlens-events-table">
+                    <div class="riviantrackr-table-wrapper">
+                        <table class="riviantrackr-table riviantrackr-table-compact" id="riviantrackr-events-table">
                             <thead>
                                 <tr>
-                                    <th style="width: 32px; text-align: center;"><input type="checkbox" id="searchlens-select-all" title="Select all" /></th>
+                                    <th style="width: 32px; text-align: center;"><input type="checkbox" id="riviantrackr-select-all" title="Select all" /></th>
                                     <th>Query</th>
                                     <th>Status</th>
                                     <th>Cache</th>
@@ -3302,29 +3372,29 @@ class SearchLens_AI {
                             <tbody>
                                 <?php foreach ( $recent_events as $event ) : ?>
                                     <tr>
-                                        <td style="text-align: center;"><input type="checkbox" class="searchlens-row-check" value="<?php echo esc_attr( $event->id ); ?>" /></td>
-                                        <td class="searchlens-query-cell" title="<?php echo esc_attr( $event->search_query ); ?>"><?php echo esc_html( $event->search_query ); ?></td>
+                                        <td style="text-align: center;"><input type="checkbox" class="riviantrackr-row-check" value="<?php echo esc_attr( $event->id ); ?>" /></td>
+                                        <td class="riviantrackr-query-cell" title="<?php echo esc_attr( $event->search_query ); ?>"><?php echo esc_html( $event->search_query ); ?></td>
                                         <td>
                                             <?php if ( (int) $event->ai_success === 1 ) : ?>
-                                                <span class="searchlens-badge searchlens-badge-success">Success</span>
+                                                <span class="riviantrackr-badge riviantrackr-badge-success">Success</span>
                                             <?php else : ?>
-                                                <span class="searchlens-badge searchlens-badge-error">Error</span>
+                                                <span class="riviantrackr-badge riviantrackr-badge-error">Error</span>
                                             <?php endif; ?>
                                         </td>
                                         <td>
                                             <?php
                                             $cache_val = $event->cache_hit !== null ? (int) $event->cache_hit : null;
                                             if ( $cache_val === 1 ) : ?>
-                                                <span class="searchlens-badge searchlens-badge-success" title="Server cache hit">Hit</span>
+                                                <span class="riviantrackr-badge riviantrackr-badge-success" title="Server cache hit">Hit</span>
                                             <?php elseif ( $cache_val === 2 ) : ?>
-                                                <span class="searchlens-badge searchlens-badge-info" title="Browser session cache hit">Session</span>
+                                                <span class="riviantrackr-badge riviantrackr-badge-info" title="Browser session cache hit">Session</span>
                                             <?php elseif ( $cache_val === 0 ) : ?>
-                                                <span class="searchlens-badge searchlens-badge-warning">Miss</span>
+                                                <span class="riviantrackr-badge riviantrackr-badge-warning">Miss</span>
                                             <?php else : ?>
-                                                <span class="searchlens-badge searchlens-badge-muted">N/A</span>
+                                                <span class="riviantrackr-badge riviantrackr-badge-muted">N/A</span>
                                             <?php endif; ?>
                                         </td>
-                                        <td class="searchlens-date-cell"><?php
+                                        <td class="riviantrackr-date-cell"><?php
                                             if ( isset( $event->response_time_ms ) && $event->response_time_ms !== null ) {
                                                 $rt = (int) $event->response_time_ms;
                                                 if ( $rt >= 1000 ) {
@@ -3336,10 +3406,10 @@ class SearchLens_AI {
                                                 echo '&mdash;';
                                             }
                                         ?></td>
-                                        <td class="searchlens-error-cell" <?php if ( ! empty( $event->ai_error ) ) : ?>title="<?php echo esc_attr( $event->ai_error ); ?>"<?php endif; ?>>
+                                        <td class="riviantrackr-error-cell" <?php if ( ! empty( $event->ai_error ) ) : ?>title="<?php echo esc_attr( $event->ai_error ); ?>"<?php endif; ?>>
                                             <?php echo esc_html( $event->ai_error ); ?>
                                         </td>
-                                        <td class="searchlens-date-cell">
+                                        <td class="riviantrackr-date-cell">
                                             <?php echo esc_html( date_i18n( 'M j, g:i a', strtotime( $event->created_at ) ) ); ?>
                                         </td>
                                     </tr>
@@ -3360,71 +3430,71 @@ class SearchLens_AI {
                     <?php endif; ?>
 
                 <?php else : ?>
-                    <div class="searchlens-empty-message">No recent search events logged yet.</div>
+                    <div class="riviantrackr-empty-message">No recent search events logged yet.</div>
                 <?php endif; ?>
             </div>
         </div>
 
         <!-- Data Management Section -->
-        <div class="searchlens-section">
-            <div class="searchlens-section-header">
+        <div class="riviantrackr-section">
+            <div class="riviantrackr-section-header">
                 <h2>Data Management</h2>
                 <p>Manage analytics log data</p>
             </div>
-            <div class="searchlens-section-content">
+            <div class="riviantrackr-section-content">
                 <!-- Spam Cleanup -->
-                <div class="searchlens-field">
-                    <div class="searchlens-field-label">
+                <div class="riviantrackr-field">
+                    <div class="riviantrackr-field-label">
                         <label>Spam Cleanup</label>
                     </div>
-                    <div class="searchlens-field-description">
+                    <div class="riviantrackr-field-description">
                         Scan log entries for spam patterns (URLs, emails, phone numbers, known spam keywords, and your blocklist) and remove them.
                     </div>
                     <div style="margin-top: 12px; display: flex; align-items: center; gap: 12px;">
-                        <button type="button" id="searchlens-purge-spam-btn"
-                                class="searchlens-button searchlens-button-secondary"
-                                data-nonce="<?php echo esc_attr( wp_create_nonce( 'searchlens_purge_spam' ) ); ?>">
+                        <button type="button" id="riviantrackr-purge-spam-btn"
+                                class="riviantrackr-button riviantrackr-button-secondary"
+                                data-nonce="<?php echo esc_attr( wp_create_nonce( 'riviantrackr_purge_spam' ) ); ?>">
                             Scan &amp; Remove Spam
                         </button>
-                        <span id="searchlens-purge-spam-result"></span>
+                        <span id="riviantrackr-purge-spam-result"></span>
                     </div>
                 </div>
 
-                <div class="searchlens-field" style="margin-top: 24px;">
-                    <div class="searchlens-field-label">
+                <div class="riviantrackr-field" style="margin-top: 24px;">
+                    <div class="riviantrackr-field-label">
                         <label>Purge Old Logs</label>
                     </div>
-                    <div class="searchlens-field-description">
+                    <div class="riviantrackr-field-description">
                         Delete log entries older than the specified number of days to free up database space.
                     </div>
                     <form method="post" style="display: flex; align-items: center; gap: 12px; margin-top: 12px;">
-                        <?php wp_nonce_field( 'searchlens_purge_logs' ); ?>
+                        <?php wp_nonce_field( 'riviantrackr_purge_logs' ); ?>
                         <span>Delete logs older than</span>
-                        <input type="number" name="searchlens_purge_days" value="30" min="1" max="365"
+                        <input type="number" name="riviantrackr_purge_days" value="30" min="1" max="365"
                                style="width: 80px;" />
                         <span>days</span>
-                        <button type="submit" name="searchlens_purge_logs" value="1"
-                                class="searchlens-button searchlens-button-secondary"
+                        <button type="submit" name="riviantrackr_purge_logs" value="1"
+                                class="riviantrackr-button riviantrackr-button-secondary"
                                 onclick="return confirm('Are you sure you want to delete old log entries? This action cannot be undone.');">
                             Purge Old Logs
                         </button>
                     </form>
                 </div>
-                <div class="searchlens-field" style="margin-top: 24px;">
-                    <div class="searchlens-field-label">
+                <div class="riviantrackr-field" style="margin-top: 24px;">
+                    <div class="riviantrackr-field-label">
                         <label>Automatic Purging</label>
                     </div>
-                    <div class="searchlens-field-description">
+                    <div class="riviantrackr-field-description">
                         Automatically delete old logs on a daily schedule to keep your database clean.
                     </div>
                     <?php
                     $options          = $this->get_options();
                     $auto_purge       = ! empty( $options['auto_purge_enabled'] );
                     $auto_purge_days  = isset( $options['auto_purge_days'] ) ? absint( $options['auto_purge_days'] ) : 90;
-                    $next_scheduled   = wp_next_scheduled( 'searchlens_daily_log_purge' );
+                    $next_scheduled   = wp_next_scheduled( 'riviantrackr_daily_log_purge' );
                     ?>
                     <form method="post" action="options.php" style="margin-top: 12px;">
-                        <?php settings_fields( 'searchlens_group' ); ?>
+                        <?php settings_fields( 'riviantrackr_group' ); ?>
                         <?php
                         // Preserve all existing options as hidden fields
                         foreach ( $options as $key => $value ) {
@@ -3449,7 +3519,7 @@ class SearchLens_AI {
                                 <input type="number" name="<?php echo esc_attr( $this->option_name ); ?>[auto_purge_days]" value="<?php echo esc_attr( $auto_purge_days ); ?>" min="7" max="365" style="width: 80px;" />
                                 <span>days</span>
                             </label>
-                            <button type="submit" class="searchlens-button searchlens-button-secondary">Save</button>
+                            <button type="submit" class="riviantrackr-button riviantrackr-button-secondary">Save</button>
                         </div>
                         <?php if ( $auto_purge && $next_scheduled ) : ?>
                             <p style="margin-top: 8px; font-size: 12px; color: #6e6e73;">
@@ -3458,16 +3528,16 @@ class SearchLens_AI {
                         <?php endif; ?>
                     </form>
                 </div>
-                <div class="searchlens-field" style="margin-top: 24px;">
-                    <div class="searchlens-field-label">
+                <div class="riviantrackr-field" style="margin-top: 24px;">
+                    <div class="riviantrackr-field-label">
                         <label>Export Data</label>
                     </div>
-                    <div class="searchlens-field-description">
+                    <div class="riviantrackr-field-description">
                         Download analytics data as CSV for external analysis. Choose date range and data type.
                     </div>
                     <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="margin-top: 12px;">
-                        <?php wp_nonce_field( 'searchlens_export_csv' ); ?>
-                        <input type="hidden" name="action" value="searchlens_export_csv" />
+                        <?php wp_nonce_field( 'riviantrackr_export_csv' ); ?>
+                        <input type="hidden" name="action" value="riviantrackr_export_csv" />
                         <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px;">
                             <label style="display: flex; align-items: center; gap: 6px;">
                                 <span>From:</span>
@@ -3485,7 +3555,7 @@ class SearchLens_AI {
                                     <option value="daily">Daily Summary</option>
                                 </select>
                             </label>
-                            <button type="submit" class="searchlens-button searchlens-button-secondary">
+                            <button type="submit" class="riviantrackr-button riviantrackr-button-secondary">
                                 Export CSV
                             </button>
                         </div>
@@ -3526,8 +3596,8 @@ class SearchLens_AI {
         }
 
         wp_add_dashboard_widget(
-            'searchlens_dashboard_widget',
-            'SearchLens AI',
+            'riviantrackr_dashboard_widget',
+            'RivianTrackr AI Search Summary',
             array( $this, 'render_dashboard_widget' )
         );
     }
@@ -3543,7 +3613,7 @@ class SearchLens_AI {
                 <p style="margin: 0 0 16px 0; font-size: 13px; color: #6e6e73;">
                     Once visitors use search, stats will appear here.
                 </p>
-                <a href="<?php echo esc_url( admin_url( 'admin.php?page=searchlens-settings' ) ); ?>"
+                <a href="<?php echo esc_url( admin_url( 'admin.php?page=riviantrackr-settings' ) ); ?>"
                    style="display: inline-block; padding: 6px 14px; background: #0071e3; color: #fff; text-decoration: none; border-radius: 6px; font-size: 13px; font-weight: 500;">
                     Configure Plugin
                 </a>
@@ -3556,7 +3626,7 @@ class SearchLens_AI {
         $table_name = self::get_logs_table_name();
 
         // Dashboard widget uses cached stats with 5-minute TTL
-        $cache_key = 'searchlens_dashboard_widget_stats';
+        $cache_key = 'riviantrackr_dashboard_widget_stats';
         $cached = get_transient( $cache_key );
 
         if ( false === $cached ) {
@@ -3616,23 +3686,23 @@ class SearchLens_AI {
         $widget_avg_rt      = $totals && $totals->avg_response_time !== null ? (int) round( (float) $totals->avg_response_time ) : null;
         ?>
         
-        <div class="searchlens-widget-container">
+        <div class="riviantrackr-widget-container">
             <!-- Stats Grid -->
-            <div class="searchlens-widget-stats-grid">
-                <div class="searchlens-widget-stat">
-                    <span class="searchlens-widget-stat-value"><?php echo number_format( $total_searches ); ?></span>
-                    <span class="searchlens-widget-stat-label">Total Searches</span>
+            <div class="riviantrackr-widget-stats-grid">
+                <div class="riviantrackr-widget-stat">
+                    <span class="riviantrackr-widget-stat-value"><?php echo number_format( $total_searches ); ?></span>
+                    <span class="riviantrackr-widget-stat-label">Total Searches</span>
                 </div>
-                <div class="searchlens-widget-stat">
-                    <span class="searchlens-widget-stat-value"><?php echo esc_html( $success_rate ); ?>%</span>
-                    <span class="searchlens-widget-stat-label">Success Rate</span>
+                <div class="riviantrackr-widget-stat">
+                    <span class="riviantrackr-widget-stat-value"><?php echo esc_html( $success_rate ); ?>%</span>
+                    <span class="riviantrackr-widget-stat-label">Success Rate</span>
                 </div>
-                <div class="searchlens-widget-stat">
-                    <span class="searchlens-widget-stat-value"><?php echo number_format( $last_24 ); ?></span>
-                    <span class="searchlens-widget-stat-label">Last 24 Hours</span>
+                <div class="riviantrackr-widget-stat">
+                    <span class="riviantrackr-widget-stat-value"><?php echo number_format( $last_24 ); ?></span>
+                    <span class="riviantrackr-widget-stat-label">Last 24 Hours</span>
                 </div>
-                <div class="searchlens-widget-stat">
-                    <span class="searchlens-widget-stat-value"><?php
+                <div class="riviantrackr-widget-stat">
+                    <span class="riviantrackr-widget-stat-value"><?php
                         if ( $widget_avg_rt !== null ) {
                             if ( $widget_avg_rt >= 1000 ) {
                                 echo esc_html( number_format( $widget_avg_rt / 1000, 1 ) . 's' );
@@ -3643,15 +3713,15 @@ class SearchLens_AI {
                             echo '&mdash;';
                         }
                     ?></span>
-                    <span class="searchlens-widget-stat-label">Avg Response</span>
+                    <span class="riviantrackr-widget-stat-label">Avg Response</span>
                 </div>
             </div>
 
-            <div class="searchlens-widget-section">
-                <h4 class="searchlens-widget-section-title">Top Search Queries</h4>
+            <div class="riviantrackr-widget-section">
+                <h4 class="riviantrackr-widget-section-title">Top Search Queries</h4>
                 
                 <?php if ( ! empty( $top_queries ) ) : ?>
-                    <table class="searchlens-widget-table">
+                    <table class="riviantrackr-widget-table">
                         <thead>
                             <tr>
                                 <th>Query</th>
@@ -3667,16 +3737,16 @@ class SearchLens_AI {
                                 $success_q_rate = $this->calculate_success_rate( $success_q, $total_q );
                                 
                                 // Determine badge class
-                                if ( $success_q_rate >= SEARCHLENS_BADGE_SUCCESS_HIGH ) {
-                                    $badge_class = 'searchlens-widget-badge-success';
-                                } elseif ( $success_q_rate >= SEARCHLENS_BADGE_SUCCESS_MED ) {
-                                    $badge_class = 'searchlens-widget-badge-warning';
+                                if ( $success_q_rate >= RIVIANTRACKR_BADGE_SUCCESS_HIGH ) {
+                                    $badge_class = 'riviantrackr-widget-badge-success';
+                                } elseif ( $success_q_rate >= RIVIANTRACKR_BADGE_SUCCESS_MED ) {
+                                    $badge_class = 'riviantrackr-widget-badge-warning';
                                 } else {
-                                    $badge_class = 'searchlens-widget-badge-error';
+                                    $badge_class = 'riviantrackr-widget-badge-error';
                                 }
                                 ?>
                                 <tr>
-                                    <td class="searchlens-widget-query">
+                                    <td class="riviantrackr-widget-query">
                                         <?php
                                         $query_display = mb_strlen( $row->search_query ) > 35
                                             ? mb_substr( $row->search_query, 0, 32 ) . '...'
@@ -3685,10 +3755,10 @@ class SearchLens_AI {
                                         ?>
                                     </td>
                                     <td style="text-align: center;">
-                                        <span class="searchlens-widget-count"><?php echo number_format( $total_q ); ?></span>
+                                        <span class="riviantrackr-widget-count"><?php echo number_format( $total_q ); ?></span>
                                     </td>
                                     <td style="text-align: center;">
-                                        <span class="searchlens-widget-badge <?php echo esc_attr( $badge_class ); ?>">
+                                        <span class="riviantrackr-widget-badge <?php echo esc_attr( $badge_class ); ?>">
                                             <?php echo esc_html( $success_q_rate ); ?>%
                                         </span>
                                     </td>
@@ -3697,15 +3767,15 @@ class SearchLens_AI {
                         </tbody>
                     </table>
                 <?php else : ?>
-                    <div class="searchlens-widget-empty">
+                    <div class="riviantrackr-widget-empty">
                         No search data yet. Waiting for visitors to use AI search.
                     </div>
                 <?php endif; ?>
             </div>
 
-            <div class="searchlens-widget-footer">
-                <a href="<?php echo esc_url( admin_url( 'admin.php?page=searchlens-analytics' ) ); ?>"
-                   class="searchlens-widget-link">
+            <div class="riviantrackr-widget-footer">
+                <a href="<?php echo esc_url( admin_url( 'admin.php?page=riviantrackr-analytics' ) ); ?>"
+                   class="riviantrackr-widget-link">
                     View Full Analytics →
                 </a>
             </div>
@@ -3732,11 +3802,11 @@ class SearchLens_AI {
             echo '<link rel="dns-prefetch" href="' . esc_url( $origin ) . '">' . "\n";
         }
 
-        $version = SEARCHLENS_VERSION;
+        $version = RIVIANTRACKR_VERSION;
 
         wp_enqueue_style(
-            'searchlens',
-            plugin_dir_url( __FILE__ ) . 'assets/searchlens.css',
+            'riviantrackr',
+            plugin_dir_url( __FILE__ ) . 'assets/riviantrackr.css',
             array(),
             $version
         );
@@ -3744,18 +3814,18 @@ class SearchLens_AI {
         // Add dynamic color styles
         $color_css = $this->generate_color_css( $options );
         if ( ! empty( $color_css ) ) {
-            wp_add_inline_style( 'searchlens', $color_css );
+            wp_add_inline_style( 'riviantrackr', $color_css );
         }
 
         if ( ! empty( $options['custom_css'] ) ) {
             // Defense in depth: sanitize again on output
             $custom_css = $this->sanitize_custom_css( $options['custom_css'] );
-            wp_add_inline_style( 'searchlens', $custom_css );
+            wp_add_inline_style( 'riviantrackr', $custom_css );
         }
 
         wp_enqueue_script(
-            'searchlens',
-            plugin_dir_url( __FILE__ ) . 'assets/searchlens.js',
+            'riviantrackr',
+            plugin_dir_url( __FILE__ ) . 'assets/riviantrackr.js',
             array(),
             $version,
             true
@@ -3768,12 +3838,12 @@ class SearchLens_AI {
         $bot_challenge_token = hash_hmac( 'sha256', (string) $bot_challenge_ts, wp_salt( 'nonce' ) );
 
         wp_localize_script(
-            'searchlens',
-            'SearchLensAI',
+            'riviantrackr',
+            'RivianTrackrAI',
             array(
-                'endpoint'         => rest_url( 'searchlens/v1/summary' ),
-                'feedbackEndpoint' => rest_url( 'searchlens/v1/feedback' ),
-                'logEndpoint'      => rest_url( 'searchlens/v1/log-session-hit' ),
+                'endpoint'         => rest_url( 'riviantrackr/v1/summary' ),
+                'feedbackEndpoint' => rest_url( 'riviantrackr/v1/feedback' ),
+                'logEndpoint'      => rest_url( 'riviantrackr/v1/log-session-hit' ),
                 'nonce'            => wp_create_nonce( 'wp_rest' ),
                 'query'            => get_search_query(),
                 'cacheVersion'     => $this->get_cache_namespace(),
@@ -3781,10 +3851,10 @@ class SearchLens_AI {
                 'botToken'         => $bot_challenge_token,
                 'botTokenTs'       => $bot_challenge_ts,
                 'errorCodes'       => array(
-                    'noResults'    => SEARCHLENS_ERROR_NO_RESULTS,
-                    'apiError'     => SEARCHLENS_ERROR_API_ERROR,
-                    'rateLimited'  => SEARCHLENS_ERROR_RATE_LIMITED,
-                    'notConfigured' => SEARCHLENS_ERROR_NOT_CONFIGURED,
+                    'noResults'    => RIVIANTRACKR_ERROR_NO_RESULTS,
+                    'apiError'     => RIVIANTRACKR_ERROR_API_ERROR,
+                    'rateLimited'  => RIVIANTRACKR_ERROR_RATE_LIMITED,
+                    'notConfigured' => RIVIANTRACKR_ERROR_NOT_CONFIGURED,
                 ),
             )
         );
@@ -3845,45 +3915,45 @@ class SearchLens_AI {
         $show_badge = isset( $options['show_openai_badge'] ) ? $options['show_openai_badge'] : 0;
         $show_feedback = isset( $options['show_feedback'] ) ? $options['show_feedback'] : 0;
         ?>
-        <div class="searchlens-summary" style="margin-bottom: 1.5rem;">
-            <div class="searchlens-summary-inner" style="padding: 1.25rem 1.25rem; border-radius: 10px; border-width: 1px; border-style: solid; display:flex; flex-direction:column; gap:0.6rem;">
-                <div class="searchlens-summary-header" style="display:flex; align-items:center; justify-content:space-between; gap:0.75rem;">
+        <div class="riviantrackr-summary" style="margin-bottom: 1.5rem;">
+            <div class="riviantrackr-summary-inner" style="padding: 1.25rem 1.25rem; border-radius: 10px; border-width: 1px; border-style: solid; display:flex; flex-direction:column; gap:0.6rem;">
+                <div class="riviantrackr-summary-header" style="display:flex; align-items:center; justify-content:space-between; gap:0.75rem;">
                     <h2 style="margin:0; font-size:1.1rem;">
                         AI summary for "<?php echo esc_html( $search_query ); ?>"
                     </h2>
                     <?php if ( $show_badge ) : ?>
-                    <span class="searchlens-openai-badge" aria-label="Powered by OpenAI">
-                        <span class="searchlens-openai-mark" aria-hidden="true"></span>
-                        <span class="searchlens-openai-text">Powered by OpenAI</span>
+                    <span class="riviantrackr-openai-badge" aria-label="Powered by OpenAI">
+                        <span class="riviantrackr-openai-mark" aria-hidden="true"></span>
+                        <span class="riviantrackr-openai-text">Powered by OpenAI</span>
                     </span>
                     <?php endif; ?>
                 </div>
 
-                <div id="searchlens-search-summary-content" class="searchlens-search-summary-content" aria-live="polite">
-                    <span class="searchlens-spinner" role="status" aria-label="Loading AI summary"></span>
-                    <p class="searchlens-loading-text">Generating summary based on your search and <?php echo esc_html( $site_name ); ?> articles...</p>
+                <div id="riviantrackr-search-summary-content" class="riviantrackr-search-summary-content" aria-live="polite">
+                    <span class="riviantrackr-spinner" role="status" aria-label="Loading AI summary"></span>
+                    <p class="riviantrackr-loading-text">Generating summary based on your search and <?php echo esc_html( $site_name ); ?> articles...</p>
                 </div>
 
                 <?php if ( $show_feedback ) : ?>
-                <div id="searchlens-feedback" class="searchlens-feedback" style="display:none; margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid rgba(128,128,128,0.3);">
-                    <div class="searchlens-feedback-prompt" style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+                <div id="riviantrackr-feedback" class="riviantrackr-feedback" style="display:none; margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid rgba(128,128,128,0.3);">
+                    <div class="riviantrackr-feedback-prompt" style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
                         <span style="font-size:0.85rem;">Was this summary helpful?</span>
-                        <div class="searchlens-feedback-buttons" style="display:flex; gap:0.5rem;">
-                            <button type="button" class="searchlens-feedback-btn" data-helpful="1" aria-label="Yes, helpful" style="padding:0.25rem 0.75rem; border:1px solid currentColor; border-radius:4px; background:transparent; color:inherit; cursor:pointer; font-size:0.85rem;">
+                        <div class="riviantrackr-feedback-buttons" style="display:flex; gap:0.5rem;">
+                            <button type="button" class="riviantrackr-feedback-btn" data-helpful="1" aria-label="Yes, helpful" style="padding:0.25rem 0.75rem; border:1px solid currentColor; border-radius:4px; background:transparent; color:inherit; cursor:pointer; font-size:0.85rem;">
                                 &#128077; Yes
                             </button>
-                            <button type="button" class="searchlens-feedback-btn" data-helpful="0" aria-label="No, not helpful" style="padding:0.25rem 0.75rem; border:1px solid currentColor; border-radius:4px; background:transparent; color:inherit; cursor:pointer; font-size:0.85rem;">
+                            <button type="button" class="riviantrackr-feedback-btn" data-helpful="0" aria-label="No, not helpful" style="padding:0.25rem 0.75rem; border:1px solid currentColor; border-radius:4px; background:transparent; color:inherit; cursor:pointer; font-size:0.85rem;">
                                 &#128078; No
                             </button>
                         </div>
                     </div>
-                    <div class="searchlens-feedback-thanks" style="display:none; font-size:0.85rem;">
+                    <div class="riviantrackr-feedback-thanks" style="display:none; font-size:0.85rem;">
                         Thanks for your feedback!
                     </div>
                 </div>
                 <?php endif; ?>
 
-                <div class="searchlens-disclaimer" style="margin-top:0.75rem; font-size:0.75rem; line-height:1.4; opacity:0.65;">
+                <div class="riviantrackr-disclaimer" style="margin-top:0.75rem; font-size:0.75rem; line-height:1.4; opacity:0.65;">
                     AI summaries are generated automatically based on <?php echo esc_html( $site_name ); ?> articles and may be inaccurate or incomplete. Always verify important details.
                 </div>
             </div>
@@ -3893,29 +3963,29 @@ class SearchLens_AI {
 
     public function enqueue_admin_assets( $hook ) {
         $allowed_hooks = array(
-            'toplevel_page_searchlens-settings',
-            'searchlens-settings_page_searchlens-analytics',
+            'toplevel_page_riviantrackr-settings',
+            'riviantrackr-settings_page_riviantrackr-analytics',
         );
 
         $is_our_page = in_array( $hook, $allowed_hooks, true ) ||
-                       strpos( $hook, 'searchlens' ) !== false;
+                       strpos( $hook, 'riviantrackr' ) !== false;
 
         if ( ! $is_our_page ) {
             return;
         }
 
-        $version = SEARCHLENS_VERSION;
+        $version = RIVIANTRACKR_VERSION;
 
         wp_enqueue_style(
-            'searchlens-admin',
-            plugin_dir_url( __FILE__ ) . 'assets/searchlens-admin.css',
+            'riviantrackr-admin',
+            plugin_dir_url( __FILE__ ) . 'assets/riviantrackr-admin.css',
             array(),
             $version
         );
 
         wp_enqueue_script(
-            'searchlens-admin',
-            plugin_dir_url( __FILE__ ) . 'assets/searchlens-admin.js',
+            'riviantrackr-admin',
+            plugin_dir_url( __FILE__ ) . 'assets/riviantrackr-admin.js',
             array( 'jquery' ),
             $version,
             true
@@ -3923,12 +3993,12 @@ class SearchLens_AI {
 
         // Pass security nonces and dynamic values to admin JS.
         wp_localize_script(
-            'searchlens-admin',
-            'SearchLensAdmin',
+            'riviantrackr-admin',
+            'RivianTrackrAdmin',
             array(
-                'bulkDeleteNonce'    => wp_create_nonce( 'searchlens_bulk_delete_logs' ),
-                'testKeyNonce'       => wp_create_nonce( 'searchlens_test_key' ),
-                'gdprPurgeNonce'     => wp_create_nonce( 'searchlens_gdpr_purge' ),
+                'bulkDeleteNonce'    => wp_create_nonce( 'riviantrackr_bulk_delete_logs' ),
+                'testKeyNonce'       => wp_create_nonce( 'riviantrackr_test_key' ),
+                'gdprPurgeNonce'     => wp_create_nonce( 'riviantrackr_gdpr_purge' ),
                 'useApiKeyConstant'  => $this->is_api_key_from_constant(),
             )
         );
@@ -4014,9 +4084,9 @@ class SearchLens_AI {
      */
     private function is_ip_rate_limited( string $ip ): bool {
         $ip_hash  = hash( 'sha256', $ip );
-        $key      = 'searchlens_ip_rate_' . substr( $ip_hash, 0, 32 );
+        $key      = 'riviantrackr_ip_rate_' . substr( $ip_hash, 0, 32 );
         $lock_key = $key . '_lock';
-        $limit    = SEARCHLENS_IP_RATE_LIMIT;
+        $limit    = RIVIANTRACKR_IP_RATE_LIMIT;
         $now      = time();
         $cutoff   = $now - 60;
 
@@ -4049,7 +4119,7 @@ class SearchLens_AI {
 
         // Under the limit — record this request
         $timestamps[] = $now;
-        set_transient( $key, $timestamps, SEARCHLENS_RATE_LIMIT_WINDOW );
+        set_transient( $key, $timestamps, RIVIANTRACKR_RATE_LIMIT_WINDOW );
         delete_transient( $lock_key );
 
         return false;
@@ -4065,9 +4135,9 @@ class SearchLens_AI {
      * @return array Rate limit info with 'limit', 'remaining', 'used', and 'reset' keys.
      */
     private function get_rate_limit_info( $ip ) {
-        $limit   = SEARCHLENS_IP_RATE_LIMIT;
+        $limit   = RIVIANTRACKR_IP_RATE_LIMIT;
         $ip_hash = hash( 'sha256', $ip );
-        $key     = 'searchlens_ip_rate_' . substr( $ip_hash, 0, 32 );
+        $key     = 'riviantrackr_ip_rate_' . substr( $ip_hash, 0, 32 );
 
         $timestamps = get_transient( $key );
         if ( ! is_array( $timestamps ) ) {
@@ -4110,8 +4180,8 @@ class SearchLens_AI {
      */
     private function is_log_rate_limited( string $ip ): bool {
         $ip_hash = hash( 'sha256', $ip );
-        $key     = 'searchlens_log_rate_' . substr( $ip_hash, 0, 32 );
-        $limit   = SEARCHLENS_IP_LOG_RATE_LIMIT;
+        $key     = 'riviantrackr_log_rate_' . substr( $ip_hash, 0, 32 );
+        $limit   = RIVIANTRACKR_IP_LOG_RATE_LIMIT;
         $now     = time();
         $cutoff  = $now - 60;
 
@@ -4129,20 +4199,20 @@ class SearchLens_AI {
         }
 
         $timestamps[] = $now;
-        set_transient( $key, $timestamps, SEARCHLENS_RATE_LIMIT_WINDOW );
+        set_transient( $key, $timestamps, RIVIANTRACKR_RATE_LIMIT_WINDOW );
 
         return false;
     }
 
     private function get_client_ip(): string {
         // Use REMOTE_ADDR by default - it's the only non-spoofable source.
-        // Sites behind trusted reverse proxies can define SEARCHLENS_TRUSTED_PROXY_HEADER
+        // Sites behind trusted reverse proxies can define RIVIANTRACKR_TRUSTED_PROXY_HEADER
         // to read from X-Forwarded-For or similar headers.
         $ip = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : 'unknown';
 
         // Allow sites behind trusted proxies to use forwarded headers
-        if ( defined( 'SEARCHLENS_TRUSTED_PROXY_HEADER' ) && SEARCHLENS_TRUSTED_PROXY_HEADER ) {
-            $header = 'HTTP_' . strtoupper( str_replace( '-', '_', SEARCHLENS_TRUSTED_PROXY_HEADER ) );
+        if ( defined( 'RIVIANTRACKR_TRUSTED_PROXY_HEADER' ) && RIVIANTRACKR_TRUSTED_PROXY_HEADER ) {
+            $header = 'HTTP_' . strtoupper( str_replace( '-', '_', RIVIANTRACKR_TRUSTED_PROXY_HEADER ) );
             if ( ! empty( $_SERVER[ $header ] ) ) {
                 // Take the first IP in the list (original client)
                 $ips = explode( ',', sanitize_text_field( wp_unslash( $_SERVER[ $header ] ) ) );
@@ -4163,7 +4233,7 @@ class SearchLens_AI {
 
     public function register_rest_routes() {
         register_rest_route(
-            'searchlens/v1',
+            'riviantrackr/v1',
             '/summary',
             array(
                 'methods'             => 'GET',
@@ -4191,7 +4261,7 @@ class SearchLens_AI {
         // Uses a dedicated permission check that skips IP rate limiting so
         // analytics logging does not consume the user's rate-limit quota.
         register_rest_route(
-            'searchlens/v1',
+            'riviantrackr/v1',
             '/log-session-hit',
             array(
                 'methods'             => 'POST',
@@ -4214,7 +4284,7 @@ class SearchLens_AI {
 
         // Feedback endpoint for thumbs up/down
         register_rest_route(
-            'searchlens/v1',
+            'riviantrackr/v1',
             '/feedback',
             array(
                 'methods'             => 'POST',
@@ -4303,7 +4373,7 @@ class SearchLens_AI {
     public function add_rate_limit_headers( $response, $server, $request ) {
         // Only add headers to our plugin's endpoints
         $route = $request->get_route();
-        if ( strpos( $route, '/searchlens/' ) === false ) {
+        if ( strpos( $route, '/riviantrackr/' ) === false ) {
             return $response;
         }
 
@@ -4327,7 +4397,7 @@ class SearchLens_AI {
         // Block obvious bots to save API costs
         if ( $this->is_likely_bot() ) {
             return new WP_Error(
-                SEARCHLENS_ERROR_BOT_DETECTED,
+                RIVIANTRACKR_ERROR_BOT_DETECTED,
                 'AI search is not available for automated requests.',
                 array( 'status' => 403 )
             );
@@ -4343,7 +4413,7 @@ class SearchLens_AI {
             $age      = time() - (int) $bts;
             if ( ! hash_equals( $expected, $bt ) || $age < 0 || $age > 600 ) {
                 return new WP_Error(
-                    SEARCHLENS_ERROR_BOT_DETECTED,
+                    RIVIANTRACKR_ERROR_BOT_DETECTED,
                     'Invalid challenge token. Please refresh the page.',
                     array( 'status' => 403 )
                 );
@@ -4355,7 +4425,7 @@ class SearchLens_AI {
         if ( $this->is_ip_rate_limited( $client_ip ) ) {
             $rate_info = $this->get_rate_limit_info( $client_ip );
             return new WP_Error(
-                SEARCHLENS_ERROR_RATE_LIMITED,
+                RIVIANTRACKR_ERROR_RATE_LIMITED,
                 'Too many requests from your IP address. Please try again in a minute.',
                 array(
                     'status'     => 429,
@@ -4379,7 +4449,7 @@ class SearchLens_AI {
     public function rest_log_permission_check( WP_REST_Request $request ) {
         if ( $this->is_likely_bot() ) {
             return new WP_Error(
-                SEARCHLENS_ERROR_BOT_DETECTED,
+                RIVIANTRACKR_ERROR_BOT_DETECTED,
                 'Logging is not available for automated requests.',
                 array( 'status' => 403 )
             );
@@ -4388,7 +4458,7 @@ class SearchLens_AI {
         // Lightweight rate limit to prevent database flooding
         if ( $this->is_log_rate_limited( $this->get_client_ip() ) ) {
             return new WP_Error(
-                SEARCHLENS_ERROR_RATE_LIMITED,
+                RIVIANTRACKR_ERROR_RATE_LIMITED,
                 'Too many logging requests. Please slow down.',
                 array( 'status' => 429 )
             );
@@ -4417,7 +4487,7 @@ class SearchLens_AI {
         // Block obvious bots
         if ( $this->is_likely_bot() ) {
             return new WP_Error(
-                SEARCHLENS_ERROR_BOT_DETECTED,
+                RIVIANTRACKR_ERROR_BOT_DETECTED,
                 'Feedback is not available for automated requests.',
                 array( 'status' => 403 )
             );
@@ -4426,7 +4496,7 @@ class SearchLens_AI {
         // Lightweight rate limit to prevent feedback spam
         if ( $this->is_log_rate_limited( $this->get_client_ip() ) ) {
             return new WP_Error(
-                SEARCHLENS_ERROR_RATE_LIMITED,
+                RIVIANTRACKR_ERROR_RATE_LIMITED,
                 'Too many requests. Please slow down.',
                 array( 'status' => 429 )
             );
@@ -4457,12 +4527,12 @@ class SearchLens_AI {
         // Reasonable length limits (prevent abuse)
         // Use mb_strlen for proper multi-byte character support
         $length = function_exists( 'mb_strlen' ) ? mb_strlen( $value, 'UTF-8' ) : strlen( $value );
-        if ( $length < SEARCHLENS_QUERY_MIN_LENGTH || $length > SEARCHLENS_QUERY_MAX_LENGTH ) {
+        if ( $length < RIVIANTRACKR_QUERY_MIN_LENGTH || $length > RIVIANTRACKR_QUERY_MAX_LENGTH ) {
             return false;
         }
 
         // Also check byte length to prevent oversized payloads
-        if ( strlen( $value ) > SEARCHLENS_QUERY_MAX_BYTES ) {
+        if ( strlen( $value ) > RIVIANTRACKR_QUERY_MAX_BYTES ) {
             return false;
         }
 
@@ -4560,7 +4630,7 @@ class SearchLens_AI {
                 // Log the attempt for security monitoring
                 if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                     // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                    error_log( '[SearchLens AI] Blocked SQL injection attempt: ' . substr( $value, 0, 100 ) );
+                    error_log( '[RivianTrackr AI Search Summary] Blocked SQL injection attempt: ' . substr( $value, 0, 100 ) );
                 }
                 return true;
             }
@@ -4649,7 +4719,7 @@ class SearchLens_AI {
             if ( preg_match( '/' . $pattern . '/i', $normalized ) ) {
                 if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                     // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                    error_log( '[SearchLens AI] Blocked spam query (pattern: ' . $pattern . '): ' . substr( $value, 0, 100 ) );
+                    error_log( '[RivianTrackr AI Search Summary] Blocked spam query (pattern: ' . $pattern . '): ' . substr( $value, 0, 100 ) );
                 }
                 return true;
             }
@@ -4687,7 +4757,7 @@ class SearchLens_AI {
             if ( stripos( $normalized, strtolower( $probe ) ) !== false ) {
                 if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                     // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                    error_log( '[SearchLens AI] Blocked scanner probe query (variable: ' . $probe . '): ' . substr( $value, 0, 100 ) );
+                    error_log( '[RivianTrackr AI Search Summary] Blocked scanner probe query (variable: ' . $probe . '): ' . substr( $value, 0, 100 ) );
                 }
                 return true;
             }
@@ -4712,7 +4782,7 @@ class SearchLens_AI {
                 if ( strpos( $normalized, $term ) !== false ) {
                     if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                         // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                        error_log( '[SearchLens AI] Blocked query via blocklist (term: ' . $term . '): ' . substr( $value, 0, 100 ) );
+                        error_log( '[RivianTrackr AI Search Summary] Blocked query via blocklist (term: ' . $term . '): ' . substr( $value, 0, 100 ) );
                     }
                     return true;
                 }
@@ -4792,7 +4862,7 @@ class SearchLens_AI {
                 array(
                     'answer_html' => '',
                     'error'       => 'AI search is not enabled.',
-                    'error_code'  => SEARCHLENS_ERROR_NOT_CONFIGURED,
+                    'error_code'  => RIVIANTRACKR_ERROR_NOT_CONFIGURED,
                 )
             );
         }
@@ -4802,7 +4872,7 @@ class SearchLens_AI {
                 array(
                     'answer_html' => '',
                     'error'       => 'Missing search query.',
-                    'error_code'  => SEARCHLENS_ERROR_INVALID_QUERY,
+                    'error_code'  => RIVIANTRACKR_ERROR_INVALID_QUERY,
                 )
             );
         }
@@ -4835,9 +4905,9 @@ class SearchLens_AI {
                 $content = wp_strip_all_tags( $post->post_content );
                 
                 // Use smart truncation for better sentence boundaries
-                $content_length    = isset( $options['content_length'] ) ? (int) $options['content_length'] : SEARCHLENS_CONTENT_LENGTH;
+                $content_length    = isset( $options['content_length'] ) ? (int) $options['content_length'] : RIVIANTRACKR_CONTENT_LENGTH;
                 $truncated_content = $this->smart_truncate( $content, $content_length );
-                $excerpt = $this->smart_truncate( $content, SEARCHLENS_EXCERPT_LENGTH );
+                $excerpt = $this->smart_truncate( $content, RIVIANTRACKR_EXCERPT_LENGTH );
 
                 $posts_for_ai[] = array(
                     'id'      => $post->ID,
@@ -4864,7 +4934,7 @@ class SearchLens_AI {
                     'answer_html'   => '',
                     'results_count' => 0,
                     'error'         => 'No articles on ' . $site_name . ' matched your search. Try different keywords or a broader search term.',
-                    'error_code'    => SEARCHLENS_ERROR_NO_RESULTS,
+                    'error_code'    => RIVIANTRACKR_ERROR_NO_RESULTS,
                 )
             );
         }
@@ -4882,7 +4952,7 @@ class SearchLens_AI {
                 array(
                     'answer_html' => '',
                     'error'       => $ai_error ? $ai_error : 'AI summary is not available right now.',
-                    'error_code'  => SEARCHLENS_ERROR_API_ERROR,
+                    'error_code'  => RIVIANTRACKR_ERROR_API_ERROR,
                 )
             );
         }
@@ -4935,7 +5005,7 @@ class SearchLens_AI {
             return false;
         }
 
-        $key   = 'searchlens_rate_' . gmdate( 'YmdHi' );
+        $key   = 'riviantrackr_rate_' . gmdate( 'YmdHi' );
         $count = (int) get_transient( $key );
 
         if ( $count >= $limit ) {
@@ -4943,7 +5013,7 @@ class SearchLens_AI {
         }
 
         $count++;
-        set_transient( $key, $count, SEARCHLENS_RATE_LIMIT_WINDOW );
+        set_transient( $key, $count, RIVIANTRACKR_RATE_LIMIT_WINDOW );
 
         return false;
     }
@@ -4959,7 +5029,7 @@ class SearchLens_AI {
         $normalized_query = strtolower( trim( $search_query ) );
         $namespace        = $this->get_cache_namespace();
 
-        $content_length = isset( $options['content_length'] ) ? (int) $options['content_length'] : SEARCHLENS_CONTENT_LENGTH;
+        $content_length = isset( $options['content_length'] ) ? (int) $options['content_length'] : RIVIANTRACKR_CONTENT_LENGTH;
         $cache_key_data = implode( '|', array(
             $options['model'],
             $options['max_posts'],
@@ -5001,7 +5071,7 @@ class SearchLens_AI {
             // Log detailed error for debugging, but show generic message to users
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[SearchLens AI] API error: ' . $api_response['error'] );
+                error_log( '[RivianTrackr AI Search Summary] API error: ' . $api_response['error'] );
             }
             $ai_error = 'The AI service encountered an error. Please try again later.';
             return null;
@@ -5030,14 +5100,14 @@ class SearchLens_AI {
         if ( empty( $raw_content ) ) {
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[SearchLens AI] Empty response. Full API response: ' . wp_json_encode( $api_response ) );
+                error_log( '[RivianTrackr AI Search Summary] Empty response. Full API response: ' . wp_json_encode( $api_response ) );
             }
             // Check if there's a finish_reason that explains the empty response
             $finish_reason = $api_response['choices'][0]['finish_reason'] ?? 'unknown';
             // Log detailed reason for debugging
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[SearchLens AI] Empty response with finish_reason: ' . $finish_reason );
+                error_log( '[RivianTrackr AI Search Summary] Empty response with finish_reason: ' . $finish_reason );
             }
             if ( $finish_reason === 'content_filter' ) {
                 $ai_error = 'The response was filtered by content policy. Please try a different search.';
@@ -5178,7 +5248,7 @@ class SearchLens_AI {
         );
 
         // Use the admin-configured max tokens setting
-        $configured_tokens = isset( $options['max_tokens'] ) ? (int) $options['max_tokens'] : SEARCHLENS_MAX_TOKENS;
+        $configured_tokens = isset( $options['max_tokens'] ) ? (int) $options['max_tokens'] : RIVIANTRACKR_MAX_TOKENS;
 
         // Reasoning models use max_completion_tokens and need a higher limit
         // to leave room for hidden reasoning tokens
@@ -5203,7 +5273,7 @@ class SearchLens_AI {
                 'Content-Type'  => 'application/json',
             ),
             'body'    => wp_json_encode( $body ),
-            'timeout' => isset( $options['request_timeout'] ) ? (int) $options['request_timeout'] : SEARCHLENS_API_TIMEOUT,
+            'timeout' => isset( $options['request_timeout'] ) ? (int) $options['request_timeout'] : RIVIANTRACKR_API_TIMEOUT,
         );
 
         // Retry logic: attempt up to 3 times with exponential backoff for transient errors
@@ -5221,7 +5291,7 @@ class SearchLens_AI {
                     $data['_retry_count'] = $attempt;
                     if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                         // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                        error_log( '[SearchLens AI] Request succeeded after ' . $attempt . ' retry(ies)' );
+                        error_log( '[RivianTrackr AI Search Summary] Request succeeded after ' . $attempt . ' retry(ies)' );
                     }
                 }
                 return $data;
@@ -5244,7 +5314,7 @@ class SearchLens_AI {
 
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[SearchLens AI] Retry attempt ' . ( $attempt + 1 ) . ' after ' . $delay . 's delay' );
+                error_log( '[RivianTrackr AI Search Summary] Retry attempt ' . ( $attempt + 1 ) . ' after ' . $delay . 's delay' );
             }
         }
 
@@ -5268,7 +5338,7 @@ class SearchLens_AI {
             $error_msg = $response->get_error_message();
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[SearchLens AI] API request error: ' . $error_msg );
+                error_log( '[RivianTrackr AI Search Summary] API request error: ' . $error_msg );
             }
 
             // Timeouts and connection errors are retryable
@@ -5305,7 +5375,7 @@ class SearchLens_AI {
         if ( $code < 200 || $code >= 300 ) {
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[SearchLens AI] API HTTP error ' . $code . ' body: ' . $body );
+                error_log( '[RivianTrackr AI Search Summary] API HTTP error ' . $code . ' body: ' . $body );
             }
 
             $decoded_error = json_decode( $body, true );
@@ -5361,7 +5431,7 @@ class SearchLens_AI {
         if ( json_last_error() !== JSON_ERROR_NONE ) {
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-                error_log( '[SearchLens AI] Failed to decode OpenAI response: ' . json_last_error_msg() );
+                error_log( '[RivianTrackr AI Search Summary] Failed to decode OpenAI response: ' . json_last_error_msg() );
             }
             return array(
                 'success'   => false,
@@ -5390,11 +5460,11 @@ class SearchLens_AI {
         $show_label = 'Show sources (' . intval( $count ) . ')';
         $hide_label = 'Hide sources';
 
-        $html  = '<div class="searchlens-sources">';
-        $html .= '<button type="button" class="searchlens-sources-toggle" aria-expanded="false" aria-controls="searchlens-sources-list" data-label-show="' . esc_attr( $show_label ) . '" data-label-hide="' . esc_attr( $hide_label ) . '">';
+        $html  = '<div class="riviantrackr-sources">';
+        $html .= '<button type="button" class="riviantrackr-sources-toggle" aria-expanded="false" aria-controls="riviantrackr-sources-list" data-label-show="' . esc_attr( $show_label ) . '" data-label-hide="' . esc_attr( $hide_label ) . '">';
         $html .= esc_html( $show_label );
         $html .= '</button>';
-        $html .= '<ul id="searchlens-sources-list" class="searchlens-sources-list" hidden>';
+        $html .= '<ul id="riviantrackr-sources-list" class="riviantrackr-sources-list" hidden>';
 
         foreach ( $sources as $src ) {
             $title   = isset( $src['title'] ) ? $src['title'] : '';
@@ -5435,13 +5505,13 @@ class SearchLens_AI {
      * Register the trending searches widget.
      */
     public function register_trending_widget() {
-        register_widget( 'SearchLens_Trending_Widget' );
+        register_widget( 'RivianTrackr_Trending_Widget' );
     }
 
     /**
      * Render the trending searches shortcode.
      *
-     * Usage: [searchlens_trending limit="5" title="Trending Searches" time_period="24" time_unit="hours"]
+     * Usage: [riviantrackr_trending limit="5" title="Trending Searches" time_period="24" time_unit="hours"]
      *
      * @param array $atts Shortcode attributes.
      * @return string HTML output.
@@ -5455,7 +5525,7 @@ class SearchLens_AI {
             'font_color'  => '',
             'time_period' => 24,
             'time_unit'   => 'hours',
-        ), $atts, 'searchlens_trending' );
+        ), $atts, 'riviantrackr_trending' );
 
         // Validate time_unit
         $time_unit = in_array( $atts['time_unit'], array( 'hours', 'days' ), true ) ? $atts['time_unit'] : 'hours';
@@ -5539,10 +5609,10 @@ class SearchLens_AI {
         }
 
         // Font Awesome icon (primary) and SVG fallback
-        $icon_fa = '<i class="fa-solid fa-magnifying-glass searchlens-trending-fa-icon" style="font-size: 32px; opacity: 0.9; flex-shrink: 0; width: 48px; text-align: center; display: none;"></i>';
-        $icon_svg = '<svg class="searchlens-trending-svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 32px; height: 32px; opacity: 0.9;"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>';
+        $icon_fa = '<i class="fa-solid fa-magnifying-glass riviantrackr-trending-fa-icon" style="font-size: 32px; opacity: 0.9; flex-shrink: 0; width: 48px; text-align: center; display: none;"></i>';
+        $icon_svg = '<svg class="riviantrackr-trending-svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 32px; height: 32px; opacity: 0.9;"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>';
 
-        $html = '<div class="searchlens-trending-widget" style="
+        $html = '<div class="riviantrackr-trending-widget" style="
             background: ' . esc_attr( $bg_color ) . ';
             color: ' . esc_attr( $font_color ) . ';
             border-radius: 20px;
@@ -5552,7 +5622,7 @@ class SearchLens_AI {
         ">';
 
         // Header with icon
-        $html .= '<div class="searchlens-trending-header" style="
+        $html .= '<div class="riviantrackr-trending-header" style="
             display: flex;
             align-items: center;
             gap: 16px;
@@ -5560,15 +5630,15 @@ class SearchLens_AI {
         ">';
 
         // Icon (Font Awesome with SVG fallback)
-        $html .= '<div class="searchlens-trending-icon" style="
+        $html .= '<div class="riviantrackr-trending-icon" style="
             flex-shrink: 0;
             width: 48px;
             text-align: center;
         ">' . $icon_fa . $icon_svg . '</div>';
 
         // Title and subtitle
-        $html .= '<div class="searchlens-trending-header-text">';
-        $html .= '<h3 class="searchlens-trending-title" style="
+        $html .= '<div class="riviantrackr-trending-header-text">';
+        $html .= '<h3 class="riviantrackr-trending-title" style="
             margin: 0 0 4px 0;
             font-size: 20px;
             font-weight: 800;
@@ -5577,7 +5647,7 @@ class SearchLens_AI {
         ">' . esc_html( $title ) . '</h3>';
 
         if ( ! empty( $subtitle ) ) {
-            $html .= '<p class="searchlens-trending-subtitle" style="
+            $html .= '<p class="riviantrackr-trending-subtitle" style="
                 margin: 0;
                 font-size: 14px;
                 font-weight: 400;
@@ -5590,7 +5660,7 @@ class SearchLens_AI {
         $html .= '</div></div>';
 
         // Keywords list
-        $html .= '<ul class="searchlens-trending-list" style="
+        $html .= '<ul class="riviantrackr-trending-list" style="
             list-style: none;
             margin: 0;
             padding: 0;
@@ -5602,8 +5672,8 @@ class SearchLens_AI {
         foreach ( $keywords as $keyword ) {
             $search_url = home_url( '/?s=' . urlencode( $keyword->search_query ) );
 
-            $html .= '<li class="searchlens-trending-item">';
-            $html .= '<a href="' . esc_url( $search_url ) . '" class="searchlens-trending-link" style="
+            $html .= '<li class="riviantrackr-trending-item">';
+            $html .= '<a href="' . esc_url( $search_url ) . '" class="riviantrackr-trending-link" style="
                 display: block;
                 text-decoration: none;
                 color: ' . esc_attr( $font_color ) . ';
@@ -5622,29 +5692,29 @@ class SearchLens_AI {
         $html .= '</ul></div>';
 
         // Enqueue responsive styles via wp_add_inline_style
-        $trending_css = '.searchlens-trending-widget { max-width: 100%; }
-            .searchlens-trending-link:hover { background: rgba(0, 0, 0, 0.15) !important; }
+        $trending_css = '.riviantrackr-trending-widget { max-width: 100%; }
+            .riviantrackr-trending-link:hover { background: rgba(0, 0, 0, 0.15) !important; }
             @media (max-width: 480px) {
-                .searchlens-trending-widget { padding: 20px !important; border-radius: 16px !important; }
-                .searchlens-trending-header { gap: 12px !important; margin-bottom: 16px !important; }
-                .searchlens-trending-icon { width: 40px !important; }
-                .searchlens-trending-icon svg { width: 28px !important; height: 28px !important; }
-                .searchlens-trending-icon .searchlens-trending-fa-icon { font-size: 28px !important; width: 40px !important; }
-                .searchlens-trending-title { font-size: 18px !important; }
-                .searchlens-trending-subtitle { font-size: 13px !important; }
-                .searchlens-trending-link { padding: 8px 12px !important; gap: 10px !important; }
-                .searchlens-trending-query { font-size: 14px !important; }
+                .riviantrackr-trending-widget { padding: 20px !important; border-radius: 16px !important; }
+                .riviantrackr-trending-header { gap: 12px !important; margin-bottom: 16px !important; }
+                .riviantrackr-trending-icon { width: 40px !important; }
+                .riviantrackr-trending-icon svg { width: 28px !important; height: 28px !important; }
+                .riviantrackr-trending-icon .riviantrackr-trending-fa-icon { font-size: 28px !important; width: 40px !important; }
+                .riviantrackr-trending-title { font-size: 18px !important; }
+                .riviantrackr-trending-subtitle { font-size: 13px !important; }
+                .riviantrackr-trending-link { padding: 8px 12px !important; gap: 10px !important; }
+                .riviantrackr-trending-query { font-size: 14px !important; }
             }';
-        wp_register_style( 'searchlens-trending', false, array(), SEARCHLENS_VERSION );
-        wp_enqueue_style( 'searchlens-trending' );
-        wp_add_inline_style( 'searchlens-trending', $trending_css );
+        wp_register_style( 'riviantrackr-trending', false, array(), RIVIANTRACKR_VERSION );
+        wp_enqueue_style( 'riviantrackr-trending' );
+        wp_add_inline_style( 'riviantrackr-trending', $trending_css );
 
         // Enqueue Font Awesome detection script
         wp_enqueue_script(
-            'searchlens-trending',
-            plugin_dir_url( __FILE__ ) . 'assets/searchlens-trending.js',
+            'riviantrackr-trending',
+            plugin_dir_url( __FILE__ ) . 'assets/riviantrackr-trending.js',
             array(),
-            SEARCHLENS_VERSION,
+            RIVIANTRACKR_VERSION,
             true
         );
 
@@ -5655,18 +5725,18 @@ class SearchLens_AI {
 /**
  * Trending Searches Widget Class.
  */
-class SearchLens_Trending_Widget extends WP_Widget {
+class RivianTrackr_Trending_Widget extends WP_Widget {
 
     /**
      * Constructor.
      */
     public function __construct() {
         parent::__construct(
-            'searchlens_trending_widget',
-            'SearchLens AI - Trending Searches',
+            'riviantrackr_trending_widget',
+            'RivianTrackr AI Search Summary - Trending Searches',
             array(
                 'description' => 'Display trending search keywords from a configurable time period.',
-                'classname'   => 'searchlens-trending-widget-container',
+                'classname'   => 'riviantrackr-trending-widget-container',
             )
         );
     }
@@ -5687,12 +5757,12 @@ class SearchLens_Trending_Widget extends WP_Widget {
         $time_unit   = ! empty( $instance['time_unit'] ) ? $instance['time_unit'] : 'hours';
 
         // Get the main plugin instance
-        global $searchlens_instance;
-        if ( ! isset( $searchlens_instance ) ) {
-            $searchlens_instance = new SearchLens_AI();
+        global $riviantrackr_instance;
+        if ( ! isset( $riviantrackr_instance ) ) {
+            $riviantrackr_instance = new RivianTrackr_AI_Search_Summary();
         }
 
-        $content = $searchlens_instance->render_trending_searches( $limit, $title, $subtitle, $bg_color, $font_color, $time_period, $time_unit );
+        $content = $riviantrackr_instance->render_trending_searches( $limit, $title, $subtitle, $bg_color, $font_color, $time_period, $time_unit );
 
         if ( empty( $content ) ) {
             return; // Don't show widget if no trending searches
@@ -5792,7 +5862,7 @@ class SearchLens_Trending_Widget extends WP_Widget {
                    onchange="document.getElementById('<?php echo esc_attr( $this->get_field_id( 'font_color' ) ); ?>').value = this.value;">
         </p>
         <p class="description">
-            Shortcode: <code>[searchlens_trending limit="5" time_period="24" time_unit="hours"]</code>
+            Shortcode: <code>[riviantrackr_trending limit="5" time_period="24" time_unit="hours"]</code>
         </p>
         <?php
     }
@@ -5818,7 +5888,7 @@ class SearchLens_Trending_Widget extends WP_Widget {
     }
 }
 
-register_activation_hook( __FILE__, array( 'SearchLens_AI', 'activate' ) );
-register_deactivation_hook( __FILE__, array( 'SearchLens_AI', 'deactivate' ) );
+register_activation_hook( __FILE__, array( 'RivianTrackr_AI_Search_Summary', 'activate' ) );
+register_deactivation_hook( __FILE__, array( 'RivianTrackr_AI_Search_Summary', 'deactivate' ) );
 
-new SearchLens_AI();
+new RivianTrackr_AI_Search_Summary();

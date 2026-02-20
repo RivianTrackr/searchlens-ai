@@ -1,40 +1,40 @@
 (function($) {
     $(document).ready(function() {
-        var adminData = window.SearchLensAdmin || {};
+        var adminData = window.RivianTrackrAdmin || {};
 
         // --- Settings page: CSS modal / reset ---
-        var modal = $('#searchlens-default-css-modal');
-        var textarea = $('#searchlens-custom-css');
+        var modal = $('#riviantrackr-default-css-modal');
+        var textarea = $('#riviantrackr-custom-css');
 
-        $('#searchlens-reset-css').on('click', function() {
+        $('#riviantrackr-reset-css').on('click', function() {
             if (confirm('Reset custom CSS? This will clear all your custom styles.')) {
                 textarea.val('');
             }
         });
 
-        $('#searchlens-view-default-css').on('click', function() {
-            modal.addClass('searchlens-modal-open');
+        $('#riviantrackr-view-default-css').on('click', function() {
+            modal.addClass('riviantrackr-modal-open');
         });
 
-        $('#searchlens-close-modal').on('click', function() {
-            modal.removeClass('searchlens-modal-open');
+        $('#riviantrackr-close-modal').on('click', function() {
+            modal.removeClass('riviantrackr-modal-open');
         });
 
         modal.on('click', function(e) {
             if (e.target === this) {
-                modal.removeClass('searchlens-modal-open');
+                modal.removeClass('riviantrackr-modal-open');
             }
         });
 
         $(document).on('keydown', function(e) {
-            if (e.key === 'Escape' && modal.hasClass('searchlens-modal-open')) {
-                modal.removeClass('searchlens-modal-open');
+            if (e.key === 'Escape' && modal.hasClass('riviantrackr-modal-open')) {
+                modal.removeClass('riviantrackr-modal-open');
             }
         });
 
         // --- Settings page: Advanced toggle ---
-        $('#searchlens-advanced-toggle').on('click', function() {
-            var $settings = $('#searchlens-advanced-settings');
+        $('#riviantrackr-advanced-toggle').on('click', function() {
+            var $settings = $('#riviantrackr-advanced-settings');
             var isHidden = $settings.is(':hidden');
             if (isHidden) {
                 $settings.slideDown(200);
@@ -46,25 +46,25 @@
         });
 
         // --- Settings page: Test API Key ---
-        $('#searchlens-test-key-btn').on('click', function() {
+        $('#riviantrackr-test-key-btn').on('click', function() {
             var btn = $(this);
             var useConstant = adminData.useApiKeyConstant || false;
-            var apiKey = useConstant ? '__USE_CONSTANT__' : $('#searchlens-api-key').val().trim();
-            var resultDiv = $('#searchlens-test-result');
+            var apiKey = useConstant ? '__USE_CONSTANT__' : $('#riviantrackr-api-key').val().trim();
+            var resultDiv = $('#riviantrackr-test-result');
 
             if (!useConstant && !apiKey) {
-                resultDiv.html('<div class="searchlens-test-result error"><p>Please enter an API key first.</p></div>');
+                resultDiv.html('<div class="riviantrackr-test-result error"><p>Please enter an API key first.</p></div>');
                 return;
             }
 
             btn.prop('disabled', true).text('Testing...');
-            resultDiv.html('<div class="searchlens-test-result info"><p>Testing API key...</p></div>');
+            resultDiv.html('<div class="riviantrackr-test-result info"><p>Testing API key...</p></div>');
 
             $.ajax({
                 url: ajaxurl,
                 type: 'POST',
                 data: {
-                    action: 'searchlens_test_api_key',
+                    action: 'riviantrackr_test_api_key',
                     api_key: apiKey,
                     nonce: adminData.testKeyNonce || ''
                 },
@@ -76,22 +76,22 @@
                         if (response.data.model_count) {
                             msg += '<br>Available models: ' + response.data.model_count + ' (Chat models: ' + response.data.chat_models + ')';
                         }
-                        resultDiv.html('<div class="searchlens-test-result success"><p>' + msg + '</p></div>');
+                        resultDiv.html('<div class="riviantrackr-test-result success"><p>' + msg + '</p></div>');
                     } else {
-                        resultDiv.html('<div class="searchlens-test-result error"><p><strong>\u2717 Test failed:</strong> ' + response.data.message + '</p></div>');
+                        resultDiv.html('<div class="riviantrackr-test-result error"><p><strong>\u2717 Test failed:</strong> ' + response.data.message + '</p></div>');
                     }
                 },
                 error: function() {
                     btn.prop('disabled', false).text('Test Connection');
-                    resultDiv.html('<div class="searchlens-test-result error"><p>Request failed. Please try again.</p></div>');
+                    resultDiv.html('<div class="riviantrackr-test-result error"><p>Request failed. Please try again.</p></div>');
                 }
             });
         });
 
         // --- Settings page: Refresh Models ---
-        $('#searchlens-refresh-models-btn').on('click', function() {
+        $('#riviantrackr-refresh-models-btn').on('click', function() {
             var btn = $(this);
-            var resultSpan = $('#searchlens-refresh-models-result');
+            var resultSpan = $('#riviantrackr-refresh-models-result');
             var nonce = btn.data('nonce');
 
             btn.prop('disabled', true).text('Refreshing...');
@@ -101,7 +101,7 @@
                 url: ajaxurl,
                 type: 'POST',
                 data: {
-                    action: 'searchlens_refresh_models',
+                    action: 'riviantrackr_refresh_models',
                     nonce: nonce
                 },
                 success: function(response) {
@@ -121,11 +121,11 @@
         });
 
         // --- Settings page: GDPR Purge ---
-        $('#searchlens-gdpr-purge-btn').on('click', function() {
+        $('#riviantrackr-gdpr-purge-btn').on('click', function() {
             if (!confirm('This will permanently replace all stored search query text with SHA-256 hashes. This cannot be undone. Continue?')) return;
 
             var btn = $(this);
-            var resultSpan = $('#searchlens-gdpr-purge-result');
+            var resultSpan = $('#riviantrackr-gdpr-purge-result');
             btn.prop('disabled', true).text('Anonymizing...');
             resultSpan.html('');
 
@@ -133,7 +133,7 @@
                 url: ajaxurl,
                 type: 'POST',
                 data: {
-                    action: 'searchlens_gdpr_purge_queries',
+                    action: 'riviantrackr_gdpr_purge_queries',
                     nonce: adminData.gdprPurgeNonce || ''
                 },
                 success: function(response) {
@@ -152,9 +152,9 @@
         });
 
         // --- Settings page: Clear Cache ---
-        $('#searchlens-clear-cache-btn').on('click', function() {
+        $('#riviantrackr-clear-cache-btn').on('click', function() {
             var btn = $(this);
-            var resultSpan = $('#searchlens-clear-cache-result');
+            var resultSpan = $('#riviantrackr-clear-cache-result');
             var nonce = btn.data('nonce');
 
             btn.prop('disabled', true).text('Clearing...');
@@ -164,7 +164,7 @@
                 url: ajaxurl,
                 type: 'POST',
                 data: {
-                    action: 'searchlens_clear_cache',
+                    action: 'riviantrackr_clear_cache',
                     nonce: nonce
                 },
                 success: function(response) {
@@ -183,9 +183,9 @@
         });
 
         // --- Analytics page: Purge Spam ---
-        $('#searchlens-purge-spam-btn').on('click', function() {
+        $('#riviantrackr-purge-spam-btn').on('click', function() {
             var btn = $(this);
-            var resultSpan = $('#searchlens-purge-spam-result');
+            var resultSpan = $('#riviantrackr-purge-spam-result');
             var nonce = btn.data('nonce');
 
             if (!confirm('This will scan all log entries and permanently delete those matching spam patterns. Continue?')) {
@@ -199,7 +199,7 @@
                 url: ajaxurl,
                 type: 'POST',
                 data: {
-                    action: 'searchlens_purge_spam',
+                    action: 'riviantrackr_purge_spam',
                     nonce: nonce
                 },
                 success: function(response) {
@@ -222,29 +222,29 @@
         });
 
         // --- Analytics page: Bulk delete ---
-        var $selectAll = $('#searchlens-select-all');
-        var $deleteBtn = $('#searchlens-bulk-delete-btn');
-        var $resultSpan = $('#searchlens-bulk-delete-result');
+        var $selectAll = $('#riviantrackr-select-all');
+        var $deleteBtn = $('#riviantrackr-bulk-delete-btn');
+        var $resultSpan = $('#riviantrackr-bulk-delete-result');
 
         function updateDeleteBtn() {
-            var checked = $('.searchlens-row-check:checked').length;
+            var checked = $('.riviantrackr-row-check:checked').length;
             $deleteBtn.toggle(checked > 0).text('Delete Selected (' + checked + ')');
         }
 
         $selectAll.on('change', function() {
-            $('.searchlens-row-check').prop('checked', this.checked);
+            $('.riviantrackr-row-check').prop('checked', this.checked);
             updateDeleteBtn();
         });
 
-        $(document).on('change', '.searchlens-row-check', function() {
-            var total = $('.searchlens-row-check').length;
-            var checked = $('.searchlens-row-check:checked').length;
+        $(document).on('change', '.riviantrackr-row-check', function() {
+            var total = $('.riviantrackr-row-check').length;
+            var checked = $('.riviantrackr-row-check:checked').length;
             $selectAll.prop('checked', total === checked);
             updateDeleteBtn();
         });
 
         $deleteBtn.on('click', function() {
-            var ids = $('.searchlens-row-check:checked').map(function() { return this.value; }).get();
+            var ids = $('.riviantrackr-row-check:checked').map(function() { return this.value; }).get();
             if (!ids.length) return;
 
             if (!confirm('Delete ' + ids.length + ' selected log entries? This cannot be undone.')) return;
@@ -256,7 +256,7 @@
                 url: ajaxurl,
                 type: 'POST',
                 data: {
-                    action: 'searchlens_bulk_delete_logs',
+                    action: 'riviantrackr_bulk_delete_logs',
                     nonce: adminData.bulkDeleteNonce || '',
                     ids: ids.join(',')
                 },

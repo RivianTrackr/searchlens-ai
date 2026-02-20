@@ -10,7 +10,7 @@ We release patches for security vulnerabilities for the following versions:
 
 ## Reporting a Vulnerability
 
-We take the security of SearchLens AI seriously. If you discover a security vulnerability, please follow these steps:
+We take the security of RivianTrackr AI Search Summary seriously. If you discover a security vulnerability, please follow these steps:
 
 ### How to Report
 
@@ -42,7 +42,7 @@ By default, OpenAI API keys are stored in the WordPress options table in plain t
 Add this line to your `wp-config.php` file (before "That's all, stop editing!"):
 
 ```php
-define( 'SEARCHLENS_API_KEY', 'sk-proj-your-api-key-here' );
+define( 'RIVIANTRACKR_API_KEY', 'sk-proj-your-api-key-here' );
 ```
 
 **Benefits of using a constant:**
@@ -55,7 +55,7 @@ define( 'SEARCHLENS_API_KEY', 'sk-proj-your-api-key-here' );
 
 ```php
 // In wp-config.php
-define( 'SEARCHLENS_API_KEY', getenv('OPENAI_API_KEY') );
+define( 'RIVIANTRACKR_API_KEY', getenv('OPENAI_API_KEY') );
 ```
 
 Then set `OPENAI_API_KEY` in your server's environment configuration.
@@ -97,7 +97,7 @@ Then set `OPENAI_API_KEY` in your server's environment configuration.
 
 ### WordPress REST API Endpoint
 
-The plugin exposes a public REST API endpoint at `/wp-json/searchlens/v1/summary` with `permission_callback => '__return_true'`. This is intentional for search functionality but means:
+The plugin exposes a public REST API endpoint at `/wp-json/riviantrackr/v1/summary` with `permission_callback => '__return_true'`. This is intentional for search functionality but means:
 
 - Anyone can trigger AI searches on your site
 - Rate limiting is implemented to prevent abuse

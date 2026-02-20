@@ -1,6 +1,6 @@
-# SearchLens AI
+# RivianTrackr AI Search Summary
 
-[![Version](https://img.shields.io/badge/version-1.0.6-blue.svg)](https://github.com/RivianTrackr/searchlens-ai)
+[![Version](https://img.shields.io/badge/version-1.0.7-blue.svg)](https://github.com/RivianTrackr/riviantrackr-ai-search-summary)
 [![WordPress](https://img.shields.io/badge/WordPress-6.9%2B-blue.svg)](https://wordpress.org/)
 [![PHP](https://img.shields.io/badge/PHP-8.4%2B-purple.svg)](https://php.net/)
 [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
@@ -43,9 +43,9 @@ A powerful WordPress plugin that adds AI-powered summaries to your search result
 ### Widgets & Shortcodes
 
 - **Trending Searches Widget** - Display popular search terms in your sidebar
-- **`[searchlens_trending]` Shortcode** - Embed trending searches anywhere on your site
+- **`[riviantrackr_trending]` Shortcode** - Embed trending searches anywhere on your site
   - Configurable limit, title, subtitle, colors, and time period
-  - Example: `[searchlens_trending limit="5" title="Popular Searches" time_period="24" time_unit="hours"]`
+  - Example: `[riviantrackr_trending limit="5" title="Popular Searches" time_period="24" time_unit="hours"]`
 
 ### Customization
 
@@ -72,8 +72,8 @@ A powerful WordPress plugin that adds AI-powered summaries to your search result
 
 1. Upload the plugin folder to `/wp-content/plugins/`
 2. Activate the plugin in WordPress admin
-3. Go to **SearchLens AI → Settings** and add your OpenAI API key
-4. Enable SearchLens AI
+3. Go to **RivianTrackr AI Search Summary → Settings** and add your OpenAI API key
+4. Enable RivianTrackr AI Search Summary
 5. Configure settings as needed
 
 ## Configuration
@@ -83,7 +83,7 @@ A powerful WordPress plugin that adds AI-powered summaries to your search result
 Add to your `wp-config.php` for maximum security:
 
 ```php
-define( 'SEARCHLENS_API_KEY', 'sk-proj-your-api-key-here' );
+define( 'RIVIANTRACKR_API_KEY', 'sk-proj-your-api-key-here' );
 ```
 
 **Benefits:**
@@ -94,12 +94,12 @@ define( 'SEARCHLENS_API_KEY', 'sk-proj-your-api-key-here' );
 **Using environment variables:**
 
 ```php
-define( 'SEARCHLENS_API_KEY', getenv('OPENAI_API_KEY') );
+define( 'RIVIANTRACKR_API_KEY', getenv('OPENAI_API_KEY') );
 ```
 
 ### Settings Overview
 
-Navigate to **WP Admin → SearchLens AI → Settings** to configure:
+Navigate to **WP Admin → RivianTrackr AI Search Summary → Settings** to configure:
 
 | Section | Options |
 |---------|---------|
@@ -113,7 +113,7 @@ Navigate to **WP Admin → SearchLens AI → Settings** to configure:
 
 ## REST API Endpoints
 
-The plugin provides REST API endpoints under `/wp-json/searchlens/v1/`:
+The plugin provides REST API endpoints under `/wp-json/riviantrackr/v1/`:
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
@@ -123,7 +123,7 @@ The plugin provides REST API endpoints under `/wp-json/searchlens/v1/`:
 
 ## Shortcode Reference
 
-### `[searchlens_trending]`
+### `[riviantrackr_trending]`
 
 Display trending search queries anywhere on your site.
 
@@ -142,7 +142,7 @@ Display trending search queries anywhere on your site.
 **Example:**
 
 ```
-[searchlens_trending limit="10" title="What People Are Searching" time_period="7" time_unit="days" color="#f5f5f5"]
+[riviantrackr_trending limit="10" title="What People Are Searching" time_period="7" time_unit="days" color="#f5f5f5"]
 ```
 
 ## Hooks & Filters
@@ -153,14 +153,14 @@ The plugin integrates with WordPress through standard hooks:
 - `template_redirect` - Logs no-results searches
 - `rest_api_init` - Registers REST API endpoints
 - `widgets_init` - Registers trending widget
-- `searchlens_daily_log_purge` - Scheduled log cleanup
+- `riviantrackr_daily_log_purge` - Scheduled log cleanup
 
 ## Database Tables
 
 The plugin creates two custom tables:
 
-- `wp_searchlens_logs` - Stores search events, AI responses, timing, and errors
-- `wp_searchlens_feedback` - Stores user feedback with IP hashing
+- `wp_riviantrackr_logs` - Stores search events, AI responses, timing, and errors
+- `wp_riviantrackr_feedback` - Stores user feedback with IP hashing
 
 ## Documentation
 
@@ -170,8 +170,8 @@ The plugin creates two custom tables:
 
 ## Support
 
-- [Report Issues](https://github.com/RivianTrackr/searchlens-ai/issues)
-- [Discussions](https://github.com/RivianTrackr/searchlens-ai/discussions)
+- [Report Issues](https://github.com/RivianTrackr/riviantrackr-ai-search-summary/issues)
+- [Discussions](https://github.com/RivianTrackr/riviantrackr-ai-search-summary/discussions)
 
 ## License
 
