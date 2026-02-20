@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin Name: AI Search Summary
  * Description: Add AI-powered summaries to WordPress search results using OpenAI or Anthropic Claude. Non-blocking, with analytics, cache control, and collapsible sources.
- * Version: 1.1.0
+ * Version: 1.1.0.1
  * Author: Jose Castillo
  * Author URI: https://github.com/RivianTrackr/
  * License: GPL v2 or later
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Domain Path: /languages
  */
 
-define( 'RIVIANTRACKR_VERSION', '1.1.0' );
+define( 'RIVIANTRACKR_VERSION', '1.1.0.1' );
 define( 'RIVIANTRACKR_MODELS_CACHE_TTL', 7 * DAY_IN_SECONDS );
 define( 'RIVIANTRACKR_MIN_CACHE_TTL', 60 );
 define( 'RIVIANTRACKR_MAX_CACHE_TTL', 86400 );
@@ -191,6 +191,7 @@ class RivianTrackr_AI_Search_Summary {
             results_count int unsigned NOT NULL DEFAULT 0,
             ai_success tinyint(1) NOT NULL DEFAULT 0,
             ai_error text NULL,
+            ai_model varchar(100) NULL DEFAULT NULL,
             cache_hit tinyint(1) NULL DEFAULT NULL,
             response_time_ms int unsigned NULL DEFAULT NULL,
             created_at datetime NOT NULL,
@@ -403,7 +404,7 @@ class RivianTrackr_AI_Search_Summary {
         return $deleted;
     }
 
-    private function log_search_event( $search_query, $results_count, $ai_success, $ai_error = '', $cache_hit = null, $response_time_ms = null ) {
+    private function log_search_event( $search_query, $results_count, $ai_success, $ai_error = '', $cache_hit = null, $response_time_ms = null, $ai_model = null ) {
         if ( empty( $search_query ) ) {
             return;
         }
@@ -459,6 +460,11 @@ class RivianTrackr_AI_Search_Summary {
         if ( $response_time_ms !== null ) {
             $data['response_time_ms'] = (int) $response_time_ms;
             $formats[]                = '%d';
+        }
+
+        if ( $ai_model !== null ) {
+            $data['ai_model'] = sanitize_text_field( $ai_model );
+            $formats[]        = '%s';
         }
 
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
@@ -3516,6 +3522,7 @@ class RivianTrackr_AI_Search_Summary {
                                 <tr>
                                     <th style="width: 32px; text-align: center;"><input type="checkbox" id="riviantrackr-select-all" title="Select all" /></th>
                                     <th>Query</th>
+                                    <th>Model</th>
                                     <th>Status</th>
                                     <th>Cache</th>
                                     <th>Time</th>
@@ -3528,6 +3535,9 @@ class RivianTrackr_AI_Search_Summary {
                                     <tr>
                                         <td style="text-align: center;"><input type="checkbox" class="riviantrackr-row-check" value="<?php echo esc_attr( $event->id ); ?>" /></td>
                                         <td class="riviantrackr-query-cell" title="<?php echo esc_attr( $event->search_query ); ?>"><?php echo esc_html( $event->search_query ); ?></td>
+                                        <td class="riviantrackr-model-cell" style="font-size: 12px; font-family: monospace; white-space: nowrap;"><?php
+                                            echo ! empty( $event->ai_model ) ? esc_html( $event->ai_model ) : '&mdash;';
+                                        ?></td>
                                         <td>
                                             <?php if ( (int) $event->ai_success === 1 ) : ?>
                                                 <span class="riviantrackr-badge riviantrackr-badge-success">Success</span>
@@ -5098,12 +5108,13 @@ class RivianTrackr_AI_Search_Summary {
 
         $ai_error      = '';
         $cache_hit     = null;
+        $active_model  = ! empty( $options['model'] ) ? $options['model'] : null;
         $start_time    = microtime( true );
         $ai_data       = $this->get_ai_data_for_search( $search_query, $posts_for_ai, $ai_error, $cache_hit );
         $response_time_ms = (int) round( ( microtime( true ) - $start_time ) * 1000 );
 
         if ( ! $ai_data ) {
-            $this->log_search_event( $search_query, $results_count, 0, $ai_error ? $ai_error : 'AI summary not available', $cache_hit, $response_time_ms );
+            $this->log_search_event( $search_query, $results_count, 0, $ai_error ? $ai_error : 'AI summary not available', $cache_hit, $response_time_ms, $active_model );
 
             return rest_ensure_response(
                 array(
@@ -5114,7 +5125,7 @@ class RivianTrackr_AI_Search_Summary {
             );
         }
 
-        $this->log_search_event( $search_query, $results_count, 1, '', $cache_hit, $response_time_ms );
+        $this->log_search_event( $search_query, $results_count, 1, '', $cache_hit, $response_time_ms, $active_model );
 
         $answer_html = isset( $ai_data['answer_html'] ) ? (string) $ai_data['answer_html'] : '';
         $sources     = isset( $ai_data['results'] ) && is_array( $ai_data['results'] ) ? $ai_data['results'] : array();
