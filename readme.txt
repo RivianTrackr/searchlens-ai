@@ -4,7 +4,7 @@ Tags: search, ai, openai, anthropic, claude, summary, chatgpt
 Requires at least: 6.9
 Tested up to: 6.9
 Requires PHP: 8.4
-Stable tag: 1.1.0.1
+Stable tag: 1.1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -175,6 +175,9 @@ The plugin is designed with privacy in mind:
 
 == Changelog ==
 
+= 1.1.0.3 =
+* Improved: AI prompts now instruct the model to identify as the site's built-in search assistant, naturally attributing information to the site's coverage and using the site name in fallback messages
+
 = 1.1.0.1 =
 * Added: Model column in Recent Events analytics table — see which AI model was used for each search
 * Added: ai_model column in logs database table (auto-migrated on upgrade)
@@ -286,6 +289,9 @@ The plugin is designed with privacy in mind:
 * Security headers and prepared statements
 
 == Upgrade Notice ==
+
+= 1.1.0.3 =
+AI summaries now feel native to your site — the AI identifies as your site's search assistant and naturally references your site's coverage in responses.
 
 = 1.1.0.1 =
 Analytics now shows which AI model was used for each search event, making it easy to compare response times across models.
