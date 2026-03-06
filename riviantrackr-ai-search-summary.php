@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Plugin Name: AI Search Summary
  * Description: Add AI-powered summaries to WordPress search results using OpenAI or Anthropic Claude. Non-blocking, with analytics, cache control, and collapsible sources.
  * Version: 1.3.5
- * Author: Jose Castillo
+ * Author: RivianTrackr
  * Author URI: https://github.com/RivianTrackr/
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -538,7 +538,7 @@ class RivianTrackr_AI_Search_Summary {
             'color_background'     => '#121e2b',
             'color_text'           => '#e5e7eb',
             'color_accent'         => '#fba919',
-            'color_border'         => '#94a3b8',
+            'color_border'         => '#374151',
             'custom_css'              => '',
             'allow_reasoning_models'  => 0,
             'anonymize_queries'       => 0,
@@ -698,7 +698,7 @@ class RivianTrackr_AI_Search_Summary {
         $output['color_background'] = isset($input['color_background']) ? $this->sanitize_color($input['color_background'], '#121e2b') : '#121e2b';
         $output['color_text'] = isset($input['color_text']) ? $this->sanitize_color($input['color_text'], '#e5e7eb') : '#e5e7eb';
         $output['color_accent'] = isset($input['color_accent']) ? $this->sanitize_color($input['color_accent'], '#fba919') : '#fba919';
-        $output['color_border'] = isset($input['color_border']) ? $this->sanitize_color($input['color_border'], '#94a3b8') : '#94a3b8';
+        $output['color_border'] = isset($input['color_border']) ? $this->sanitize_color($input['color_border'], '#374151') : '#374151';
 
         $output['custom_css'] = isset($input['custom_css']) ? $this->sanitize_custom_css($input['custom_css']) : '';
         $output['allow_reasoning_models'] = isset($input['allow_reasoning_models']) && $input['allow_reasoning_models'] ? 1 : 0;
@@ -852,7 +852,7 @@ class RivianTrackr_AI_Search_Summary {
         $bg     = isset( $options['color_background'] ) ? $options['color_background'] : '#121e2b';
         $text   = isset( $options['color_text'] ) ? $options['color_text'] : '#e5e7eb';
         $accent = isset( $options['color_accent'] ) ? $options['color_accent'] : '#fba919';
-        $border = isset( $options['color_border'] ) ? $options['color_border'] : '#94a3b8';
+        $border = isset( $options['color_border'] ) ? $options['color_border'] : '#374151';
 
         // Convert hex to rgba for semi-transparent backgrounds
         $bg_rgb = $this->hex_to_rgb( $bg );
@@ -1707,7 +1707,7 @@ class RivianTrackr_AI_Search_Summary {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  border: 2px solid rgba(148,163,184,0.5);
+  border: 2px solid rgba(55,65,81,0.5);
   border-top-color: #fba919;
   display: inline-block;
   animation: riviantrackr-spin 0.7s linear infinite;
@@ -1729,8 +1729,8 @@ class RivianTrackr_AI_Search_Summary {
   gap: 0.35rem;
   padding: 0.15rem 0.55rem;
   border-radius: 999px;
-  border: 1px solid rgba(148,163,184,0.5);
-  background: rgba(15,23,42,0.9);
+  border: 1px solid #374151;
+  background: #0f1a26;
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -1742,7 +1742,7 @@ class RivianTrackr_AI_Search_Summary {
   width: 10px;
   height: 10px;
   border-radius: 999px;
-  border: 1px solid rgba(148,163,184,0.8);
+  border: 1px solid #374151;
   position: relative;
   flex-shrink: 0;
 }
@@ -1752,7 +1752,7 @@ class RivianTrackr_AI_Search_Summary {
   position: absolute;
   inset: 2px;
   border-radius: 999px;
-  background: linear-gradient(135deg,#fba919,#3b82f6);
+  background: linear-gradient(135deg, #fba919, #d2de24, #86c440, #5ec095, #34c5ec, #2b96d2, #3571b8, #534da0, #d11d55, #ef3d6c, #ed1a36, #ee383a);
 }
 
 .riviantrackr-sources {
@@ -1800,7 +1800,7 @@ class RivianTrackr_AI_Search_Summary {
 .riviantrackr-sources-list span {
   display: block;
   opacity: 0.8;
-  color: #cbd5f5;
+  color: #e5e7eb;
 }';
     }
 
@@ -2587,8 +2587,8 @@ class RivianTrackr_AI_Search_Summary {
                                 <input type="text"
                                        id="riviantrackr-color-border"
                                        name="<?php echo esc_attr( $this->option_name ); ?>[color_border]"
-                                       value="<?php echo esc_attr( isset( $options['color_border'] ) ? $options['color_border'] : '#94a3b8' ); ?>"
-                                       placeholder="#94a3b8" />
+                                       value="<?php echo esc_attr( isset( $options['color_border'] ) ? $options['color_border'] : '#374151' ); ?>"
+                                       placeholder="#374151" />
                             </div>
                         </div>
 
@@ -4061,7 +4061,7 @@ class RivianTrackr_AI_Search_Summary {
         $show_feedback = isset( $options['show_feedback'] ) ? $options['show_feedback'] : 0;
         ?>
         <div class="riviantrackr-summary" style="margin-bottom: 1.5rem;">
-            <div class="riviantrackr-summary-inner" style="padding: 1.25rem 1.25rem; border-radius: 10px; border-width: 1px; border-style: solid; display:flex; flex-direction:column; gap:0.6rem;">
+            <div class="riviantrackr-summary-inner" style="padding: 1.25rem 1.25rem; border-radius: 12px; border-width: 1px; border-style: solid; display:flex; flex-direction:column; gap:0.6rem;">
                 <div class="riviantrackr-summary-header" style="display:flex; align-items:center; justify-content:space-between; gap:0.75rem;">
                     <h2 style="margin:0; font-size:1.1rem;">
                         AI summary for "<?php echo esc_html( $search_query ); ?>"
