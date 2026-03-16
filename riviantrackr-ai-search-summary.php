@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin Name: AI Search Summary
  * Description: Add AI-powered summaries to WordPress search results using OpenAI or Anthropic Claude. Non-blocking, with analytics, cache control, and collapsible sources.
- * Version: 1.4.0
+ * Version: 1.4.1
  * Author: RivianTrackr
  * Author URI: https://github.com/RivianTrackr/
  * License: GPL v2 or later
@@ -17,7 +17,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Domain Path: /languages
  */
 
-define( 'RIVIANTRACKR_VERSION', '1.4.0' );
+define( 'RIVIANTRACKR_VERSION', '1.4.1' );
+define( 'RIVIANTRACKR_ASSET_SUFFIX', defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min' );
 
 // Load the namespaced class autoloader.
 require_once __DIR__ . '/includes/class-autoloader.php';
@@ -174,7 +175,7 @@ class RivianTrackr_AI_Search_Summary {
     public function enqueue_dashboard_widget_css() {
         wp_enqueue_style(
             'riviantrackr-admin',
-            plugin_dir_url( __FILE__ ) . 'assets/riviantrackr-admin.css',
+            plugin_dir_url( __FILE__ ) . 'assets/riviantrackr-admin' . RIVIANTRACKR_ASSET_SUFFIX . '.css',
             array(),
             RIVIANTRACKR_VERSION
         );
@@ -3934,7 +3935,7 @@ class RivianTrackr_AI_Search_Summary {
 
         wp_enqueue_style(
             'riviantrackr',
-            plugin_dir_url( __FILE__ ) . 'assets/riviantrackr.css',
+            plugin_dir_url( __FILE__ ) . 'assets/riviantrackr' . RIVIANTRACKR_ASSET_SUFFIX . '.css',
             array(),
             $version
         );
@@ -3953,7 +3954,7 @@ class RivianTrackr_AI_Search_Summary {
 
         wp_enqueue_script(
             'riviantrackr',
-            plugin_dir_url( __FILE__ ) . 'assets/riviantrackr.js',
+            plugin_dir_url( __FILE__ ) . 'assets/riviantrackr' . RIVIANTRACKR_ASSET_SUFFIX . '.js',
             array(),
             $version,
             true
@@ -4126,14 +4127,14 @@ class RivianTrackr_AI_Search_Summary {
 
         wp_enqueue_style(
             'riviantrackr-admin',
-            plugin_dir_url( __FILE__ ) . 'assets/riviantrackr-admin.css',
+            plugin_dir_url( __FILE__ ) . 'assets/riviantrackr-admin' . RIVIANTRACKR_ASSET_SUFFIX . '.css',
             array(),
             $version
         );
 
         wp_enqueue_script(
             'riviantrackr-admin',
-            plugin_dir_url( __FILE__ ) . 'assets/riviantrackr-admin.js',
+            plugin_dir_url( __FILE__ ) . 'assets/riviantrackr-admin' . RIVIANTRACKR_ASSET_SUFFIX . '.js',
             array( 'jquery' ),
             $version,
             true
@@ -5114,7 +5115,7 @@ class RivianTrackr_AI_Search_Summary {
         // Enqueue Font Awesome detection script
         wp_enqueue_script(
             'riviantrackr-trending',
-            plugin_dir_url( __FILE__ ) . 'assets/riviantrackr-trending.js',
+            plugin_dir_url( __FILE__ ) . 'assets/riviantrackr-trending' . RIVIANTRACKR_ASSET_SUFFIX . '.js',
             array(),
             RIVIANTRACKR_VERSION,
             true
