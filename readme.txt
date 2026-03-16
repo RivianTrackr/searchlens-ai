@@ -4,7 +4,7 @@ Tags: search, ai, openai, anthropic, claude, summary, chatgpt
 Requires at least: 6.9
 Tested up to: 6.9
 Requires PHP: 8.4
-Stable tag: 1.3.5
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -174,6 +174,17 @@ The plugin is designed with privacy in mind:
 6. WordPress dashboard widget with quick stats
 
 == Changelog ==
+
+= 1.4.1 =
+* Added: Minified CSS and JS assets — all stylesheets and scripts now ship with `.min` versions (~35% smaller). Production loads minified by default; set `SCRIPT_DEBUG` to `true` for originals.
+
+= 1.4.0 =
+* Added: RivianTrackr Design System with CSS custom properties (`--rtg-*`) across frontend and admin
+* Added: Dark theme tokens (frontend) and light theme tokens (admin)
+* Added: Brand gradient on AI provider badge
+* Added: `prefers-reduced-motion` accessibility support
+* Changed: Accent color updated to brand gold (`#fba919`)
+* Changed: Default border color updated to `#374151`
 
 = 1.3.5 =
 * Added: "Hide zero-result queries" filter toggle on the Analytics dashboard — non-destructively excludes zero-result entries from all analytics views without deleting data
