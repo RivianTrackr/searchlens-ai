@@ -1,18 +1,18 @@
 # RivianTrackr AI Search Summary
 
-[![Version](https://img.shields.io/badge/version-1.0.7.1-blue.svg)](https://github.com/RivianTrackr/riviantrackr-ai-search-summary)
+[![Version](https://img.shields.io/badge/version-1.4.1-blue.svg)](https://github.com/RivianTrackr/riviantrackr-ai-search-summary)
 [![WordPress](https://img.shields.io/badge/WordPress-6.9%2B-blue.svg)](https://wordpress.org/)
 [![PHP](https://img.shields.io/badge/PHP-8.4%2B-purple.svg)](https://php.net/)
 [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 
-A powerful WordPress plugin that adds AI-powered summaries to your search results using OpenAI's GPT models. Enhance your site's search experience with intelligent, contextual summaries that help users find what they're looking for faster.
+A powerful WordPress plugin that adds AI-powered summaries to your search results using OpenAI or Anthropic Claude. Enhance your site's search experience with intelligent, contextual summaries that help users find what they're looking for faster.
 
 ## Features
 
 ### Core AI Functionality
 
-- **AI-Powered Search Summaries** - Generate intelligent summaries from matching posts using OpenAI's GPT models
-- **Multiple Model Support** - Choose from GPT-4o, GPT-4, GPT-3.5-turbo, and reasoning models (o1, o3)
+- **AI-Powered Search Summaries** - Generate intelligent summaries from matching posts using OpenAI or Anthropic Claude
+- **Multiple Model Support** - Choose from OpenAI models (GPT-4o, GPT-4, GPT-3.5-turbo, o1, o3) or Anthropic models (Claude Haiku 4.5, Sonnet 4.5/4.6, Opus 4.5/4.6)
 - **Non-Blocking Search** - AI summaries load asynchronously without delaying normal search results
 - **Smart Content Processing** - Automatic text truncation and HTML stripping for optimal API usage
 - **Collapsible Sources** - Display the articles used to generate the summary with expandable source list
@@ -51,7 +51,7 @@ A powerful WordPress plugin that adds AI-powered summaries to your search result
 
 - **Color Theming** - Customize background, text, accent, and border colors
 - **Custom CSS Editor** - Add your own styles with syntax highlighting
-- **OpenAI Badge** - Optional "Powered by OpenAI" badge display
+- **Provider Badge** - Optional "Powered by OpenAI" or "Powered by Anthropic" badge display
 - **Feedback Buttons** - Optional thumbs up/down for user feedback on summaries
 - **Sources Display** - Toggle visibility of source articles
 
@@ -66,13 +66,13 @@ A powerful WordPress plugin that adds AI-powered summaries to your search result
 - WordPress 6.9 or higher
 - PHP 8.4 or higher
 - MySQL 5.6 or higher
-- OpenAI API account
+- OpenAI or Anthropic API account
 
 ## Installation
 
 1. Upload the plugin folder to `/wp-content/plugins/`
 2. Activate the plugin in WordPress admin
-3. Go to **RivianTrackr AI Search Summary → Settings** and add your OpenAI API key
+3. Go to **RivianTrackr AI Search Summary → Settings**, select your AI provider, and add your API key
 4. Enable RivianTrackr AI Search Summary
 5. Configure settings as needed
 
@@ -82,8 +82,16 @@ A powerful WordPress plugin that adds AI-powered summaries to your search result
 
 Add to your `wp-config.php` for maximum security:
 
+**OpenAI:**
+
 ```php
 define( 'RIVIANTRACKR_API_KEY', 'sk-proj-your-api-key-here' );
+```
+
+**Anthropic:**
+
+```php
+define( 'RIVIANTRACKR_ANTHROPIC_API_KEY', 'sk-ant-your-api-key-here' );
 ```
 
 **Benefits:**
@@ -95,6 +103,7 @@ define( 'RIVIANTRACKR_API_KEY', 'sk-proj-your-api-key-here' );
 
 ```php
 define( 'RIVIANTRACKR_API_KEY', getenv('OPENAI_API_KEY') );
+define( 'RIVIANTRACKR_ANTHROPIC_API_KEY', getenv('ANTHROPIC_API_KEY') );
 ```
 
 ### Settings Overview
@@ -103,12 +112,12 @@ Navigate to **WP Admin → RivianTrackr AI Search Summary → Settings** to conf
 
 | Section | Options |
 |---------|---------|
-| **Getting Started** | Enable/Disable, API Key, API Key Validation |
+| **Getting Started** | Enable/Disable, AI Provider (OpenAI/Anthropic), API Key, API Key Validation |
 | **Site Configuration** | Site Name, Site Description, Badge/Sources/Feedback visibility, Max Sources Displayed |
 | **AI Configuration** | Model selection, Context Size, Content Length Per Post, Post Types, Max Response Tokens |
 | **Performance** | Cache TTL, Manual cache clear, Request Timeout, Max Calls Per Minute |
 | **Appearance** | Background, Text, Accent, Border colors, Custom CSS |
-| **Advanced** | Allow reasoning models (o1, o3), Spam Blocklist, Preserve Data on Uninstall |
+| **Advanced** | Allow reasoning models (o1, o3), Claude model selection, Spam Blocklist, Preserve Data on Uninstall |
 | **Log Management** | Auto-purge toggle, Retention days (7-365) |
 
 ## REST API Endpoints
