@@ -6,7 +6,7 @@ We release patches for security vulnerabilities for the following versions:
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 1.0.x   | :white_check_mark: |
+| 1.4.x   | :white_check_mark: |
 
 ## Reporting a Vulnerability
 
@@ -35,14 +35,22 @@ Include the following information:
 
 ### API Key Storage
 
-By default, OpenAI API keys are stored in the WordPress options table in plain text. For better security, we strongly recommend using a PHP constant instead.
+By default, API keys (OpenAI or Anthropic) are stored in the WordPress options table in plain text. For better security, we strongly recommend using a PHP constant instead.
 
 #### Recommended: Define API Key in wp-config.php
 
 Add this line to your `wp-config.php` file (before "That's all, stop editing!"):
 
+**OpenAI:**
+
 ```php
 define( 'RIVIANTRACKR_API_KEY', 'sk-proj-your-api-key-here' );
+```
+
+**Anthropic:**
+
+```php
+define( 'RIVIANTRACKR_ANTHROPIC_API_KEY', 'sk-ant-your-api-key-here' );
 ```
 
 **Benefits of using a constant:**
@@ -56,14 +64,15 @@ define( 'RIVIANTRACKR_API_KEY', 'sk-proj-your-api-key-here' );
 ```php
 // In wp-config.php
 define( 'RIVIANTRACKR_API_KEY', getenv('OPENAI_API_KEY') );
+define( 'RIVIANTRACKR_ANTHROPIC_API_KEY', getenv('ANTHROPIC_API_KEY') );
 ```
 
-Then set `OPENAI_API_KEY` in your server's environment configuration.
+Then set the appropriate environment variable in your server's environment configuration.
 
 #### Additional Recommendations
 
-- Use a restricted API key with minimal permissions in OpenAI dashboard
-- Set usage limits in your OpenAI account
+- Use a restricted API key with minimal permissions in your provider's dashboard (OpenAI or Anthropic Console)
+- Set usage limits in your API provider account
 - Regularly rotate API keys
 - Never commit API keys to version control
 
@@ -86,7 +95,7 @@ Then set `OPENAI_API_KEY` in your server's environment configuration.
 
 4. **Monitoring**
    - Regularly check the Analytics page for unusual activity
-   - Monitor API usage in your OpenAI dashboard
+   - Monitor API usage in your provider's dashboard (OpenAI or Anthropic Console)
    - Review error logs for suspicious patterns
 
 5. **Updates**
@@ -116,8 +125,9 @@ Search queries and AI responses are logged to the database for analytics. Consid
 ### External API Calls
 
 The plugin makes requests to:
-- `api.openai.com` - For AI chat completions
-- User's data is sent to OpenAI according to their [data usage policies](https://openai.com/policies/usage-policies)
+- `api.openai.com` - For OpenAI chat completions
+- `api.anthropic.com` - For Anthropic Claude messages
+- User's data is sent to the selected provider according to their data usage policies: [OpenAI](https://openai.com/policies/usage-policies) | [Anthropic](https://www.anthropic.com/policies/privacy)
 
 ## Security Features
 
