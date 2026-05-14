@@ -4,7 +4,7 @@ Tags: search, ai, openai, anthropic, claude, summary, chatgpt
 Requires at least: 6.9
 Tested up to: 6.9
 Requires PHP: 8.4
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -174,6 +174,10 @@ The plugin is designed with privacy in mind:
 6. WordPress dashboard widget with quick stats
 
 == Changelog ==
+
+= 1.4.2 =
+* Added: "Refresh Models" button now dynamically fetches the live model list from Anthropic's `/v1/models` endpoint (previously showed a static "pre-configured" message). Hardcoded list retained as a fallback if the API is unreachable.
+* Added: Anthropic model list is now cached per-provider with the same 7-day TTL as the OpenAI cache.
 
 = 1.4.1 =
 * Added: Minified CSS and JS assets — all stylesheets and scripts now ship with `.min` versions (~35% smaller). Production loads minified by default; set `SCRIPT_DEBUG` to `true` for originals.
