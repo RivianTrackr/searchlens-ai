@@ -5,6 +5,19 @@ All notable changes to RivianTrackr AI Search Summary will be documented in this
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.2] - 2026-05-14
+
+### Added
+
+- **Dynamic Anthropic model list** — The "Refresh Models" button on the AI Configuration settings page now calls Anthropic's `/v1/models` endpoint when the active provider is Anthropic, replacing the previous static "pre-configured" message. The fetched list is cached per-provider in `riviantrackr_anthropic_models_cache` with the same 7-day TTL as the OpenAI cache. The original hardcoded curated list is retained as a fallback when the API is unreachable or no key is set.
+- **Per-provider "Last updated" timestamp** — The timestamp shown below the Refresh Models button now reflects whichever provider's cache is active (OpenAI or Anthropic).
+
+### Changed
+
+- **Anthropic model dropdown** — Now displays the dated snapshot IDs returned by Anthropic's API (e.g. `claude-sonnet-4-5-20250929`) instead of the short aliases. Previously saved aliases are preserved as valid options in the dropdown.
+
+---
+
 ## [1.4.1] - 2026-03-16
 
 ### Added

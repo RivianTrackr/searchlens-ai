@@ -33,6 +33,7 @@ if ( ! empty( $riviantrackr_options['preserve_data_on_uninstall'] ) ) {
     );
 
     delete_option( 'riviantrackr_models_cache' );
+    delete_option( 'riviantrackr_anthropic_models_cache' );
     delete_option( 'riviantrackr_cache_namespace' );
     delete_option( 'riviantrackr_cache_keys' );
     // Clean up legacy searchlens options
@@ -49,6 +50,7 @@ global $wpdb;
 // Delete plugin options (current and legacy prefixes)
 delete_option( 'riviantrackr_options' );
 delete_option( 'riviantrackr_models_cache' );
+delete_option( 'riviantrackr_anthropic_models_cache' );
 delete_option( 'riviantrackr_cache_namespace' );
 delete_option( 'riviantrackr_cache_keys' );
 delete_option( 'riviantrackr_db_version' );

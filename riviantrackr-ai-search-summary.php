@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin Name: AI Search Summary
  * Description: Add AI-powered summaries to WordPress search results using OpenAI or Anthropic Claude. Non-blocking, with analytics, cache control, and collapsible sources.
- * Version: 1.4.1
+ * Version: 1.4.2
  * Author: RivianTrackr
  * Author URI: https://github.com/RivianTrackr/
  * License: GPL v2 or later
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Domain Path: /languages
  */
 
-define( 'RIVIANTRACKR_VERSION', '1.4.1' );
+define( 'RIVIANTRACKR_VERSION', '1.4.2' );
 define( 'RIVIANTRACKR_ASSET_SUFFIX', defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min' );
 
 // Load the namespaced class autoloader.
@@ -81,6 +81,7 @@ define( 'RIVIANTRACKR_ERROR_OFF_TOPIC', 'off_topic' );
 class RivianTrackr_AI_Search_Summary {
 
     private string $option_name = 'riviantrackr_options';
+    private string $anthropic_models_cache_option = 'riviantrackr_anthropic_models_cache';
     private $options_cache      = null;
     private bool $summary_injected = false;
 
@@ -1238,8 +1239,16 @@ class RivianTrackr_AI_Search_Summary {
         $provider = $options['ai_provider'];
 
         if ( $provider === 'anthropic' ) {
-            // Anthropic models are curated — no remote refresh needed
-            wp_send_json_success( array( 'message' => 'Anthropic models list is pre-configured.' ) );
+            $anthropic_key = $this->get_active_api_key();
+            if ( empty( $anthropic_key ) ) {
+                wp_send_json_error( array( 'message' => 'Cannot refresh models because no Anthropic API key is set.' ) );
+            }
+            $refreshed = $this->refresh_anthropic_model_cache( $anthropic_key );
+            if ( $refreshed ) {
+                wp_send_json_success( array( 'message' => 'Model list refreshed from Anthropic.' ) );
+            } else {
+                wp_send_json_error( array( 'message' => 'Could not refresh models. Check your API key or try again later.' ) );
+            }
             return;
         }
 
@@ -1885,6 +1894,7 @@ class RivianTrackr_AI_Search_Summary {
 
     /**
      * Get the curated list of Anthropic Claude models.
+     * Used as a fallback when the live API list cannot be fetched.
      */
     private function get_anthropic_models(): array {
         return array(
@@ -1896,12 +1906,134 @@ class RivianTrackr_AI_Search_Summary {
         );
     }
 
+    private function fetch_models_from_anthropic( $api_key ) {
+        if ( empty( $api_key ) ) {
+            return array();
+        }
+
+        $models   = array();
+        $after_id = '';
+        $max_pages = 5;
+
+        for ( $page = 0; $page < $max_pages; $page++ ) {
+            $url = 'https://api.anthropic.com/v1/models?limit=100';
+            if ( $after_id !== '' ) {
+                $url .= '&after_id=' . rawurlencode( $after_id );
+            }
+
+            $response = wp_safe_remote_get(
+                $url,
+                array(
+                    'headers' => array(
+                        'x-api-key'         => $api_key,
+                        'anthropic-version' => '2023-06-01',
+                    ),
+                    'timeout' => 5,
+                )
+            );
+
+            if ( is_wp_error( $response ) ) {
+                if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                    error_log( '[RivianTrackr AI Search Summary] Anthropic model list error: ' . $response->get_error_message() );
+                }
+                return array();
+            }
+
+            $code = wp_remote_retrieve_response_code( $response );
+            $body = wp_remote_retrieve_body( $response );
+
+            if ( $code < 200 || $code >= 300 ) {
+                if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                    error_log( '[RivianTrackr AI Search Summary] Anthropic model list HTTP error ' . $code . ' body: ' . $body );
+                }
+                return array();
+            }
+
+            $data = json_decode( $body, true );
+            if ( json_last_error() !== JSON_ERROR_NONE || empty( $data['data'] ) || ! is_array( $data['data'] ) ) {
+                break;
+            }
+
+            foreach ( $data['data'] as $model ) {
+                if ( empty( $model['id'] ) ) {
+                    continue;
+                }
+                $id = $model['id'];
+                if ( strpos( $id, 'claude-' ) === 0 ) {
+                    $models[] = $id;
+                }
+            }
+
+            if ( empty( $data['has_more'] ) || empty( $data['last_id'] ) ) {
+                break;
+            }
+            $after_id = $data['last_id'];
+        }
+
+        $models = array_values( array_unique( $models ) );
+        rsort( $models );
+
+        return $models;
+    }
+
+    private function refresh_anthropic_model_cache( $api_key ) {
+        if ( empty( $api_key ) ) {
+            return false;
+        }
+
+        $models = $this->fetch_models_from_anthropic( $api_key );
+
+        if ( empty( $models ) ) {
+            return false;
+        }
+
+        update_option(
+            $this->anthropic_models_cache_option,
+            array(
+                'models'     => $models,
+                'updated_at' => time(),
+            )
+        );
+
+        return true;
+    }
+
     private function get_available_models_for_dropdown( $api_key ) {
         $options  = $this->get_options();
         $provider = $options['ai_provider'];
 
-        // Anthropic uses a curated model list (no remote fetch needed)
+        // Anthropic: prefer cached/live list from API, fall back to curated list.
         if ( $provider === 'anthropic' ) {
+            $anthropic_key = $this->get_active_api_key();
+            $cache         = get_option( $this->anthropic_models_cache_option );
+            $cached_models = ( is_array( $cache ) && ! empty( $cache['models'] ) ) ? $cache['models'] : array();
+            $updated_at    = ( is_array( $cache ) && ! empty( $cache['updated_at'] ) ) ? absint( $cache['updated_at'] ) : 0;
+
+            if ( ! empty( $cached_models ) && $updated_at > 0 ) {
+                $age = time() - $updated_at;
+                if ( $age >= 0 && $age < RIVIANTRACKR_MODELS_CACHE_TTL ) {
+                    return $cached_models;
+                }
+            }
+
+            if ( ! empty( $anthropic_key ) ) {
+                $fetched = $this->fetch_models_from_anthropic( $anthropic_key );
+                if ( ! empty( $fetched ) ) {
+                    update_option(
+                        $this->anthropic_models_cache_option,
+                        array(
+                            'models'     => $fetched,
+                            'updated_at' => time(),
+                        )
+                    );
+                    return $fetched;
+                }
+            }
+
+            if ( ! empty( $cached_models ) ) {
+                return $cached_models;
+            }
+
             return $this->get_anthropic_models();
         }
 
@@ -2003,8 +2135,10 @@ class RivianTrackr_AI_Search_Summary {
         }
 
         $options  = $this->get_options();
-        $cache    = get_option( $this->models_cache_option );
         $provider = $options['ai_provider'];
+        $cache    = $provider === 'anthropic'
+            ? get_option( $this->anthropic_models_cache_option )
+            : get_option( $this->models_cache_option );
 
         // Check if setup is complete
         $has_api_key    = ! empty( $this->get_active_api_key() );
